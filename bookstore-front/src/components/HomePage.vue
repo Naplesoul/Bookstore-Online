@@ -1,11 +1,11 @@
 <template>
   <div id="container">
-    <div id="header">
-      <h1>{{ msg }}</h1>
-      <img alt="Vue logo" src="../assets/logo.png">
-      <h3 id="logo">padding</h3>
+
+    <div id="main">
+
     </div>
-    <div id="content">
+    <div id="footer">
+
     </div>
   </div>
 </template>
@@ -13,14 +13,17 @@
 <script>
 export default {
   name: 'HomePage',
-  props: {
-    msg: String
-  }
+
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+
+
+
+
 h3 {
   margin: 40px 0 0;
 }
