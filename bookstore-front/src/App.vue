@@ -9,10 +9,10 @@
           <h1>eBookstore</h1>
         </div>
         <div class="username">
-          <h3>swh</h3>
+          <h3>Naplesoul</h3>
         </div>
         <div class="userimage">
-          <img alt="logo" src="./assets/swh.jpg" height="100%" style="border-radius: 50%">
+          <img alt="logo" src="./assets/userimage1.jpg" height="100%" style="border-radius: 50%">
         </div>
       </div>
     </div>
@@ -119,7 +119,7 @@ h3
   height: 50%;
   width: 5%;
   float: right;
-  margin-right: 2%;
+  margin-right: 3%;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
@@ -148,8 +148,8 @@ h3
 #content
 {
   float: top;
-  height: 200vh;
-  width: 100%;
+  height: 1500px;
+  width: 97%;
   /*background: #9900CC;*/
 }
 
