@@ -2,4 +2,4 @@
 
 Page Demo:
 
-![ebookstore](C:\Users\ThinkPad\Desktop\ebookstore.png)
+![ebookstore](https://raw.githubusercontent.com/Naplesoul/Bookstore-Online/main/ebookstore.png)
