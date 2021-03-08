@@ -1,6 +1,11 @@
 # bookstore-front
 
+![ebookstore](C:\Users\ThinkPad\Desktop\ebookstore.png)
+
+
+
 ## Project setup
+
 ```
 yarn install
 ```
