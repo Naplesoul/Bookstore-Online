@@ -12,7 +12,7 @@
         <h3>swh</h3>
       </div>
       <div class="userimage">
-        <img alt="logo" src="./assets/logo.png" height="100%">
+        <img alt="logo" src="./assets/swh.jpg" height="100%" style="border-radius: 50%">
       </div>
     </div>
     <div id="content">
@@ -119,7 +119,7 @@ export default {
 
 #header>div.userimage
 {
-  height: 40%;
+  height: 50%;
   float: right;
   margin-right: 1%;
   position: relative;
