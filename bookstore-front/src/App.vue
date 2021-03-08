@@ -1,20 +1,22 @@
 <template>
-  <body>
   <div id="container">
-    <div id="header">
-      <div class="logo">
-        <img alt="logo" src="./assets/logo.png" height="100%">
-      </div>
-      <div class="title">
-        <h1>eBookstore</h1>
-      </div>
-      <div class="username">
-        <h3>swh</h3>
-      </div>
-      <div class="userimage">
-        <img alt="logo" src="./assets/swh.jpg" height="100%" style="border-radius: 50%">
+    <div id="header_container">
+      <div id="header">
+        <div class="logo">
+          <img alt="logo" src="./assets/logo.png" height="100%">
+        </div>
+        <div class="title">
+          <h1>eBookstore</h1>
+        </div>
+        <div class="username">
+          <h3>swh</h3>
+        </div>
+        <div class="userimage">
+          <img alt="logo" src="./assets/swh.jpg" height="100%" style="border-radius: 50%">
+        </div>
       </div>
     </div>
+
     <div id="content">
       <div id="sider">
         <div class="sidebar_chosen">
@@ -36,7 +38,6 @@
     </div>
 
   </div>
-  </body>
 
 </template>
 
@@ -57,12 +58,29 @@ export default {
 
 }
 
+h1
+{
+  font-family: "Arial";
+}
+
+h3
+{
+  font-family: "Arial";
+}
+
+#header_container
+{
+  float: top;
+  width: 100%;
+  height: 8vh;
+}
+
 #header
 {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 8%;
+  height: 8vh;
   background: #2c3e50;
 }
 
@@ -129,20 +147,19 @@ export default {
 
 #content
 {
-  position: fixed;
-  top: 8%;
-  height: 92%;
+  float: top;
+  height: 200vh;
   width: 100%;
   /*background: #9900CC;*/
 }
 
 #sider
 {
+  position: fixed;
   height: 100%;
   width: 12%;
   margin-top: 0;
-  float: left;
-  background: white;
+  /*background: aqua;*/
   border-right: 1px solid #e8e8e8;
   /*opacity: 0.8;*/
 }
@@ -154,7 +171,7 @@ export default {
   float: top;
   height: 7%;
   /*width: 10%;*/
-  border-right:6px solid #2196F3;
+  border-right: 6px solid #2196F3;
   background: #ddffff;
 }
 
@@ -186,13 +203,13 @@ export default {
   color: black;
 }
 
-#app {
+#app
+{
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 0;
 }
 
 body

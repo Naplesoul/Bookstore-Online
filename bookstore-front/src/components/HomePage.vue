@@ -2,7 +2,24 @@
   <div id="container">
 
     <div id="main">
-
+      <div class="item">
+        <h1>item</h1>
+      </div>
+      <div class="item">
+        <h1>item</h1>
+      </div>
+      <div class="item">
+        <h1>item</h1>
+      </div>
+      <div class="item">
+        <h1>item</h1>
+      </div>
+      <div class="item">
+        <h1>item</h1>
+      </div>
+      <div class="item">
+        <h1>item</h1>
+      </div>
     </div>
     <div id="footer">
 
@@ -21,21 +38,22 @@ export default {
 <style scoped>
 
 
+#main
+{
+  display: grid;
+  float: left;
+  margin-left: 15%;
+  margin-top: 2%;
+
+}
+
+.item
+{
+  margin: 20px;
+  height: 300px;
+  width: 200px;
+  background: #2196F3;
+}
 
 
-
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
 </style>
