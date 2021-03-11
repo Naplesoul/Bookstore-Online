@@ -9,8 +9,8 @@
       <input id="Password" name="password" type="password" autocomplete="current-password" placeholder="Password">
       <button>Login</button>
       <div class="switch">
-        <a id="SignUp" tabindex="0" role="checkbox" aria-checked="false">Signup</a>
-        | <a id="ResetPassword" tabindex="0" role="checkbox" aria-checked="false">Forget password</a>
+        <a id="SignUp" tabindex="0" role="checkbox" aria-checked="false">Signup </a>
+        <span style="color: white">|</span> <a id="ResetPassword" tabindex="0" role="checkbox" aria-checked="false">Forget password</a>
       </div>
     </main>
   </div>
