@@ -7,7 +7,7 @@
       </div>
       <input id="Email" name="email" type="email" placeholder="e-Mail">
       <input id="Password" name="password" type="password" autocomplete="current-password" placeholder="Password">
-      <button>Login</button>
+      <button class="loginButton">Login</button>
       <div class="switch">
         <a id="SignUp" tabindex="0" role="checkbox" aria-checked="false">Signup </a>
         <span style="color: white">|</span> <a id="ResetPassword" tabindex="0" role="checkbox" aria-checked="false">Forget password</a>
@@ -33,7 +33,7 @@ export default {
   background-size: 100%;
 }
 
-main
+#loginPageContainer>main
 {
   height: 45vh;
   width: 30vw;
@@ -51,7 +51,7 @@ main
 
 }
 
-main>div.icon
+#loginPageContainer>main>div.icon
 {
   float: top;
   height: 17vh;
@@ -62,7 +62,7 @@ main>div.icon
   top: 2vh;
 }
 
-main>input
+#loginPageContainer>main>input
 {
   background: #ffffff30;
 
@@ -77,7 +77,7 @@ main>input
   transition: border-color .2s;
 }
 
-main>button
+#loginPageContainer>main>button.loginButton
 {
   width: 82%;
   border-radius: 5px;
@@ -91,7 +91,7 @@ main>button
   background: #02e785;
 }
 
-div.switch>a
+#loginPageContainer>main>div.switch>a
 {
   font-family: "Arial";
   color: white;

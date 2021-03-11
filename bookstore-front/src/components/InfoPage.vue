@@ -12,7 +12,8 @@
       <p>作品简介：</p>
       <p style="margin-top: 0; width: 100%">程序员必读经典著作！理解计算机系统*书目，10万程序员共同选择。第二版销售突破100000册，第三版重磅上市！</p>
       <div class="buy">
-
+        <button class="cartButton">加入购物车</button>
+        <button class="buyButton">立即购买</button>
       </div>
     </div>
   </div>
@@ -28,26 +29,68 @@ export default {
 
 div.BookPicture
 {
-  width: 25vw;
+  width: 33vw;
   float: left;
-  margin-left: 27vw;
+  margin-left: 20vw;
   margin-top: 8vh;
 }
 
 div.description
 {
   float: left;
+  height: 64vh;
   width: 30vw;
   margin-left: 5vw;
-  margin-top: 8vh;
+  margin-top: 12vh;
+}
+
+.description>h2
+{
+  font-family: "Microsoft YaHei UI";
+  font-size: 3vh;
+  font-weight: bolder;
+  margin: 3vh 1vw;
+}
+
+.description>p
+{
+  font-family: "Microsoft YaHei UI";
+  font-size: 2vh;
+  margin: 2vh 1vw;
 }
 
 div.description>div.buy
 {
-  width: 100%;
+  position: absolute;
+  top: 76vh;
+  width: 30vw;
   height: 8vh;
-  /*background: black;*/
-  margin-top: 5vh;
+  /*background: #ddffff;*/
+}
+
+div.buy>button.cartButton
+{
+  float: left;
+  height: 8vh;
+  width: 40%;
+  border-radius: 10px;
+  font-size: 3vh;
+  font-family: "Microsoft YaHei UI";
+  font-weight: bolder;
+  background: #f5d651;
+}
+
+div.buy>button.buyButton
+{
+  float: right;
+  height: 8vh;
+  width: 40%;
+  border-radius: 10px;
+  font-size: 3vh;
+  font-family: "Microsoft YaHei UI";
+  font-weight: bolder;
+  background: #d53838;
+  color: white;
 }
 
 </style>
