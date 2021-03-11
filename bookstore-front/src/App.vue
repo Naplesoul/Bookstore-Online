@@ -28,7 +28,7 @@ export default
   data()
   {
     return{
-      loginStatus: -1
+      loginStatus: 0
     }
   }
 }
