@@ -11,6 +11,9 @@
       <p><span>状态：</span><span>有货 </span><span style="font-size: 1vh; color: #b84949">库存300件</span></p>
       <p>作品简介：</p>
       <p style="margin-top: 0; width: 100%">程序员必读经典著作！理解计算机系统*书目，10万程序员共同选择。第二版销售突破100000册，第三版重磅上市！</p>
+      <div class="buy">
+
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +40,14 @@ div.description
   width: 30vw;
   margin-left: 5vw;
   margin-top: 8vh;
+}
+
+div.description>div.buy
+{
+  width: 100%;
+  height: 8vh;
+  /*background: black;*/
+  margin-top: 5vh;
 }
 
 </style>
