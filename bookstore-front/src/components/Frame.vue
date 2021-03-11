@@ -75,7 +75,7 @@ export default
   },
   data(){
     return{
-      subPage: 2
+      subPage: 0
     }
   }
 }
@@ -83,12 +83,12 @@ export default
 
 <style scoped>
 
-h1
+#header>h1
 {
   font-family: "Arial";
 }
 
-h3
+#header>h3
 {
   font-family: "Arial";
 }

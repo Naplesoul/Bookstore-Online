@@ -184,7 +184,7 @@ export default {
   margin-top: 2%;
 }
 
-.item
+#main>div.item
 {
   border-radius: 5px;
   height: 90%;
@@ -192,14 +192,14 @@ export default {
   background: #4c667f;
 }
 
-.picture>img
+#main>div.item>div.picture>img
 {
   height: 70%;
   float: top;
   border-radius: 5px 5px 0 0;
 }
 
-.info
+#main>div.item>div.info
 {
   margin-bottom: 0;
   float: bottom;
