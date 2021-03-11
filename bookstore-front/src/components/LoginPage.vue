@@ -51,7 +51,7 @@ main
 
 }
 
-.icon
+main>div.icon
 {
   float: top;
   height: 17vh;
@@ -62,7 +62,7 @@ main
   top: 2vh;
 }
 
-input
+main>input
 {
   background: #ffffff30;
 
@@ -77,7 +77,7 @@ input
   transition: border-color .2s;
 }
 
-button
+main>button
 {
   width: 82%;
   border-radius: 5px;
@@ -91,7 +91,7 @@ button
   background: #02e785;
 }
 
-a
+div.switch>a
 {
   font-family: "Arial";
   color: white;
