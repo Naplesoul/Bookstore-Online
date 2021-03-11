@@ -32,21 +32,50 @@
           <h3>My Profile</h3>
         </div>
       </div>
-      <component v-bind:is="choosePage"></component>
+      <component v-bind:is="chooseSubPage"></component>
     </div>
 
   </div>
 </template>
 
 <script>
-import HomePage from './HomePage.vue'
+import HomePage from './HomePage.vue';
+import BrowsePage from "@/components/BrowsePage";
+import CartPage from "@/components/CartPage";
+import InfoPage from "@/components/InfoPage";
+import OrderPage from "@/components/OrderPage";
+import ProfilePage from "@/components/ProfilePage";
 
 export default
 {
   name: "Frame",
   components:
   {
-    HomePage
+    HomePage,
+    BrowsePage,
+    CartPage,
+    InfoPage,
+    OrderPage,
+    ProfilePage,
+  },
+  computed:{
+    chooseSubPage(){
+      switch (this.subPage)
+      {
+        case 0: return 'HomePage'
+        case 1: return 'BrowsePage'
+        case 2: return 'InfoPage'
+        case 3: return 'CartPage'
+        case 4: return 'OrderPage'
+        case 5: return 'ProfilePage'
+        default: return 'HomePage'
+      }
+    }
+  },
+  data(){
+    return{
+      subPage: 0
+    }
   }
 }
 </script>
