@@ -14,6 +14,7 @@
         <div class="userimage">
           <img alt="logo" src="../assets/userimage1.jpg" height="100%" style="border-radius: 50%">
         </div>
+        <input id="Search" name="searchBook" type="searchBook" placeholder="  Search Books">
       </div>
     </div>
 
@@ -164,6 +165,20 @@ h3
   height: 50%;
   float: right;
   margin-right: 1%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#header>input#Search
+{
+  width: 18vw;
+  height: 3vh;
+  font-size: 2vh;
+  font-family: "Arial";
+  border-radius: 10px;
+  float: right;
+  margin-right: 4%;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
