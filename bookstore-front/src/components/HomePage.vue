@@ -1,10 +1,12 @@
 <template>
   <div id="homePageContainer">
-
+    <div id="recommendation">
+      <img alt="recommend" src="@/assets/recommend1.jpg" width="100%">
+    </div>
     <div id="main">
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book1.jpg" width="100%">
+          <img alt="pic" src="@/assets/book1.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname1</h3>
@@ -13,7 +15,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book2.jpg" width="100%">
+          <img alt="pic" src="@/assets/book2.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname2</h3>
@@ -23,7 +25,7 @@
 
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book1.jpg" width="100%">
+          <img alt="pic" src="@/assets/book1.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname1</h3>
@@ -32,7 +34,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book2.jpg" width="100%">
+          <img alt="pic" src="@/assets/book2.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname2</h3>
@@ -41,7 +43,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book1.jpg" width="100%">
+          <img alt="pic" src="@/assets/book1.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname1</h3>
@@ -50,7 +52,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book2.jpg" width="100%">
+          <img alt="pic" src="@/assets/book2.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname2</h3>
@@ -59,7 +61,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book1.jpg" width="100%">
+          <img alt="pic" src="@/assets/book1.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname1</h3>
@@ -68,7 +70,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book2.jpg" width="100%">
+          <img alt="pic" src="@/assets/book2.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname2</h3>
@@ -77,7 +79,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book1.jpg" width="100%">
+          <img alt="pic" src="@/assets/book1.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname1</h3>
@@ -86,7 +88,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book2.jpg" width="100%">
+          <img alt="pic" src="@/assets/book2.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname2</h3>
@@ -95,7 +97,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book1.jpg" width="100%">
+          <img alt="pic" src="@/assets/book1.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname1</h3>
@@ -104,7 +106,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book2.jpg" width="100%">
+          <img alt="pic" src="@/assets/book2.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname2</h3>
@@ -113,7 +115,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book1.jpg" width="100%">
+          <img alt="pic" src="@/assets/book1.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname1</h3>
@@ -122,7 +124,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book2.jpg" width="100%">
+          <img alt="pic" src="@/assets/book2.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname2</h3>
@@ -131,7 +133,7 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book1.jpg" width="100%">
+          <img alt="pic" src="@/assets/book1.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname1</h3>
@@ -140,17 +142,13 @@
       </div>
       <div class="item">
         <div class="picture">
-          <img alt="pic" src="../assets/book2.jpg" width="100%">
+          <img alt="pic" src="@/assets/book2.jpg" width="100%">
         </div>
         <div class="info">
           <h3 class="name">bookname2</h3>
           <h4 class="price">￥83.00</h4>
         </div>
       </div>
-
-    </div>
-    <div id="footer">
-
     </div>
   </div>
 </template>
@@ -176,6 +174,14 @@ export default {
   margin-top: 2%;
   width: 85%;
   height: 100%;
+}
+
+#recommendation
+{
+  width: 50vw;
+  float: left;
+  margin-left: 27vw;
+  margin-top: 2%;
 }
 
 .item
