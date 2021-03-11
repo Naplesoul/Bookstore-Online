@@ -1,5 +1,5 @@
 <template>
-  <div id="container2">
+  <div id="container">
     <component v-bind:is="choosePage"></component>
   </div>
 </template>
@@ -28,7 +28,7 @@ export default
   data()
   {
     return{
-      loginStatus: 0
+      loginStatus: -1
     }
   }
 }
@@ -37,12 +37,6 @@ export default
 </script>
 
 <style>
-#container
-{
-
-}
-
-
 
 body
 {
