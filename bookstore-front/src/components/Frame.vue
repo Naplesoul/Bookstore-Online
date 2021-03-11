@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import HomePage from './HomePage.vue';
+import HomePage from "@/components/HomePage.vue";
 import BrowsePage from "@/components/BrowsePage";
 import CartPage from "@/components/CartPage";
 import InfoPage from "@/components/InfoPage";
@@ -187,7 +187,7 @@ h3
 #content
 {
   float: top;
-  height: 1500px;
+  /*height: 1500px;*/
   width: 97%;
   /*background: #9900CC;*/
 }
