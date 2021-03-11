@@ -64,10 +64,13 @@ main
 
 input
 {
-  background-color: white;
+  background: #ffffff30;
+
   border-radius: 5px;
   display: block;
   font-size: 2vh;
+  font-family: "Arial";
+
   margin: 1vh auto;
   padding: 1vh 1vw;
   width: 75%;
@@ -79,10 +82,19 @@ button
   width: 82%;
   border-radius: 5px;
   display: block;
+  font-family: "Arial";
+  font-weight: bolder;
   font-size: 2vh;
   margin: 2vh auto;
   padding: 1vh 1vw;
   transition: all .25s;
+  background: #02e785;
+}
+
+a
+{
+  font-family: "Arial";
+  color: white;
 }
 
 </style>

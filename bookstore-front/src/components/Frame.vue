@@ -32,7 +32,7 @@
           <h3>My Profile</h3>
         </div>
       </div>
-      <HomePage/>
+      <component v-bind:is="choosePage"></component>
     </div>
 
   </div>
