@@ -25,9 +25,9 @@ class UserAvatar extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            isAuth: this.props.isAuth,
-            name: this.props.isAuth ? this.props.name : null,
-            avatarPath: this.props.isAuth ? this.props.avatarPath : null,
+            // isAuthed: this.props.isAuthed,
+            // userName: this.props.isAuthed ? this.props.userName : null,
+            // avatarPath: this.props.isAuthed ? this.props.avatarPath : null,
             anchorEl: null,
         };
         this.openMenu = this.openMenu.bind(this);
@@ -45,16 +45,17 @@ class UserAvatar extends React.Component{
     };
 
     login = () => {
-        this.setState({isAuth: true});
+        this.props.askForLogin();
     };
 
     logout = () => {
-        this.setState({isAuth: false, anchorEl: null});
+        this.closeMenu();
+        this.props.askForLogout();
     }
 
     render() {
         const { classes } = this.props;
-        if (this.state.isAuth){
+        if (this.props.isAuthed){
             return(
                 <div className={classes.root}>
                     <div>
@@ -65,7 +66,7 @@ class UserAvatar extends React.Component{
                             onClick={this.openMenu}
                             color="inherit"
                         >
-                            <Avatar className={classes.avatar} alt="userImage" src={require("../assets/userimage1.jpg")}/>
+                            <Avatar className={classes.avatar} alt="userImage" src={this.props.avatarPath}/>
                         </IconButton>
                         <Menu
                             id="menu-appbar"
@@ -87,7 +88,7 @@ class UserAvatar extends React.Component{
                         </Menu>
                     </div>
                     <Typography variant="h7" noWrap className={classes.name}>
-                        {this.state.name}
+                        {this.props.userName}
                     </Typography>
                 </div>
             );

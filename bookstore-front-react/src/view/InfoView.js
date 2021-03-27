@@ -7,12 +7,12 @@ const styles = theme => ({
 
 });
 
-class BrowseView extends React.Component {
+class InfoView extends React.Component {
     render() {
         return(
-            <h1>this is Browse page</h1>
+            <h1>this is info page</h1>
         );
     }
 }
 
-export default withStyles(styles)(BrowseView);
+export default withStyles(styles)(InfoView);

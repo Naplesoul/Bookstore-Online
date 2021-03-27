@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -12,7 +12,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InputBase from '@material-ui/core/InputBase';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles';
 
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -23,7 +23,11 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 
 import UserAvatar from "../components/UserAvatar";
 import HomeView from "./HomeView";
-import {Home} from "@material-ui/icons";
+import BrowseView from "./BrowseView";
+import InfoView from "./InfoView";
+import OrderView from "./OrderView";
+import CartView from "./CartView";
+import ProfileView from "./ProfileView";
 
 const drawerWidth = 240;
 
@@ -49,6 +53,7 @@ const styles = theme => ({
     logo: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(3),
+        cursor: "pointer",
     },
 
     title: {
@@ -58,6 +63,7 @@ const styles = theme => ({
             display: 'block',
         },
         color: "#98dafb",
+        cursor: "pointer",
     },
 
     search: {
@@ -119,15 +125,82 @@ function Logo(props) {
 
 class Frame extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            // isAuthed: this.props.isAuthed,
+            // userName: this.props.isAuthed ? this.props.userName : null,
+            // avatarPath: this.props.isAuthed ? this.props.avatarPath : null,
+            redirectPath: null,
+        }
+        this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
+        this.goHome = this.goHome.bind(this);
+        this.go2Books = this.go2Books.bind(this);
+        this.go2Cart = this.go2Cart.bind(this);
+        this.go2Orders = this.go2Orders.bind(this);
+        this.go2Profile = this.go2Profile.bind(this);
+    }
+
+    login(){
+        this.setState({
+            redirectPath: "/login",
+        })
+    }
+
+    logout(){
+        this.props.askForLogout();
+    }
+
+    goHome(){
+        this.setState({
+            redirectPath: "/store",
+        })
+    }
+
+    go2Books(){
+        this.setState({
+            redirectPath: "/store/books",
+        })
+    }
+
+    go2Cart(){
+        this.setState({
+            redirectPath: "/store/cart",
+        })
+    }
+
+    go2Orders(){
+        this.setState({
+            redirectPath: "/store/orders",
+        })
+    }
+
+    go2Profile(){
+        this.setState({
+            redirectPath: "/store/profile",
+        })
+    }
+
+
     render() {
+        if (this.state.redirectPath){
+            let path = this.state.redirectPath;
+            this.setState({
+                redirectPath: null,
+            });
+            return(
+                <Redirect to={{pathname: path}}/>
+            );
+        }
         const { classes } = this.props;
         return(
             <div className={classes.root}>
                 <CssBaseline />
                 <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
-                        <Logo className={classes.logo}/>
-                        <Typography variant="h5" noWrap className={classes.title}>
+                        <Logo className={classes.logo} onClick={this.goHome}/>
+                        <Typography variant="h5" noWrap className={classes.title} onClick={this.goHome}>
                             eBookstore
                         </Typography>
                         <div className={classes.search}>
@@ -144,7 +217,8 @@ class Frame extends React.Component {
                             />
                         </div>
                         <div className={classes.avatar}>
-                            <UserAvatar isAuth={true} name={"沈玮杭"} avatarPath={"../assets/userimage1.jpg"}/>
+                            <UserAvatar isAuthed={this.props.isAuthed} userName={this.props.userName} avatarPath={this.props.avatarPath}
+                            askForLogin={this.login} askForLogout={this.logout}/>
                         </div>
 
 
@@ -160,19 +234,19 @@ class Frame extends React.Component {
                     <Toolbar />
                     <div className={classes.drawerContainer}>
                         <List>
-                            <ListItem button>
+                            <ListItem button onClick={this.go2Books}>
                                 <ListItemIcon><MenuBookIcon/></ListItemIcon>
                                 <ListItemText>Books</ListItemText>
                             </ListItem>
-                            <ListItem button>
+                            <ListItem button onClick={this.go2Cart}>
                                 <ListItemIcon><ShoppingCartIcon/></ListItemIcon>
                                 <ListItemText>Cart</ListItemText>
                             </ListItem>
-                            <ListItem button>
+                            <ListItem button onClick={this.go2Orders}>
                                 <ListItemIcon><AssignmentIcon/></ListItemIcon>
                                 <ListItemText>My Orders</ListItemText>
                             </ListItem>
-                            <ListItem button>
+                            <ListItem button onClick={this.go2Profile}>
                                 <ListItemIcon><AccountBoxIcon/></ListItemIcon>
                                 <ListItemText>My Profile</ListItemText>
                             </ListItem>
@@ -181,7 +255,12 @@ class Frame extends React.Component {
                 </Drawer>
                 <main className={classes.content}>
                     <Router>
-                        <Route exact path={"/"}><HomeView/></Route>
+                        <Route exact path={"/store"}><HomeView/></Route>
+                        <Route exact path={"/store/books"}><BrowseView/></Route>
+                        <Route path={"/store/info/"}><InfoView/></Route>
+                        <Route exact path={"/store/cart"}><CartView/></Route>
+                        <Route exact path={"/store/orders"}><OrderView/></Route>
+                        <Route exact path={"/store/profile"}><ProfileView/></Route>
                     </Router>
                 </main>
             </div>
