@@ -2,7 +2,6 @@ import React from 'react';
 import {Router, Route, Redirect} from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
-// import LoginView from './view/LoginView';
 import Frame from "./view/Frame";
 import LoginView from "./view/LoginView";
 

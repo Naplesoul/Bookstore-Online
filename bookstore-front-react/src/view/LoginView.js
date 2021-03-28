@@ -13,12 +13,13 @@ import Typography from '@material-ui/core/Typography';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 
+
 const styles = theme => ({
     root: {
         height: '100vh',
     },
     image: {
-        backgroundImage: 'url(https://source.unsplash.com/random)',
+        backgroundImage: 'url(http://area.sinaapp.com/bingImg/)',
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -89,10 +90,10 @@ class LoginView extends React.Component {
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
+                                id="userName"
+                                label="User Name"
+                                name="username"
+                                autoComplete="username"
                                 autoFocus
                             />
                             <TextField

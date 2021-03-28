@@ -13,6 +13,7 @@ const styles = (theme) => ({
     },
     name: {
         marginTop: theme.spacing(2.3),
+        cursor: 'pointer',
     },
     avatar: {
         width: theme.spacing(4),
@@ -87,7 +88,7 @@ class UserAvatar extends React.Component{
                             <MenuItem onClick={this.logout}>Logout</MenuItem>
                         </Menu>
                     </div>
-                    <Typography variant="h7" noWrap className={classes.name}>
+                    <Typography variant="h7" noWrap className={classes.name} onClick={this.openMenu}>
                         {this.props.userName}
                     </Typography>
                 </div>
