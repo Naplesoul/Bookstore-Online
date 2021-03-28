@@ -109,7 +109,6 @@ const styles = theme => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
-        backgroundColor: "red",
         marginTop: theme.spacing(8),
     }
 });
