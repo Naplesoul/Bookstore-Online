@@ -52,7 +52,11 @@ class CartView extends React.Component {
 
     render() {
         if (this.props.cartData.length === 0) {
-            return null;
+            return (
+                <Typography variant={"h5"} align={"center"}>
+                    Your cart is empty, go and get some!
+                </Typography>
+            );
         }
         let totalPrice = 0;
         this.props.cartData.forEach(item => {
