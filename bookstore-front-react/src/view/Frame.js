@@ -262,7 +262,7 @@ class Frame extends React.Component {
                             />
                         </div>
                         <div className={classes.avatar}>
-                            <UserAvatar isAuthed={this.props.isAuthed} userName={this.props.userName} avatarPath={this.props.avatarPath}
+                            <UserAvatar user={this.props.user}
                             askForLogin={this.login.bind(this)} askForLogout={this.logout.bind(this)}/>
                         </div>
 
