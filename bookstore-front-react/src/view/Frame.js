@@ -31,6 +31,18 @@ import ProfileView from "./ProfileView";
 
 const drawerWidth = 240;
 
+
+let bookData = [
+    {id: 0, name: "The Lord of the Rings", author: "J. R. R. Tolkien", category: "novel", price: 45.90, storage: 500, intro: "The book is a sequel to \"The Hobbit\" and is recognized as the originator of modern fantasy literature. ", picDir: require("../assets/book0.jpg").default},
+    {id: 1, name: "Le Petit Prince (The Little Prince)", author: "Antoine de Saint-Exupéry", category: "novel", price: 9.88, storage: 31, intro: "The protagonist of this book is a little prince from an alien planet. The book uses a pilot as the storyteller, telling the various adventures that the little prince went through when he set off from his own planet to the earth. ", picDir: require("../assets/book1.jpg").default},
+];
+
+
+let cartData = [
+    {id: 0, num: 5, isChosen: true, name: "The Lord of the Rings", author: "J. R. R. Tolkien", category: "novel", price: 45.90, storage: 500, picDir: require("../assets/book0.jpg").default},
+    {id: 1, num: 2, isChosen: true, name: "Le Petit Prince (The Little Prince)", author: "Antoine de Saint-Exupéry", category: "novel", price: 9.88, storage: 31, picDir: require("../assets/book1.jpg").default},
+];
+
 const styles = theme => ({
     root: {
         display: 'flex',
@@ -127,18 +139,52 @@ class Frame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // isAuthed: this.props.isAuthed,
-            // userName: this.props.isAuthed ? this.props.userName : null,
-            // avatarPath: this.props.isAuthed ? this.props.avatarPath : null,
             redirectPath: null,
+            bookData: bookData,
+            cartData: cartData,
         }
-        this.login = this.login.bind(this);
-        this.logout = this.logout.bind(this);
-        this.goHome = this.goHome.bind(this);
-        this.go2Books = this.go2Books.bind(this);
-        this.go2Cart = this.go2Cart.bind(this);
-        this.go2Orders = this.go2Orders.bind(this);
-        this.go2Profile = this.go2Profile.bind(this);
+    }
+
+    onCartNumberChange(id, num) {
+        let newCartData = [];
+        let len = this.state.cartData.length;
+        for (let i = 0; i < len; ++i) {
+            if (this.state.cartData[i].id === id) {
+                this.state.cartData[i].num = num;
+            }
+            newCartData.push(this.state.cartData[i]);
+        }
+        this.setState({
+            cartData: newCartData,
+        })
+    };
+
+    removeCartItem(id) {
+        let newCartData = [];
+        let len = this.state.cartData.length;
+        for (let i = 0; i < len; ++i) {
+            if (this.state.cartData[i].id === id) {
+                continue;
+            }
+            newCartData.push(this.state.cartData[i]);
+        }
+        this.setState({
+            cartData: newCartData,
+        })
+    }
+
+    chooseCartItem(id) {
+        let newCartData = [];
+        let len = this.state.cartData.length;
+        for (let i = 0; i < len; ++i) {
+            if (this.state.cartData[i].id === id) {
+                this.state.cartData[i].isChosen = !this.state.cartData[i].isChosen;
+            }
+            newCartData.push(this.state.cartData[i]);
+        }
+        this.setState({
+            cartData: newCartData,
+        })
     }
 
     login(){
@@ -198,8 +244,8 @@ class Frame extends React.Component {
                 <CssBaseline />
                 <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
-                        <Logo className={classes.logo} onClick={this.goHome}/>
-                        <Typography variant="h5" noWrap className={classes.title} onClick={this.goHome}>
+                        <Logo className={classes.logo} onClick={this.goHome.bind(this)}/>
+                        <Typography variant="h5" noWrap className={classes.title} onClick={this.goHome.bind(this)}>
                             eBookstore
                         </Typography>
                         <div className={classes.search}>
@@ -217,7 +263,7 @@ class Frame extends React.Component {
                         </div>
                         <div className={classes.avatar}>
                             <UserAvatar isAuthed={this.props.isAuthed} userName={this.props.userName} avatarPath={this.props.avatarPath}
-                            askForLogin={this.login} askForLogout={this.logout}/>
+                            askForLogin={this.login.bind(this)} askForLogout={this.logout.bind(this)}/>
                         </div>
 
 
@@ -233,19 +279,19 @@ class Frame extends React.Component {
                     <Toolbar />
                     <div className={classes.drawerContainer}>
                         <List>
-                            <ListItem button onClick={this.go2Books}>
+                            <ListItem button onClick={this.go2Books.bind(this)}>
                                 <ListItemIcon><MenuBookIcon/></ListItemIcon>
                                 <ListItemText>Books</ListItemText>
                             </ListItem>
-                            <ListItem button onClick={this.go2Cart}>
+                            <ListItem button onClick={this.go2Cart.bind(this)}>
                                 <ListItemIcon><ShoppingCartIcon/></ListItemIcon>
                                 <ListItemText>Cart</ListItemText>
                             </ListItem>
-                            <ListItem button onClick={this.go2Orders}>
+                            <ListItem button onClick={this.go2Orders.bind(this)}>
                                 <ListItemIcon><AssignmentIcon/></ListItemIcon>
                                 <ListItemText>My Orders</ListItemText>
                             </ListItem>
-                            <ListItem button onClick={this.go2Profile}>
+                            <ListItem button onClick={this.go2Profile.bind(this)}>
                                 <ListItemIcon><AccountBoxIcon/></ListItemIcon>
                                 <ListItemText>My Profile</ListItemText>
                             </ListItem>
@@ -257,7 +303,13 @@ class Frame extends React.Component {
                         <Route exact path={"/store"}><HomeView/></Route>
                         <Route exact path={"/store/books"}><BrowseView/></Route>
                         <Route path={"/store/info/"}><InfoView/></Route>
-                        <Route exact path={"/store/cart"}><CartView/></Route>
+                        <Route exact path={"/store/cart"}>
+                            <CartView cartData={this.state.cartData}
+                                      onNumberChange={this.onCartNumberChange.bind(this)}
+                                      remove={this.removeCartItem.bind(this)}
+                                      choose={this.chooseCartItem.bind(this)}
+                            />
+                        </Route>
                         <Route exact path={"/store/orders"}><OrderView/></Route>
                         <Route exact path={"/store/profile"}><ProfileView/></Route>
                     </Router>
