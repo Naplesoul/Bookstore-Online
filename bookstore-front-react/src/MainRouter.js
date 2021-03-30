@@ -7,32 +7,32 @@ import LoginView from "./view/LoginView";
 
 const history = createBrowserHistory();
 
+const nullUser = {
+    isAuthed: false,
+    userName: null,
+    avatarPath: null,
+};
+
 class MainRouter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isAuthed: false,
-            userName: null,
-            avatarPath: null,
+            user: nullUser,
         }
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
     }
 
-    login(userName, avatarPath){
+    login(loginUser){
         this.setState({
-            isAuthed: true,
-            userName: userName,
-            avatarPath: avatarPath,
+            user: loginUser,
         })
 
     }
 
     logout(){
         this.setState(() => ({
-            isAuthed: false,
-            userName: null,
-            avatarPath: null,
+            user: nullUser,
         }));
     }
 
@@ -43,7 +43,7 @@ class MainRouter extends React.Component {
                     <Redirect to={{pathname: "/store"}}/>
                 </Route>
                 <Route path={"/store"}>
-                    <Frame isAuthed={this.state.isAuthed} userName={this.state.userName} avatarPath={this.state.avatarPath}
+                    <Frame user={this.state.user}
                            askForLogout={this.logout}
                     />
                 </Route>

@@ -54,7 +54,7 @@ class CartView extends React.Component {
         if (this.props.cartData.length === 0) {
             return (
                 <Typography variant={"h5"} align={"center"}>
-                    Your cart is empty, go and get some!
+                    Oops! Your cart is empty, go and get some!
                 </Typography>
             );
         }

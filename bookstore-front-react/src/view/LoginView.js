@@ -55,7 +55,7 @@ class LoginView extends React.Component {
     }
 
     login(){
-        this.props.login("沈玮杭", "../assets/userimage1.jpg");
+        this.props.login({isAuthed: true, userName: "沈玮杭", avatarPath: require("../assets/userimage1.jpg").default});
         this.setState({
             redirectPath: "/store",
         })

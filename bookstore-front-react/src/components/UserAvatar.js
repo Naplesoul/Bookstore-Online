@@ -26,9 +26,6 @@ class UserAvatar extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            // isAuthed: this.props.isAuthed,
-            // userName: this.props.isAuthed ? this.props.userName : null,
-            // avatarPath: this.props.isAuthed ? this.props.avatarPath : null,
             anchorEl: null,
         };
         this.openMenu = this.openMenu.bind(this);
@@ -56,7 +53,7 @@ class UserAvatar extends React.Component{
 
     render() {
         const { classes } = this.props;
-        if (this.props.isAuthed){
+        if (this.props.user.isAuthed){
             return(
                 <div className={classes.root}>
                     <div>
@@ -67,7 +64,7 @@ class UserAvatar extends React.Component{
                             onClick={this.openMenu}
                             color="inherit"
                         >
-                            <Avatar className={classes.avatar} alt="userImage" src={this.props.avatarPath}/>
+                            <Avatar className={classes.avatar} alt="userImage" src={this.props.user.avatarPath}/>
                         </IconButton>
                         <Menu
                             id="menu-appbar"
@@ -89,7 +86,7 @@ class UserAvatar extends React.Component{
                         </Menu>
                     </div>
                     <Typography variant="h7" noWrap className={classes.name} onClick={this.openMenu}>
-                        {this.props.userName}
+                        {this.props.user.userName}
                     </Typography>
                 </div>
             );
