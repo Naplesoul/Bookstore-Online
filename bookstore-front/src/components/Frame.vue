@@ -75,7 +75,7 @@ export default
   },
   data(){
     return{
-      subPage: 0
+      subPage: 2
     }
   }
 }

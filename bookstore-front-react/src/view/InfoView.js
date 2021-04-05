@@ -9,9 +9,9 @@ import {Button} from "@material-ui/core";
 
 const styles = theme => ({
     root: {
-        width: "96%",
-        marginLeft: "4vw",
-        marginTop: "2vh",
+        width: "98%",
+        marginLeft: "2vw",
+        marginTop: "4vh",
     },
     detail: {
         marginLeft: "3vw",
@@ -58,7 +58,7 @@ class InfoView extends React.Component {
         return(
             <Grid container spacing={5} className={classes.root}>
                 <Grid item xs={5}>
-                    <img alt={"bookPicture"} src={this.props.bookInfo.picDir} width={"87%"}/>
+                    <img alt={"bookPicture"} src={this.props.bookInfo.picDir} width={"100%"}/>
                 </Grid>
                 <Grid item xs={5} className={classes.detail}>
                     <Typography variant={"h4"} className={classes.bookName}>{this.props.bookInfo.name}</Typography>
