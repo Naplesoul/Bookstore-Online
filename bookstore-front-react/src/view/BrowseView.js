@@ -9,7 +9,7 @@ import CartItem from "../components/CartItem";
 
 const styles = theme => ({
     root: {
-
+        marginTop: 5,
     },
     page: {
         marginLeft: '33vw',
@@ -19,7 +19,6 @@ const styles = theme => ({
 class BrowseView extends React.Component {
     constructor(props) {
         super(props);
-
     }
 
     clickBook(id) {
@@ -32,7 +31,16 @@ class BrowseView extends React.Component {
             <div className={classes.root}>
                 <GridList cellHeight={160} className={classes.gridList} cols={3}>
                     {this.props.bookData.map((item, index) => {
-                        return <BookCard bookInfo={item} clickBook={this.clickBook.bind(this)} />;
+                        if (this.props.searchText) {
+                            let searchText = this.props.searchText.toLowerCase();
+                            if (item.name.toString().toLowerCase().indexOf(searchText) >= 0
+                                || item.author.toString().toLowerCase().indexOf(searchText) >= 0
+                                || item.category.toString().toLowerCase().indexOf(searchText) >= 0)
+                                return <BookCard bookInfo={item} clickBook={this.clickBook.bind(this)} />;
+                        } else {
+                            return <BookCard bookInfo={item} clickBook={this.clickBook.bind(this)} />;
+                        }
+
                     })}
                 </GridList>
                 <div className={classes.page}>
