@@ -9,6 +9,7 @@ const nullUser = {
     isAuthed: false,
     userName: null,
     avatarPath: null,
+    isAdmin: false,
 };
 
 class MainRouter extends React.Component {
