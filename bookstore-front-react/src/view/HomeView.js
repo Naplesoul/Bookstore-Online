@@ -10,12 +10,22 @@ const styles = theme => ({
 });
 
 class HomeView extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    clickBook(id) {
+        this.props.clickBook(id);
+    }
+
     render() {
         const { classes } = this.props;
         return(
             <div>
                 <AdsCarousel/>
-                <BrowseView/>
+                <BrowseView  bookData={this.props.bookData}
+                             clickBook={this.clickBook.bind(this)}
+                />
             </div>
         );
     }

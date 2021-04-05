@@ -1,11 +1,9 @@
 import React from 'react';
 import {Router, Route, Redirect} from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import history from './utils/history'
 
 import Frame from "./view/Frame";
 import LoginView from "./view/LoginView";
-
-const history = createBrowserHistory();
 
 const nullUser = {
     isAuthed: false,

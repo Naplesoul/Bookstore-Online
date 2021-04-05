@@ -15,7 +15,6 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles';
 
 import MenuBookIcon from '@material-ui/icons/MenuBook';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SearchIcon from '@material-ui/icons/Search';
@@ -28,13 +27,14 @@ import InfoView from "./InfoView";
 import OrderView from "./OrderView";
 import CartView from "./CartView";
 import ProfileView from "./ProfileView";
+import CartIcon from "../components/CartIcon";
 
 const drawerWidth = 240;
 
 
 let bookData = [
     {id: 0, name: "The Lord of the Rings", author: "J. R. R. Tolkien", category: "novel", price: 45.90, storage: 500, intro: "The book is a sequel to \"The Hobbit\" and is recognized as the originator of modern fantasy literature. ", picDir: require("../assets/book0.jpg").default},
-    {id: 1, name: "Le Petit Prince (The Little Prince)", author: "Antoine de Saint-Exupéry", category: "novel", price: 9.88, storage: 31, intro: "The protagonist of this book is a little prince from an alien planet. The book uses a pilot as the storyteller, telling the various adventures that the little prince went through when he set off from his own planet to the earth. ", picDir: require("../assets/book1.jpg").default},
+    {id: 1, name: "Le Petit Prince", author: "Antoine de Saint-Exupéry", category: "novel", price: 9.88, storage: 31, intro: "The protagonist of this book is a little prince from an alien planet. The book uses a pilot as the storyteller, telling the various adventures that the little prince went through when he set off from his own planet to the earth. ", picDir: require("../assets/book1.jpg").default},
 ];
 
 
@@ -142,7 +142,23 @@ class Frame extends React.Component {
             redirectPath: null,
             bookData: bookData,
             cartData: cartData,
+            infoPageBook: bookData[0],
         }
+    }
+
+    clickBook(id) {
+        let newInfoPageBook = this.state.infoPageBook;
+        let len = this.state.bookData.length;
+        for (let i = 0; i < len; ++i) {
+            if (this.state.bookData[i].id === id) {
+                newInfoPageBook = this.state.bookData[i];
+                break;
+            }
+        }
+        this.setState({
+            infoPageBook: newInfoPageBook,
+            redirectPath: "/store/info",
+        });
     }
 
     onCartNumberChange(id, num) {
@@ -156,7 +172,46 @@ class Frame extends React.Component {
         }
         this.setState({
             cartData: newCartData,
-        })
+        });
+    };
+
+    addCart(id, buyNow) {
+        let found = false;
+        let newCartData = [];
+        let len = this.state.cartData.length;
+        if (buyNow) {
+            for (let i = 0; i < len; ++i) {
+                this.state.cartData[i].isChosen = false;
+                if (this.state.cartData[i].id === id) {
+                    this.state.cartData[i].num += 1;
+                    this.state.cartData[i].isChosen = true;
+                    found = true;
+                }
+                newCartData.push(this.state.cartData[i]);
+            }
+        } else {
+            for (let i = 0; i < len; ++i) {
+                if (this.state.cartData[i].id === id) {
+                    this.state.cartData[i].num += 1;
+                    found = true;
+                }
+                newCartData.push(this.state.cartData[i]);
+            }
+        }
+        if (!found) {
+            let dataLen = this.state.bookData.length;
+            for (let i = 0; i < dataLen; ++i) {
+                if (this.state.bookData[i].id === id) {
+                    newCartData.push({id: id, num: 1, isChosen: true, name: this.state.bookData[i].name, author: this.state.bookData[i].author, category: this.state.bookData[i].category, price: this.state.bookData[i].price, storage: this.state.bookData[i].storage, picDir: this.state.bookData[i].picDir});
+                }
+            }
+        }
+        this.setState({
+            cartData: newCartData,
+        });
+        if (buyNow) {
+            this.go2Cart();
+        }
     };
 
     removeCartItem(id) {
@@ -187,6 +242,17 @@ class Frame extends React.Component {
         })
     }
 
+    cartNumber = () => {
+        let num = 0;
+        let len = this.state.cartData.length;
+        for (let i = 0; i < len; ++i) {
+            num += this.state.cartData[i].num;
+        }
+        if (num)
+            return num;
+        return null;
+    }
+
     login(){
         this.setState({
             redirectPath: "/login",
@@ -209,7 +275,9 @@ class Frame extends React.Component {
         })
     }
 
+
     go2Cart(){
+        if(this.props.user)
         this.setState({
             redirectPath: "/store/cart",
         })
@@ -262,7 +330,7 @@ class Frame extends React.Component {
                             />
                         </div>
                         <div className={classes.avatar}>
-                            <UserAvatar user={this.props.user}
+                            <UserAvatar user={this.props.user} go2Profile={this.go2Profile.bind(this)}
                             askForLogin={this.login.bind(this)} askForLogout={this.logout.bind(this)}/>
                         </div>
 
@@ -284,7 +352,9 @@ class Frame extends React.Component {
                                 <ListItemText>Books</ListItemText>
                             </ListItem>
                             <ListItem button onClick={this.go2Cart.bind(this)}>
-                                <ListItemIcon><ShoppingCartIcon/></ListItemIcon>
+                                <ListItemIcon>
+                                    <CartIcon number={this.cartNumber()}/>
+                                </ListItemIcon>
                                 <ListItemText>Cart</ListItemText>
                             </ListItem>
                             <ListItem button onClick={this.go2Orders.bind(this)}>
@@ -300,9 +370,21 @@ class Frame extends React.Component {
                 </Drawer>
                 <main className={classes.content}>
                     <Router>
-                        <Route exact path={"/store"}><HomeView/></Route>
-                        <Route exact path={"/store/books"}><BrowseView/></Route>
-                        <Route path={"/store/info/"}><InfoView/></Route>
+                        <Route exact path={"/store"}>
+                            <HomeView bookData={this.state.bookData}
+                                      clickBook={this.clickBook.bind(this)}
+                                />
+                        </Route>
+                        <Route exact path={"/store/books"}>
+                            <BrowseView bookData={this.state.bookData}
+                                        clickBook={this.clickBook.bind(this)}
+                            />
+                        </Route>
+                        <Route exact path={"/store/info/"}>
+                            <InfoView bookInfo={this.state.infoPageBook}
+                                      addCart={this.addCart.bind(this)}
+                            />
+                        </Route>
                         <Route exact path={"/store/cart"}>
                             <CartView cartData={this.state.cartData}
                                       onNumberChange={this.onCartNumberChange.bind(this)}
