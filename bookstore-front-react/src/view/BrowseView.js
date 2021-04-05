@@ -4,6 +4,7 @@ import BookCard from "../components/BookCard";
 import GridList from '@material-ui/core/GridList';
 import { Pagination } from 'antd';
 import 'antd/dist/antd.css'
+import CartItem from "../components/CartItem";
 
 
 const styles = theme => ({
@@ -16,17 +17,23 @@ const styles = theme => ({
 });
 
 class BrowseView extends React.Component {
+    constructor(props) {
+        super(props);
+
+    }
+
+    clickBook(id) {
+        this.props.clickBook(id);
+    }
+
     render() {
         const { classes } = this.props;
         return(
             <div className={classes.root}>
                 <GridList cellHeight={160} className={classes.gridList} cols={3}>
-                    <BookCard/>
-                    <BookCard/>
-                    <BookCard/>
-                    <BookCard/>
-                    <BookCard/>
-                    <BookCard/>
+                    {this.props.bookData.map((item, index) => {
+                        return <BookCard bookInfo={item} clickBook={this.clickBook.bind(this)} />;
+                    })}
                 </GridList>
                 <div className={classes.page}>
                     <Pagination defaultCurrent={1} total={50} />

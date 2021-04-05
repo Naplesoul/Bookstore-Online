@@ -42,6 +42,11 @@ class UserAvatar extends React.Component{
         this.setState({anchorEl: null});
     };
 
+    go2Profile = () => {
+        this.setState({anchorEl: null});
+        this.props.go2Profile();
+    }
+
     login = () => {
         this.props.askForLogin();
     };
@@ -81,7 +86,7 @@ class UserAvatar extends React.Component{
                             open={Boolean(this.state.anchorEl)}
                             onClose={this.closeMenu}
                         >
-                            <MenuItem onClick={this.closeMenu}>My Profile</MenuItem>
+                            <MenuItem onClick={this.go2Profile}>My Profile</MenuItem>
                             <MenuItem onClick={this.logout}>Logout</MenuItem>
                         </Menu>
                     </div>

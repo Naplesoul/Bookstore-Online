@@ -27,7 +27,7 @@ const styles = theme => ({
     },
     buyButton: {
         marginTop: 17,
-        backgroundColor: "#d53838",
+        // backgroundColor: "#d53838",
     },
 });
 
