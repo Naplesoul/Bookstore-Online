@@ -48,10 +48,7 @@ let bookData = [
 ];
 
 
-let cartData = [
-    {id: 0, num: 5, isChosen: true, name: "The Lord of the Rings", author: "J. R. R. Tolkien", category: "novel", price: 45.90, storage: 500, picDir: require("../assets/book0.jpg").default},
-    {id: 1, num: 2, isChosen: true, name: "Le Petit Prince", author: "Antoine de Saint-Exupéry", category: "novel", price: 9.88, storage: 31, picDir: require("../assets/book1.jpg").default},
-];
+let cartData = [];
 
 const styles = theme => ({
     root: {
@@ -147,45 +144,49 @@ class Frame extends React.Component {
     };
 
     addCart(id, buyNow) {
-        let found = false;
-        let newCartData = [];
-        let len = this.state.cartData.length;
-        if (buyNow) {
-            for (let i = 0; i < len; ++i) {
-                this.state.cartData[i].isChosen = false;
-                if (this.state.cartData[i].id === id) {
-                    if (this.state.cartData[i].num + 1 <= this.state.cartData[i].storage)
-                        this.state.cartData[i].num += 1;
-                    this.state.cartData[i].isChosen = true;
-                    found = true;
+        if(this.props.user.isAuthed) {
+            let found = false;
+            let newCartData = [];
+            let len = this.state.cartData.length;
+            if (buyNow) {
+                for (let i = 0; i < len; ++i) {
+                    this.state.cartData[i].isChosen = false;
+                    if (this.state.cartData[i].id === id) {
+                        if (this.state.cartData[i].num + 1 <= this.state.cartData[i].storage)
+                            this.state.cartData[i].num += 1;
+                        this.state.cartData[i].isChosen = true;
+                        found = true;
+                    }
+                    newCartData.push(this.state.cartData[i]);
                 }
-                newCartData.push(this.state.cartData[i]);
+            } else {
+                for (let i = 0; i < len; ++i) {
+                    if (this.state.cartData[i].id === id) {
+                        if (this.state.cartData[i].num + 1 <= this.state.cartData[i].storage)
+                            this.state.cartData[i].num += 1;
+                        found = true;
+                    }
+                    newCartData.push(this.state.cartData[i]);
+                }
+            }
+            if (!found) {
+                let dataLen = this.state.bookData.length;
+                for (let i = 0; i < dataLen; ++i) {
+                    if (this.state.bookData[i].id === id) {
+                        if (this.state.bookData[i].storage === 0)
+                            return;
+                        newCartData.push({id: id, num: 1, isChosen: true, name: this.state.bookData[i].name, author: this.state.bookData[i].author, category: this.state.bookData[i].category, price: this.state.bookData[i].price, storage: this.state.bookData[i].storage, picDir: this.state.bookData[i].picDir});
+                    }
+                }
+            }
+            this.setState({
+                cartData: newCartData,
+            });
+            if (buyNow) {
+                this.go2Cart();
             }
         } else {
-            for (let i = 0; i < len; ++i) {
-                if (this.state.cartData[i].id === id) {
-                    if (this.state.cartData[i].num + 1 <= this.state.cartData[i].storage)
-                        this.state.cartData[i].num += 1;
-                    found = true;
-                }
-                newCartData.push(this.state.cartData[i]);
-            }
-        }
-        if (!found) {
-            let dataLen = this.state.bookData.length;
-            for (let i = 0; i < dataLen; ++i) {
-                if (this.state.bookData[i].id === id) {
-                    if (this.state.bookData[i].storage === 0)
-                        return;
-                    newCartData.push({id: id, num: 1, isChosen: true, name: this.state.bookData[i].name, author: this.state.bookData[i].author, category: this.state.bookData[i].category, price: this.state.bookData[i].price, storage: this.state.bookData[i].storage, picDir: this.state.bookData[i].picDir});
-                }
-            }
-        }
-        this.setState({
-            cartData: newCartData,
-        });
-        if (buyNow) {
-            this.go2Cart();
+            this.login();
         }
     };
 
@@ -229,7 +230,6 @@ class Frame extends React.Component {
     };
 
     onSearchTextChange(value) {
-        console.log(value);
         this.setState({
             searchText: value,
         })
@@ -283,12 +283,14 @@ class Frame extends React.Component {
 
     logout(){
         this.props.askForLogout();
+        this.goHome();
     }
 
     goHome(){
         this.setState({
             redirectPath: "/store",
             searchText: null,
+            cartData: cartData,
         })
     }
 
@@ -300,25 +302,33 @@ class Frame extends React.Component {
 
 
     go2Cart(){
-        if(this.props.user)
-        this.setState({
-            redirectPath: "/store/cart",
-            searchText: null,
-        })
+        if(this.props.user.isAuthed) {
+            this.setState({
+                redirectPath: "/store/cart",
+                searchText: null,
+            });
+        } else
+            this.login();
     }
 
     go2Orders(){
-        this.setState({
-            redirectPath: "/store/orders",
-            searchText: null,
-        })
+        if(this.props.user.isAuthed) {
+            this.setState({
+                redirectPath: "/store/orders",
+                searchText: null,
+            });
+        } else
+            this.login();
     }
 
     go2Profile(){
-        this.setState({
-            redirectPath: "/store/profile",
-            searchText: null,
-        })
+        if(this.props.user.isAuthed) {
+            this.setState({
+                redirectPath: "/store/profile",
+                searchText: null,
+            });
+        } else
+            this.login();
     }
 
 
