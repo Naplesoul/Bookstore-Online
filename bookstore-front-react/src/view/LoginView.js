@@ -50,16 +50,35 @@ class LoginView extends React.Component {
         super(props);
         this.state = {
             redirectPath: null,
+            userName: null,
+            password: null,
         }
         this.login = this.login.bind(this);
-    }
+    };
 
     login(){
-        this.props.login({isAuthed: true, userName: "沈玮杭", avatarPath: require("../assets/userimage1.jpg").default, isAdmin: true});
+        if (this.state.userName === "Admin" && this.state.password === "admin")
+            this.props.login({isAuthed: true, userName: "Admin", avatarPath: require("../assets/userimage1.jpg").default, isAdmin: true});
+        else if (this.state.userName === "User" && this.state.password === "user")
+            this.props.login({isAuthed: true, userName: "User", avatarPath: require("../assets/userimage1.jpg").default, isAdmin: false});
+        else
+            return;
         this.setState({
             redirectPath: "/store",
         })
-    }
+    };
+
+    onUserNameChange(e) {
+        this.setState({
+            userName: e.target.value,
+        });
+    };
+
+    onPasswordChange(e) {
+        this.setState({
+            password: e.target.value,
+        });
+    };
 
     render() {
         if(this.state.redirectPath){
@@ -95,6 +114,8 @@ class LoginView extends React.Component {
                                 name="username"
                                 autoComplete="username"
                                 autoFocus
+                                defaultValue={this.state.userName}
+                                onChange={this.onUserNameChange.bind(this)}
                             />
                             <TextField
                                 variant="outlined"
@@ -106,6 +127,8 @@ class LoginView extends React.Component {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                defaultValue={this.state.password}
+                                onChange={this.onPasswordChange.bind(this)}
                             />
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}

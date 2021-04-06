@@ -50,7 +50,7 @@ let bookData = [
 
 let cartData = [
     {id: 0, num: 5, isChosen: true, name: "The Lord of the Rings", author: "J. R. R. Tolkien", category: "novel", price: 45.90, storage: 500, picDir: require("../assets/book0.jpg").default},
-    {id: 1, num: 2, isChosen: true, name: "Le Petit Prince (The Little Prince)", author: "Antoine de Saint-Exupéry", category: "novel", price: 9.88, storage: 31, picDir: require("../assets/book1.jpg").default},
+    {id: 1, num: 2, isChosen: true, name: "Le Petit Prince", author: "Antoine de Saint-Exupéry", category: "novel", price: 9.88, storage: 31, picDir: require("../assets/book1.jpg").default},
 ];
 
 const styles = theme => ({
@@ -154,7 +154,8 @@ class Frame extends React.Component {
             for (let i = 0; i < len; ++i) {
                 this.state.cartData[i].isChosen = false;
                 if (this.state.cartData[i].id === id) {
-                    this.state.cartData[i].num += 1;
+                    if (this.state.cartData[i].num + 1 <= this.state.cartData[i].storage)
+                        this.state.cartData[i].num += 1;
                     this.state.cartData[i].isChosen = true;
                     found = true;
                 }
@@ -163,7 +164,8 @@ class Frame extends React.Component {
         } else {
             for (let i = 0; i < len; ++i) {
                 if (this.state.cartData[i].id === id) {
-                    this.state.cartData[i].num += 1;
+                    if (this.state.cartData[i].num + 1 <= this.state.cartData[i].storage)
+                        this.state.cartData[i].num += 1;
                     found = true;
                 }
                 newCartData.push(this.state.cartData[i]);
@@ -173,6 +175,8 @@ class Frame extends React.Component {
             let dataLen = this.state.bookData.length;
             for (let i = 0; i < dataLen; ++i) {
                 if (this.state.bookData[i].id === id) {
+                    if (this.state.bookData[i].storage === 0)
+                        return;
                     newCartData.push({id: id, num: 1, isChosen: true, name: this.state.bookData[i].name, author: this.state.bookData[i].author, category: this.state.bookData[i].category, price: this.state.bookData[i].price, storage: this.state.bookData[i].storage, picDir: this.state.bookData[i].picDir});
                 }
             }
@@ -230,6 +234,44 @@ class Frame extends React.Component {
             searchText: value,
         })
         this.go2Books();
+    };
+
+    onBookDataChange(id, data) {
+        let newBookData = this.state.bookData;
+        let len = newBookData.length;
+        for (let i = 0; i < len; ++i) {
+            if (newBookData[i].id === id) {
+                newBookData[i] = data;
+                break;
+            }
+        }
+        let newCartData = this.state.cartData;
+        len = newCartData.length;
+        for (let i = 0; i < len; ++i) {
+            if (newCartData[i].id === id) {
+                if (data.storage === 0) {
+                    this.removeCartItem(id);
+                    this.setState({
+                        bookData: newBookData,
+                    });
+                    return;
+                }
+                if (data.storage < newCartData[i].num) {
+                    newCartData[i].num = data.storage;
+                }
+                newCartData[i].name = data.name;
+                newCartData[i].author = data.author;
+                newCartData[i].storage = data.storage;
+                newCartData[i].price = data.price;
+                newCartData[i].intro = data.intro;
+                newCartData[i].category = data.category;
+                break;
+            }
+        }
+        this.setState({
+            bookData: newBookData,
+            cartData: newCartData,
+        });
     };
 
     login(){
@@ -354,6 +396,8 @@ class Frame extends React.Component {
                         <Route exact path={"/store/info/"}>
                             <InfoView bookInfo={this.state.infoPageBook}
                                       addCart={this.addCart.bind(this)}
+                                      user={this.props.user}
+                                      onBookDataChange={this.onBookDataChange.bind(this)}
                             />
                         </Route>
                         <Route exact path={"/store/cart"}>
