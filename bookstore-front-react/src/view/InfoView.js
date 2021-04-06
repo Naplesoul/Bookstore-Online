@@ -97,14 +97,14 @@ class InfoView extends React.Component {
     };
 
     onCategoryChange(e) {
-        let newData = this.props.bookInfo.trim();
-        newData.category = e.target.value;
+        let newData = this.props.bookInfo;
+        newData.category = e.target.value.trim();
         this.props.onBookDataChange(this.props.bookInfo.id, newData);
     };
 
     onIntroductionChange(e) {
-        let newData = this.props.bookInfo.trim();
-        newData.intro = e.target.value;
+        let newData = this.props.bookInfo;
+        newData.intro = e.target.value.trim();
         this.props.onBookDataChange(this.props.bookInfo.id, newData);
     };
 

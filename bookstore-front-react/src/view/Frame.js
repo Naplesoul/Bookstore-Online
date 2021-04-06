@@ -283,6 +283,9 @@ class Frame extends React.Component {
 
     logout(){
         this.props.askForLogout();
+        this.setState({
+            cartData: cartData,
+        });
         this.goHome();
     }
 
@@ -290,7 +293,6 @@ class Frame extends React.Component {
         this.setState({
             redirectPath: "/store",
             searchText: null,
-            cartData: cartData,
         })
     }
 
