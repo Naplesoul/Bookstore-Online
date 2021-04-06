@@ -4,7 +4,6 @@ import BookCard from "../components/BookCard";
 import GridList from '@material-ui/core/GridList';
 import { Pagination } from 'antd';
 import 'antd/dist/antd.css'
-import CartItem from "../components/CartItem";
 
 
 const styles = theme => ({
@@ -44,7 +43,7 @@ class BrowseView extends React.Component {
                     })}
                 </GridList>
                 <div className={classes.page}>
-                    <Pagination defaultCurrent={1} total={50} />
+                    <Pagination defaultCurrent={1} total={this.props.bookData.length} defaultPageSize={15} />
                 </div>
             </div>
         );
