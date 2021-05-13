@@ -115,7 +115,7 @@ class InfoView extends React.Component {
             return(
                 <Grid container spacing={5} className={classes.root}>
                     <Grid item xs={5}>
-                        <img alt={"bookPicture"} src={this.props.bookInfo.picDir} width={"100%"}/>
+                        <img alt={"bookPicture"} src={this.props.bookInfo.image} width={"100%"}/>
                     </Grid>
                     <Grid item xs={5} className={classes.detail}>
                         <div>
@@ -189,7 +189,7 @@ class InfoView extends React.Component {
         return(
             <Grid container spacing={5} className={classes.root}>
                 <Grid item xs={5}>
-                    <img alt={"bookPicture"} src={this.props.bookInfo.picDir} width={"100%"}/>
+                    <img alt={"bookPicture"} src={this.props.bookInfo.image} width={"100%"}/>
                 </Grid>
                 <Grid item xs={5} className={classes.detail}>
                     <Typography variant={"h4"} className={classes.bookName}>{this.props.bookInfo.name}</Typography>

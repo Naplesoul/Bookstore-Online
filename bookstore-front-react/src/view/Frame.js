@@ -31,20 +31,20 @@ const drawerWidth = 240;
 
 
 let bookData = [
-    {id: 0, name: "The Lord of the Rings", author: "J. R. R. Tolkien", category: "novel", price: 45.90, storage: 500, intro: "The book is a sequel to \"The Hobbit\" and is recognized as the originator of modern fantasy literature. ", picDir: require("../assets/book0.jpg").default},
-    {id: 1, name: "Le Petit Prince", author: "Antoine de Saint-Exupéry", category: "novel", price: 9.88, storage: 31, intro: "The protagonist of this book is a little prince from an alien planet. The book uses a pilot as the storyteller, telling the various adventures that the little prince went through when he set off from his own planet to the earth. ", picDir: require("../assets/book1.jpg").default},
-    {id: 2, name: "Java核心技术卷II", author: "凯S.霍斯特曼", category: "编程", price: 95.2, storage: 300, intro: "本书是Java领域有影响力和价值的著作之一，由拥有20多年教学与研究经验的Java技术专家撰写（获Jolt大奖），与《Java编程思想》齐名，10余年全球畅销不衰，广受好评。第10版根据JavaSE8全面更新，同时修正了第9版中的不足，系统全面讲解了Java语言的核心概念、语法、重要特性和开发方法，包含大量案例，实践性强。", picDir: require("../assets/book2.jpg").default},
-    {id: 3, name: "深入理解计算机系统", author: "兰德尔·E·布莱恩特", category: "编程", price: 136.9, storage: 1200, intro: "程序员必读经典著作！理解计算机系统*书目，10万程序员共同选择。第二版销售突破100000册，第三版重磅上市！", picDir: require("../assets/book3.jpg").default},
-    {id: 4, name: "Effective C++", author: "梅耶", category: "编程", price: 51.3, storage: 1000, intro: "大师名著纵横二十载，稳居任一荐书单三甲；称职程序员傍身绝学，通向C++精微奥妙之门。", picDir: require("../assets/book4.jpg").default},
-    {id: 5, name: "Java编程思想", author: "Bruce Eckel", category: "编程", price: 91.2, storage: 200, intro: "Java学习必读经典,殿堂级著作！赢得了全球程序员的广泛赞誉。", picDir: require("../assets/book5.jpg").default},
-    {id: 6, name: "魔兽世界编年史套装", author: "克里斯˙梅森", category: "魔幻小说", price: 449.2, storage: 123, intro: "暴雪官方历时二十年编纂而成的史料！三卷《魔兽世界编年史》将呈现大量从未公布的精美原画和插图，读者在阅读故事之余，更能享受一次视觉上的饕餮盛宴，是魔兽粉丝收藏的优选。", picDir: require("../assets/book6.jpg").default},
-    {id: 7, name: "三体：全三册", author: "刘慈欣", category: "科幻小说", price: 50.2, storage: 124, intro: "刘慈欣代表作，亚洲首部“雨果奖”获奖作品！", picDir: require("../assets/book7.jpg").default},
-    {id: 8, name: "悲惨世界", author: "雨果", category: "世界名著", price: 104, storage: 345, intro: "《悲惨世界》是雨果在流亡期间写的长篇小说，是他的代表作，也是世界文学宝库的珍品之一。 《悲惨世界》通过冉阿让等人的悲惨遭遇以及冉阿让被卞福汝主教感化后一系列令人感动的事迹，深刻揭露和批判了19世纪法国封建专制社会的腐朽本质及其罪恶现象，对穷苦人民在封建重压下所遭受的剥削欺诈和残酷迫害表示了悲悯和同情。", picDir: require("../assets/book8.jpg").default},
-    {id: 9, name: "机器学习", author: "周志华", category: "编程", price: 61.6, storage: 255, intro: "击败AlphaGo的武林秘籍，赢得人机大战的必由之路：人工智能大牛周志华教授巨著，全面揭开机器学习的奥秘。", picDir: require("../assets/book9.jpg").default},
-    {id: 10, name: "纳尼亚传奇", author: "刘易斯", category: "魔幻小说", price: 86.2, storage: 31, intro: "刘易斯基金会独家授权插图！翻译家吴岩，陈良廷，刘文澜经典译本！", picDir: require("../assets/book10.jpg").default},
-    {id: 11, name: "老人与海", author: "海明威", category: "世界名著", price: 27.8, storage: 241, intro: "收录诺贝尔文学奖获奖作品《老人与海》《乞力马扎罗的雪》，深深影响了马尔克斯、塞林格等文学家的创作理念。", picDir: require("../assets/book11.jpg").default},
-    {id: 12, name: "魔力的胎动", author: "东野圭吾", category: "悬疑/推理小说", price: 35.9, storage: 123, intro: "喜欢《解忧杂货店》，就一定要读这本书。珍藏印签。有了想要守护的东西，生命就会变得有力量。悲凉的人生、千疮百孔的命运、一桩桩悲剧的发生与救赎，读来令人喟叹不已。", picDir: require("../assets/book12.jpg").default},
-    {id: 13, name: "软件工程原理", author: "沈备军、陈昊鹏、陈雨亭", category: "编程", price: 35.9, storage: 1024, intro: "从软件工程的本质出发、结合实际案例，系统全面地介绍软件过程、软件建模技术与方法及软件工程管理同时介绍一些热点新技术和新方法。", picDir: require("../assets/book13.jpg").default},
+    // {id: 0, name: "The Lord of the Rings", author: "J. R. R. Tolkien", category: "novel", price: 45.90, storage: 500, intro: "The book is a sequel to \"The Hobbit\" and is recognized as the originator of modern fantasy literature. ", picDir: require("../assets/book0.jpg").default},
+    // {id: 1, name: "Le Petit Prince", author: "Antoine de Saint-Exupéry", category: "novel", price: 9.88, storage: 31, intro: "The protagonist of this book is a little prince from an alien planet. The book uses a pilot as the storyteller, telling the various adventures that the little prince went through when he set off from his own planet to the earth. ", picDir: require("../assets/book1.jpg").default},
+    // {id: 2, name: "Java核心技术卷II", author: "凯S.霍斯特曼", category: "编程", price: 95.2, storage: 300, intro: "本书是Java领域有影响力和价值的著作之一，由拥有20多年教学与研究经验的Java技术专家撰写（获Jolt大奖），与《Java编程思想》齐名，10余年全球畅销不衰，广受好评。第10版根据JavaSE8全面更新，同时修正了第9版中的不足，系统全面讲解了Java语言的核心概念、语法、重要特性和开发方法，包含大量案例，实践性强。", picDir: require("../assets/book2.jpg").default},
+    // {id: 3, name: "深入理解计算机系统", author: "兰德尔·E·布莱恩特", category: "编程", price: 136.9, storage: 1200, intro: "程序员必读经典著作！理解计算机系统*书目，10万程序员共同选择。第二版销售突破100000册，第三版重磅上市！", picDir: require("../assets/book3.jpg").default},
+    // {id: 4, name: "Effective C++", author: "梅耶", category: "编程", price: 51.3, storage: 1000, intro: "大师名著纵横二十载，稳居任一荐书单三甲；称职程序员傍身绝学，通向C++精微奥妙之门。", picDir: require("../assets/book4.jpg").default},
+    // {id: 5, name: "Java编程思想", author: "Bruce Eckel", category: "编程", price: 91.2, storage: 200, intro: "Java学习必读经典,殿堂级著作！赢得了全球程序员的广泛赞誉。", picDir: require("../assets/book5.jpg").default},
+    // {id: 6, name: "魔兽世界编年史套装", author: "克里斯˙梅森", category: "魔幻小说", price: 449.2, storage: 123, intro: "暴雪官方历时二十年编纂而成的史料！三卷《魔兽世界编年史》将呈现大量从未公布的精美原画和插图，读者在阅读故事之余，更能享受一次视觉上的饕餮盛宴，是魔兽粉丝收藏的优选。", picDir: require("../assets/book6.jpg").default},
+    // {id: 7, name: "三体：全三册", author: "刘慈欣", category: "科幻小说", price: 50.2, storage: 124, intro: "刘慈欣代表作，亚洲首部“雨果奖”获奖作品！", picDir: require("../assets/book7.jpg").default},
+    // {id: 8, name: "悲惨世界", author: "雨果", category: "世界名著", price: 104, storage: 345, intro: "《悲惨世界》是雨果在流亡期间写的长篇小说，是他的代表作，也是世界文学宝库的珍品之一。 《悲惨世界》通过冉阿让等人的悲惨遭遇以及冉阿让被卞福汝主教感化后一系列令人感动的事迹，深刻揭露和批判了19世纪法国封建专制社会的腐朽本质及其罪恶现象，对穷苦人民在封建重压下所遭受的剥削欺诈和残酷迫害表示了悲悯和同情。", picDir: require("../assets/book8.jpg").default},
+    // {id: 9, name: "机器学习", author: "周志华", category: "编程", price: 61.6, storage: 255, intro: "击败AlphaGo的武林秘籍，赢得人机大战的必由之路：人工智能大牛周志华教授巨著，全面揭开机器学习的奥秘。", picDir: require("../assets/book9.jpg").default},
+    // {id: 10, name: "纳尼亚传奇", author: "刘易斯", category: "魔幻小说", price: 86.2, storage: 31, intro: "刘易斯基金会独家授权插图！翻译家吴岩，陈良廷，刘文澜经典译本！", picDir: require("../assets/book10.jpg").default},
+    // {id: 11, name: "老人与海", author: "海明威", category: "世界名著", price: 27.8, storage: 241, intro: "收录诺贝尔文学奖获奖作品《老人与海》《乞力马扎罗的雪》，深深影响了马尔克斯、塞林格等文学家的创作理念。", picDir: require("../assets/book11.jpg").default},
+    // {id: 12, name: "魔力的胎动", author: "东野圭吾", category: "悬疑/推理小说", price: 35.9, storage: 123, intro: "喜欢《解忧杂货店》，就一定要读这本书。珍藏印签。有了想要守护的东西，生命就会变得有力量。悲凉的人生、千疮百孔的命运、一桩桩悲剧的发生与救赎，读来令人喟叹不已。", picDir: require("../assets/book12.jpg").default},
+    // {id: 13, name: "软件工程原理", author: "沈备军、陈昊鹏、陈雨亭", category: "编程", price: 35.9, storage: 1024, intro: "从软件工程的本质出发、结合实际案例，系统全面地介绍软件过程、软件建模技术与方法及软件工程管理同时介绍一些热点新技术和新方法。", picDir: require("../assets/book13.jpg").default},
 ];
 
 
@@ -105,13 +105,21 @@ class Frame extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
             redirectPath: null,
             bookData: bookData,
             cartData: cartData,
             infoPageBook: bookData[0],
             searchText: null,
-        }
+        };
+        fetch("http://localhost:8080/getBooks")
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    bookData: data,
+                })
+            })
     }
 
     clickBook(id) {
@@ -175,7 +183,7 @@ class Frame extends React.Component {
                     if (this.state.bookData[i].id === id) {
                         if (this.state.bookData[i].storage === 0)
                             return;
-                        newCartData.push({id: id, num: 1, isChosen: true, name: this.state.bookData[i].name, author: this.state.bookData[i].author, category: this.state.bookData[i].category, price: this.state.bookData[i].price, storage: this.state.bookData[i].storage, picDir: this.state.bookData[i].picDir});
+                        newCartData.push({id: id, num: 1, isChosen: true, name: this.state.bookData[i].name, author: this.state.bookData[i].author, category: this.state.bookData[i].category, price: this.state.bookData[i].price, storage: this.state.bookData[i].storage, image: this.state.bookData[i].image});
                     }
                 }
             }

@@ -76,7 +76,7 @@ class CartItem extends React.Component {
                         />
                     </Grid>
                     <Grid item xs={3}>
-                        <img alt={this.props.itemData.name} src={this.props.itemData.picDir} height={"180px"}
+                        <img alt={this.props.itemData.name} src={this.props.itemData.image} height={"180px"}
                              className={classes.bookimg}/>
                     </Grid>
                     <Grid item xs={4}>

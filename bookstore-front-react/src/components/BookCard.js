@@ -42,7 +42,7 @@ class BookCard extends React.Component {
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
-                        image={this.props.bookInfo.picDir}
+                        image={this.props.bookInfo.image}
                         title={this.props.bookInfo.name}
                     />
                     <CardContent className={classes.content}>
