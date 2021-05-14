@@ -6,6 +6,7 @@ import Frame from "./view/Frame";
 import LoginView from "./view/LoginView";
 
 const nullUser = {
+    id: -1,
     isAuthed: false,
     userName: null,
     avatarPath: null,

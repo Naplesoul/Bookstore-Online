@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
+import {login} from "../services/userService";
 
 
 const styles = theme => ({
@@ -57,16 +58,30 @@ class LoginView extends React.Component {
     };
 
     login(){
-        if (this.state.userName === "Admin" && this.state.password === "admin")
-            this.props.login({isAuthed: true, userName: "Admin", avatarPath: require("../assets/userimage1.jpg").default, isAdmin: true});
-        else if (this.state.userName === "User" && this.state.password === "user")
-            this.props.login({isAuthed: true, userName: "User", avatarPath: require("../assets/userimage1.jpg").default, isAdmin: false});
-        else
-            return;
-        this.setState({
-            redirectPath: "/store",
+        login(this.state.userName, this.state.password, (data) => {
+            if (data.id !== -1) {
+                this.props.login({
+                    id: data.id,
+                    isAuthed: true,
+                    userName: data.username,
+                    avatarPath: require("../assets/userimage1.jpg").default,
+                    isAdmin: data.type
+                });
+                this.setState({
+                    redirectPath: "/store",
+                })
+            }
+
         })
+
     };
+
+    onKeyDown(e) {
+        if (e.keyCode === 13) {
+            this.login();
+        }
+    }
+
 
     onUserNameChange(e) {
         this.setState({
@@ -103,13 +118,13 @@ class LoginView extends React.Component {
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
-                        <form className={classes.form} noValidate>
+                        <form className={classes.form}>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="userName"
+                                // id="userName"
                                 label="User Name"
                                 name="username"
                                 autoComplete="username"
@@ -125,17 +140,18 @@ class LoginView extends React.Component {
                                 name="password"
                                 label="Password"
                                 type="password"
-                                id="password"
+                                // id="password"
                                 autoComplete="current-password"
                                 defaultValue={this.state.password}
                                 onChange={this.onPasswordChange.bind(this)}
+                                onKeyDown={this.onKeyDown.bind(this)}
                             />
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}
                                 label="Remember me"
                             />
                             <Button
-                                type="submit"
+                                // type="submit"
                                 fullWidth
                                 variant="contained"
                                 color="primary"
