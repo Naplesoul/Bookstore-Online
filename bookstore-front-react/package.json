@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
+    "config": "^3.3.6",
     "element-react": "^1.4.34",
     "element-theme-default": "^1.4.13",
     "fontsource-roboto": "^4.0.0",

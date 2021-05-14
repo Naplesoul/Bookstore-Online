@@ -26,6 +26,7 @@ import CartView from "./CartView";
 import ProfileView from "./ProfileView";
 import SearchBox from "../components/SearchBox";
 import CartIcon from "../components/CartIcon";
+import {getBooks} from "../services/bookService";
 
 const drawerWidth = 240;
 
@@ -113,13 +114,11 @@ class Frame extends React.Component {
             infoPageBook: bookData[0],
             searchText: null,
         };
-        fetch("http://localhost:8080/getBooks")
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    bookData: data,
-                })
+        getBooks((data) => {
+            this.setState({
+                bookData: data,
             })
+        })
     }
 
     clickBook(id) {
