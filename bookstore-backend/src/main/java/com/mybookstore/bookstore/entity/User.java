@@ -3,16 +3,15 @@ package com.mybookstore.bookstore.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     private String nickname;

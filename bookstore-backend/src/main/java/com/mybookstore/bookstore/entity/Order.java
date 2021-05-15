@@ -9,18 +9,14 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "user_auth")
+@Table(name = "orders")
 @JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
-public class UserAuth {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private int id;
 
-    private String username;
-
-    @Transient
-    private String password;
-
-    private Integer type;
+    private int userId;
+    private Double totalPrice;
 }

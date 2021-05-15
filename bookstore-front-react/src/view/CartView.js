@@ -4,6 +4,7 @@ import CartItem from "../components/CartItem";
 import {Card, Grid, Button} from "@material-ui/core";
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import Typography from "@material-ui/core/Typography";
+import {placeOrder} from "../services/OrderService";
 
 
 const styles = theme => ({
@@ -34,7 +35,10 @@ const styles = theme => ({
 class CartView extends React.Component {
     constructor(props) {
         super(props);
-
+        this.getTotalPrice = this.getTotalPrice.bind(this);
+        this.state = {
+            totalPrice: 0,
+        }
     }
 
 
@@ -50,6 +54,38 @@ class CartView extends React.Component {
         this.props.choose(id);
     };
 
+    getTotalPrice() {
+        let totalPrice = 0;
+        this.props.cartData.forEach(item => {
+            if(item.isChosen) {
+                totalPrice += item.price * item.num;
+            }
+        });
+        return totalPrice;
+    }
+
+    placeOrder() {
+        let items = [];
+        let removeIds = [];
+        let len = this.props.cartData.length;
+        for (let i = 0; i < len; ++i) {
+            if (this.props.cartData[i].isChosen) {
+                items.push({
+                    bookId: this.props.cartData[i].id,
+                    bookNum: this.props.cartData[i].num,
+                })
+                removeIds.push(this.props.cartData[i].id);
+            }
+        }
+        // len = items.length;
+        // for (let i = 0; i < len; ++i) {
+        //     console.log("one");
+        //     this.props.remove(items[i].bookId);
+        // }
+        this.props.removeSome(removeIds);
+        placeOrder(this.props.user.id, this.getTotalPrice(), items)
+    }
+
     render() {
         if (this.props.cartData.length === 0) {
             return (
@@ -58,12 +94,6 @@ class CartView extends React.Component {
                 </Typography>
             );
         }
-        let totalPrice = 0;
-        this.props.cartData.forEach(item => {
-            if(item.isChosen) {
-                totalPrice += item.price * item.num;
-            }
-        });
         const { classes } = this.props;
         return(
             <div>
@@ -78,7 +108,7 @@ class CartView extends React.Component {
                     <Grid container spacing={3}>
                         <Grid item xs={8}>
                             <Typography variant={"h5"} className={classes.totalPrice}>
-                                Total: ￥{totalPrice.toFixed(2)}
+                                Total: ￥{this.getTotalPrice().toFixed(2)}
                             </Typography>
                         </Grid>
                         <Grid item xs={3}>
@@ -88,6 +118,7 @@ class CartView extends React.Component {
                                 size="large"
                                 className={classes.buyButton}
                                 startIcon={<LocalAtmIcon />}
+                                onClick={this.placeOrder.bind(this)}
                             >
                                 BuyNow
                             </Button>

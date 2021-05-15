@@ -211,6 +211,27 @@ class Frame extends React.Component {
         })
     };
 
+    removeSomeCartItem(ids) {
+        let newCartData = [];
+        let rmLen = ids.length;
+        let len = this.state.cartData.length;
+        for (let i = 0; i < len; ++i) {
+            let find = false;
+            for (let j = 0; j < rmLen; ++j) {
+                if (this.state.cartData[i].id === ids[j]) {
+                    find = true;
+                    break;
+                }
+            }
+            if (find === true)
+                continue;
+            newCartData.push(this.state.cartData[i]);
+        }
+        this.setState({
+            cartData: newCartData,
+        })
+    }
+
     chooseCartItem(id) {
         let newCartData = [];
         let len = this.state.cartData.length;
@@ -224,6 +245,7 @@ class Frame extends React.Component {
             cartData: newCartData,
         })
     };
+
 
     cartNumber = () => {
         let num = 0;
@@ -423,10 +445,16 @@ class Frame extends React.Component {
                             <CartView cartData={this.state.cartData}
                                       onNumberChange={this.onCartNumberChange.bind(this)}
                                       remove={this.removeCartItem.bind(this)}
+                                      removeSome={this.removeSomeCartItem.bind(this)}
                                       choose={this.chooseCartItem.bind(this)}
+                                      user={this.props.user}
                             />
                         </Route>
-                        <Route exact path={"/store/orders"}><OrderView/></Route>
+                        <Route exact path={"/store/orders"}>
+                            <OrderView user = {this.props.user}
+                                       bookData = {this.state.bookData}
+                            />
+                        </Route>
                         <Route exact path={"/store/profile"}><ProfileView/></Route>
                     </Router>
                 </main>
