@@ -83,7 +83,7 @@ class CartView extends React.Component {
         //     this.props.remove(items[i].bookId);
         // }
         this.props.removeSome(removeIds);
-        placeOrder(this.props.user.id, this.getTotalPrice(), items)
+        placeOrder(this.props.user.id, this.getTotalPrice(), items);
     }
 
     render() {

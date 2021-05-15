@@ -19,5 +19,7 @@ export const placeOrder = (_userId, _totalPrice, _items) => {
     postRequest(url, orderForm, (data) => {
         if (!data)
             alert("订单录入失败！");
+        else
+            alert("下单成功！");
     })
 }
