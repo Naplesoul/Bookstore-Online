@@ -58,6 +58,10 @@ class LoginView extends React.Component {
     };
 
     login(){
+        if (this.state.userName == null || this.state.password == null) {
+            alert("请填写用户名和密码");
+            return;
+        }
         login(this.state.userName, this.state.password, (data) => {
             if (data.id !== -1) {
                 this.props.login({
@@ -70,6 +74,8 @@ class LoginView extends React.Component {
                 this.setState({
                     redirectPath: "/store",
                 })
+            } else {
+                alert("用户名或密码错误");
             }
 
         })

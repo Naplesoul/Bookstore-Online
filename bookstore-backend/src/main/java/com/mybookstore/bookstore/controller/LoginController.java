@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
 public class LoginController {
     @Autowired
     private UserService userService;
 
+    @CrossOrigin
     @RequestMapping("/login")
     public UserAuth login(@RequestBody Map<String, String> params) {
         String username = params.get(Constant.USERNAME);
