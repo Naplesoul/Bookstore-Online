@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @CrossOrigin
     @RequestMapping("/getOrders")
     public List<OrderWithItems> getOrders(@RequestBody Map<String, Integer> params) {
         int userId = params.get(Constant.USER_ID);
