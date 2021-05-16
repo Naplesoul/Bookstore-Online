@@ -11,7 +11,7 @@ import javax.persistence.*;
 @JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String nickname;
