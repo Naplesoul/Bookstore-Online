@@ -16,12 +16,12 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String name;
     private String author;
     private String category;
-    private Double price;
+    private Integer price;
     private String intro;
     private Integer storage;
     private String image;

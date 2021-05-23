@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class Item {
-    private int bookId;
+    private Integer bookId;
     private Integer bookNum;
 
-    public Item(int _bookId, Integer _bookNum) {
+    public Item(Integer _bookId, Integer _bookNum) {
         bookId = _bookId;
         bookNum = _bookNum;
     }

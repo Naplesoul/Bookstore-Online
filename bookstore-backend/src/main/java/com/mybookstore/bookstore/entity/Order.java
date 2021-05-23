@@ -15,8 +15,8 @@ import javax.persistence.*;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
-    private int userId;
-    private Double totalPrice;
+    private Integer userId;
+    private Integer totalPrice;
 }

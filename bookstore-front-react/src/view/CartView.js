@@ -108,7 +108,7 @@ class CartView extends React.Component {
                     <Grid container spacing={3}>
                         <Grid item xs={8}>
                             <Typography variant={"h5"} className={classes.totalPrice}>
-                                Total: ￥{this.getTotalPrice().toFixed(2)}
+                                Total: ￥{(this.getTotalPrice()/100).toFixed(2)}
                             </Typography>
                         </Grid>
                         <Grid item xs={3}>

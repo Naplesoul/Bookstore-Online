@@ -93,12 +93,12 @@ class CartItem extends React.Component {
                             Stock: {this.props.itemData.storage}
                         </Typography>
                         <Typography variant="h5" className={classes.price}>
-                            ￥{this.props.itemData.price.toFixed(2)}
+                            ￥{(this.props.itemData.price/100).toFixed(2)}
                         </Typography>
                     </Grid>
                     <Grid item xs={3}>
                         <Typography variant="h6" className={classes.priceCalculate}>
-                            ￥{this.props.itemData.price.toFixed(2)} × {this.props.itemData.num} = ￥{(this.props.itemData.price * this.props.itemData.num).toFixed(2)}
+                            ￥{(this.props.itemData.price/100).toFixed(2)} × {this.props.itemData.num} = ￥{(this.props.itemData.price * this.props.itemData.num/100).toFixed(2)}
                         </Typography>
                         <InputNumber defaultValue={this.props.itemData.num} onChange={this.onNumberChange.bind(this)}
                                      min="1" max={this.props.itemData.storage.toString()}

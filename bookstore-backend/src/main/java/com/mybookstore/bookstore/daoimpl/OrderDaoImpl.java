@@ -7,8 +7,6 @@ import com.mybookstore.bookstore.repository.OrderItemRepository;
 import com.mybookstore.bookstore.repository.OrderRepository;
 import com.mybookstore.bookstore.utils.orderutils.Item;
 import com.mybookstore.bookstore.utils.orderutils.OrderWithItems;
-import net.sf.json.JSONObject;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

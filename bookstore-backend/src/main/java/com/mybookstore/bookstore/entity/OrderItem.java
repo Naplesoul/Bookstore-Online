@@ -15,9 +15,9 @@ import javax.persistence.*;
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
-    private int orderId;
-    private int bookId;
+    private Integer orderId;
+    private Integer bookId;
     private Integer bookNum;
 }
