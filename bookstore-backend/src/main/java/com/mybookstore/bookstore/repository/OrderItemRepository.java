@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
     @Query("select oi from OrderItem oi where oi.orderId = :orderId")
-    List<OrderItem> getOrderItems(@Param("orderId") int orderId);
+    List<OrderItem> getOrderItems(@Param("orderId") Integer orderId);
 }

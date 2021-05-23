@@ -135,7 +135,7 @@ class InfoView extends React.Component {
                         <div>
                             <TextField label="Price"
                                        variant="outlined"
-                                       defaultValue={this.props.bookInfo.price.toFixed(2)}
+                                       defaultValue={(this.props.bookInfo.price/100).toFixed(2)}
                                        className={classes.box}
                                        onChange={this.onPriceChange.bind(this)}
                             />
@@ -197,7 +197,7 @@ class InfoView extends React.Component {
                     <Typography variant={"h6"}>Category: {this.props.bookInfo.category}</Typography>
                     <Typography variant={"h6"}>
                         <span>Price: </span>
-                        <span className={classes.price}>￥{this.props.bookInfo.price}</span>
+                        <span className={classes.price}>￥{(this.props.bookInfo.price/100).toFixed(2)}</span>
                     </Typography>
                     <Typography variant={"h6"}>
                         <span>Stock: </span>

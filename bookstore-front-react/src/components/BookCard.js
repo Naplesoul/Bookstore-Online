@@ -50,7 +50,7 @@ class BookCard extends React.Component {
                             {this.props.bookInfo.name}
                         </Typography>
                         <Typography variant="body2" component="p" className={classes.price}>
-                            ￥{this.props.bookInfo.price.toFixed(2)}
+                            ￥{(this.props.bookInfo.price/100).toFixed(2)}
                         </Typography>
                     </CardContent>
                 </CardActionArea>

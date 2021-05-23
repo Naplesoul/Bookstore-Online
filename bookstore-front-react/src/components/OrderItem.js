@@ -1,13 +1,8 @@
 import React from "react";
 import {withStyles} from "@material-ui/core/styles";
-import Card from '@material-ui/core/Card';
 import 'fontsource-roboto';
 import Typography from '@material-ui/core/Typography';
 import Grid from "@material-ui/core/Grid";
-import Checkbox from '@material-ui/core/Checkbox';
-import { InputNumber } from 'element-react';
-import IconButton from "@material-ui/core/IconButton";
-import ClearIcon from '@material-ui/icons/Clear';
 
 
 
@@ -75,12 +70,12 @@ class OrderItem extends React.Component {
 
                         </Typography>
                         <Typography variant="h5" className={classes.price}>
-                            ￥{this.props.itemData.price.toFixed(2)}
+                            ￥{(this.props.itemData.price/100).toFixed(2)}
                         </Typography>
                     </Grid>
                     <Grid item xs={3}>
                         <Typography variant="h6" className={classes.priceCalculate}>
-                            ￥{this.props.itemData.price.toFixed(2)} × {this.props.bookNum} = ￥{(this.props.itemData.price * this.props.bookNum).toFixed(2)}
+                            ￥{(this.props.itemData.price/100).toFixed(2)} × {this.props.bookNum} = ￥{(this.props.itemData.price * this.props.bookNum/100).toFixed(2)}
                         </Typography>
                     </Grid>
                     <Grid item xs={1}>

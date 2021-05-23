@@ -68,7 +68,7 @@ class OrderView extends React.Component {
                                     })}
                                 </div>
                                 <Typography variant="h5" className={classes.totalPrice}>
-                                    Total: ￥{order.totalPrice.toFixed(2)}
+                                    Total: ￥{(order.totalPrice/100).toFixed(2)}
                                 </Typography>
                             </Card>
                         );
