@@ -5,6 +5,7 @@ import com.mybookstore.bookstore.entity.Book;
 import com.mybookstore.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,5 +23,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getBooks() {
         return bookDao.getBooks();
+    }
+
+    @Override
+    @Transactional
+    public Boolean setBook(Book book) {
+        bookDao.setBook(book);
+        return true;
     }
 }

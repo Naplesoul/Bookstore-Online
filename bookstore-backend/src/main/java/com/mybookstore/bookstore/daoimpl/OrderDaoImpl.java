@@ -3,6 +3,7 @@ package com.mybookstore.bookstore.daoimpl;
 import com.mybookstore.bookstore.dao.OrderDao;
 import com.mybookstore.bookstore.entity.Order;
 import com.mybookstore.bookstore.entity.OrderItem;
+import com.mybookstore.bookstore.repository.BookRepository;
 import com.mybookstore.bookstore.repository.OrderItemRepository;
 import com.mybookstore.bookstore.repository.OrderRepository;
 import com.mybookstore.bookstore.utils.orderutils.Item;
@@ -21,8 +22,11 @@ public class OrderDaoImpl implements OrderDao {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    BookRepository bookRepository;
+
     @Override
-    public List<OrderWithItems> getOrders(int userId) {
+    public List<OrderWithItems> getOrders(Integer userId) {
         List<Order> userOrders = orderRepository.getOrders(userId);
         List<OrderWithItems> orders = new ArrayList<>();
         for (Order order : userOrders) {
@@ -42,12 +46,13 @@ public class OrderDaoImpl implements OrderDao {
         order.setUserId(orderWithItems.getUserId());
         order.setTotalPrice(orderWithItems.getTotalPrice());
         Order savedOrder = orderRepository.save(order);
-        int orderId = savedOrder.getId();
+        Integer orderId = savedOrder.getId();
         for (Item item : orderWithItems.getItems()) {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrderId(orderId);
             orderItem.setBookId(item.getBookId());
             orderItem.setBookNum(item.getBookNum());
+            bookRepository.reduceStorage(item.getBookId(), item.getBookNum());
             orderItemRepository.saveAndFlush(orderItem);
         }
         return true;

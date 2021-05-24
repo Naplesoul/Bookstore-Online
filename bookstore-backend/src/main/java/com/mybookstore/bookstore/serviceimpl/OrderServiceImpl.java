@@ -5,6 +5,7 @@ import com.mybookstore.bookstore.service.OrderService;
 import com.mybookstore.bookstore.utils.orderutils.OrderWithItems;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,5 +20,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Boolean placeOrder(OrderWithItems orderWithItems) { return orderDao.placeOrder(orderWithItems); }
 }

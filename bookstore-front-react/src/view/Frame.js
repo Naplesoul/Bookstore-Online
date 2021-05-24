@@ -26,7 +26,7 @@ import CartView from "./CartView";
 import ProfileView from "./ProfileView";
 import SearchBox from "../components/SearchBox";
 import CartIcon from "../components/CartIcon";
-import {getBooks} from "../services/bookService";
+import {getBooks} from "../services/BookService";
 
 const drawerWidth = 240;
 
@@ -161,6 +161,8 @@ class Frame extends React.Component {
                     if (this.state.cartData[i].id === id) {
                         if (this.state.cartData[i].num + 1 <= this.state.cartData[i].storage)
                             this.state.cartData[i].num += 1;
+                        else
+                            alert("库存不足，不能再多啦");
                         this.state.cartData[i].isChosen = true;
                         found = true;
                     }
@@ -171,6 +173,8 @@ class Frame extends React.Component {
                     if (this.state.cartData[i].id === id) {
                         if (this.state.cartData[i].num + 1 <= this.state.cartData[i].storage)
                             this.state.cartData[i].num += 1;
+                        else
+                            alert("库存不足，不能再多啦");
                         found = true;
                     }
                     newCartData.push(this.state.cartData[i]);
@@ -180,8 +184,10 @@ class Frame extends React.Component {
                 let dataLen = this.state.bookData.length;
                 for (let i = 0; i < dataLen; ++i) {
                     if (this.state.bookData[i].id === id) {
-                        if (this.state.bookData[i].storage === 0)
+                        if (this.state.bookData[i].storage === 0) {
+                            alert("此书已无货");
                             return;
+                        }
                         newCartData.push({id: id, num: 1, isChosen: true, name: this.state.bookData[i].name, author: this.state.bookData[i].author, category: this.state.bookData[i].category, price: this.state.bookData[i].price, storage: this.state.bookData[i].storage, image: this.state.bookData[i].image});
                     }
                 }
@@ -211,7 +217,21 @@ class Frame extends React.Component {
         })
     };
 
-    removeSomeCartItem(ids) {
+    reduceStorage(id, num) {
+        let newBookData = [];
+        let len = this.state.bookData.length;
+        for (let i = 0; i < len; ++i) {
+            newBookData.push(this.state.bookData[i]);
+            if (this.state.bookData[i].id === id) {
+                newBookData[i].storage -= num;
+            }
+        }
+        this.setState({
+            bookData: newBookData,
+        })
+    }
+
+    removeSomeCartItemAndReduceStorage(ids) {
         let newCartData = [];
         let rmLen = ids.length;
         let len = this.state.cartData.length;
@@ -219,6 +239,7 @@ class Frame extends React.Component {
             let find = false;
             for (let j = 0; j < rmLen; ++j) {
                 if (this.state.cartData[i].id === ids[j]) {
+                    this.reduceStorage(ids[j], this.state.cartData[i].num);
                     find = true;
                     break;
                 }
@@ -445,17 +466,20 @@ class Frame extends React.Component {
                             <CartView cartData={this.state.cartData}
                                       onNumberChange={this.onCartNumberChange.bind(this)}
                                       remove={this.removeCartItem.bind(this)}
-                                      removeSome={this.removeSomeCartItem.bind(this)}
+                                      removeSomeAndReduceStorage={this.removeSomeCartItemAndReduceStorage.bind(this)}
                                       choose={this.chooseCartItem.bind(this)}
                                       user={this.props.user}
                             />
                         </Route>
                         <Route exact path={"/store/orders"}>
-                            <OrderView user = {this.props.user}
-                                       bookData = {this.state.bookData}
+                            <OrderView user={this.props.user}
+                                       bookData={this.state.bookData}
                             />
                         </Route>
-                        <Route exact path={"/store/profile"}><ProfileView/></Route>
+                        <Route exact path={"/store/profile"}>
+                            <ProfileView user={this.props.user}
+                            />
+                        </Route>
                     </Router>
                 </main>
             </div>
