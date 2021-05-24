@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import {login} from "../services/userService";
+import {login} from "../services/UserService";
 
 
 const styles = theme => ({
@@ -63,7 +63,11 @@ class LoginView extends React.Component {
             return;
         }
         login(this.state.userName, this.state.password, (data) => {
-            if (data.id !== -1) {
+            if (data.id === -1)
+                alert("用户名或密码错误");
+            else if (data.type === -1)
+                alert("您的账号已被禁用")
+            else {
                 this.props.login({
                     id: data.id,
                     isAuthed: true,
@@ -74,10 +78,7 @@ class LoginView extends React.Component {
                 this.setState({
                     redirectPath: "/store",
                 })
-            } else {
-                alert("用户名或密码错误");
             }
-
         })
 
     };

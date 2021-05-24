@@ -22,4 +22,10 @@ public class BookDaoImpl implements BookDao {
     public List<Book> getBooks() {
         return bookRepository.getBooks();
     }
+
+    @Override
+    public void setBook(Book book) {
+        bookRepository.setBook(book.getId(), book.getName(), book.getCategory(), book.getAuthor(),
+                book.getPrice(), book.getIntro(), book.getStorage(), book.getImage());
+    }
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import {Redirect} from 'react-router-dom';
 import {withStyles} from "@material-ui/core/styles";
 import CartItem from "../components/CartItem";
 import {Card, Grid, Button} from "@material-ui/core";
@@ -77,16 +78,15 @@ class CartView extends React.Component {
                 removeIds.push(this.props.cartData[i].id);
             }
         }
-        // len = items.length;
-        // for (let i = 0; i < len; ++i) {
-        //     console.log("one");
-        //     this.props.remove(items[i].bookId);
-        // }
-        this.props.removeSome(removeIds);
+        this.props.removeSomeAndReduceStorage(removeIds);
         placeOrder(this.props.user.id, this.getTotalPrice(), items);
     }
 
     render() {
+        if (!this.props.user.isAuthed)
+            return (
+                <Redirect to={{pathname: "/store"}}/>
+            );
         if (this.props.cartData.length === 0) {
             return (
                 <Typography variant={"h5"} align={"center"}>

@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {Button, TextField} from "@material-ui/core";
+import {Redirect} from "react-router-dom";
 
 
 
@@ -109,6 +110,10 @@ class InfoView extends React.Component {
     };
 
     render() {
+        if (!this.props.bookInfo)
+            return (
+                <Redirect to={{pathname: "/store"}}/>
+            );
         const { classes } = this.props;
         // is the user is admin, he can revise the content
         if (this.props.user.isAdmin) {
