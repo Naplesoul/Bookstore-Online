@@ -14,18 +14,19 @@ public class BookDaoImpl implements BookDao {
     private BookRepository bookRepository;
 
     @Override
-    public Book getBookById(int id) {
-        return bookRepository.getOne(id);
+    public Book getBookByBookId(Integer bookId) {
+        return bookRepository.findBookByBookId(bookId);
     }
 
     @Override
     public List<Book> getBooks() {
-        return bookRepository.getBooks();
+        return bookRepository.findAll();
     }
 
     @Override
     public void setBook(Book book) {
-        bookRepository.setBook(book.getId(), book.getName(), book.getCategory(), book.getAuthor(),
-                book.getPrice(), book.getIntro(), book.getStorage(), book.getImage());
+        bookRepository.setBook(book.getBookId(), book.getISBN(), book.getBookName(),
+                book.getCategory(), book.getAuthor(), book.getPrice(), book.getIntro(),
+                book.getStorage(), book.getImage());
     }
 }

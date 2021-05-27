@@ -1,11 +1,10 @@
 package com.mybookstore.bookstore.serviceimpl;
 
 import com.mybookstore.bookstore.dao.OrderDao;
+import com.mybookstore.bookstore.entity.Order;
 import com.mybookstore.bookstore.service.OrderService;
-import com.mybookstore.bookstore.utils.orderutils.OrderWithItems;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,11 +14,10 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
 
     @Override
-    public List<OrderWithItems> getOrders(int userId) {
+    public List<Order> getOrders(int userId) {
         return orderDao.getOrders(userId);
     }
 
     @Override
-    @Transactional
-    public Boolean placeOrder(OrderWithItems orderWithItems) { return orderDao.placeOrder(orderWithItems); }
+    public Boolean placeOrder(Order order) { return orderDao.placeOrder(order); }
 }

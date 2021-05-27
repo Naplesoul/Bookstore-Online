@@ -5,7 +5,7 @@ import com.mybookstore.bookstore.entity.Book;
 import java.util.List;
 
 public interface BookService {
-    Book getBookById(Integer id);
+    Book getBookByBookId(Integer bookId);
     List<Book> getBooks();
     Boolean setBook(Book book);
 }

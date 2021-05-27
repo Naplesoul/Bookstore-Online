@@ -20,12 +20,12 @@ public class BookController {
     }
 
     @RequestMapping("/getBook")
-    public Book getBookById(@RequestParam("id") Integer id) {
-        return bookService.getBookById(id);
+    public Book getBookByBookId(@RequestParam("bookId") Integer bookId) {
+        return bookService.getBookByBookId(bookId);
     }
 
     @RequestMapping("/setBook")
-    public Boolean setBook(@RequestBody Book params) {
-        return bookService.setBook(params);
+    public Boolean setBook(@RequestBody Book book) {
+        return bookService.setBook(book);
     }
 }

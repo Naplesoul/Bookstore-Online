@@ -11,14 +11,15 @@ import javax.persistence.*;
 @Entity
 @Table(name = "books")
 @JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "bookId")
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer bookId;
 
-    private String name;
+    private Integer ISBN;
+    private String bookName;
     private String author;
     private String category;
     private Integer price;

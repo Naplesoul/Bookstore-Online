@@ -1,7 +1,7 @@
 package com.mybookstore.bookstore.dao;
 
-import com.mybookstore.bookstore.entity.UserAuth;
+import com.mybookstore.bookstore.entity.User;
 
 public interface UserDao {
-    UserAuth checkUser(String username, String password);
+    User checkUser(String username, String password);
 }
