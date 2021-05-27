@@ -1,10 +1,10 @@
 package com.mybookstore.bookstore.dao;
 
-import com.mybookstore.bookstore.utils.orderutils.OrderWithItems;
+import com.mybookstore.bookstore.entity.Order;
 
 import java.util.List;
 
 public interface OrderDao {
-    List<OrderWithItems> getOrders(Integer userId);
-    Boolean placeOrder(OrderWithItems orderWithItems);
+    List<Order> getOrders(Integer userId);
+    Boolean placeOrder(Order order);
 }

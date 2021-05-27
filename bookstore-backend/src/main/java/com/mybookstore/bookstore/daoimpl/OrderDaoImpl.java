@@ -6,12 +6,9 @@ import com.mybookstore.bookstore.entity.OrderItem;
 import com.mybookstore.bookstore.repository.BookRepository;
 import com.mybookstore.bookstore.repository.OrderItemRepository;
 import com.mybookstore.bookstore.repository.OrderRepository;
-import com.mybookstore.bookstore.utils.orderutils.Item;
-import com.mybookstore.bookstore.utils.orderutils.OrderWithItems;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -26,33 +23,24 @@ public class OrderDaoImpl implements OrderDao {
     BookRepository bookRepository;
 
     @Override
-    public List<OrderWithItems> getOrders(Integer userId) {
-        List<Order> userOrders = orderRepository.getOrders(userId);
-        List<OrderWithItems> orders = new ArrayList<>();
-        for (Order order : userOrders) {
-            OrderWithItems orderWithItems = new OrderWithItems(order.getId(), order.getUserId(), order.getTotalPrice());
-            List<OrderItem> items = orderItemRepository.getOrderItems(order.getId());
-            for (OrderItem item : items) {
-                orderWithItems.addItem(new Item(item.getBookId(), item.getBookNum()));
-            }
-            orders.add(orderWithItems);
-        }
-        return orders;
+    public List<Order> getOrders(Integer userId) {
+        return orderRepository.findOrderByUserId(userId);
     }
 
     @Override
-    public Boolean placeOrder(OrderWithItems orderWithItems) {
-        Order order = new Order();
-        order.setUserId(orderWithItems.getUserId());
-        order.setTotalPrice(orderWithItems.getTotalPrice());
-        Order savedOrder = orderRepository.save(order);
-        Integer orderId = savedOrder.getId();
-        for (Item item : orderWithItems.getItems()) {
-            OrderItem orderItem = new OrderItem();
+    public Boolean placeOrder(Order order) {
+        Integer totalPrice = 0;
+        for (OrderItem orderItem : order.getOrderItems()) {
+            Integer bookPrice = bookRepository.findBookByBookId(orderItem.getBookId()).getPrice();
+            orderItem.setBookPrice(bookPrice);
+            totalPrice += bookPrice * orderItem.getBookNum();
+        }
+        order.setTotalPrice(totalPrice);
+        Order savedOrder = orderRepository.saveAndFlush(order);
+        Integer orderId = savedOrder.getOrderId();
+        for (OrderItem orderItem : order.getOrderItems()) {
             orderItem.setOrderId(orderId);
-            orderItem.setBookId(item.getBookId());
-            orderItem.setBookNum(item.getBookNum());
-            bookRepository.reduceStorage(item.getBookId(), item.getBookNum());
+            bookRepository.reduceStorage(orderItem.getBookId(), orderItem.getBookNum());
             orderItemRepository.saveAndFlush(orderItem);
         }
         return true;

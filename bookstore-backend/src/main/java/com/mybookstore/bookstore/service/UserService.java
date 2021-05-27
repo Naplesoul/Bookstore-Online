@@ -1,7 +1,7 @@
 package com.mybookstore.bookstore.service;
 
-import com.mybookstore.bookstore.entity.UserAuth;
+import com.mybookstore.bookstore.entity.User;
 
 public interface UserService {
-    UserAuth checkUser(String username, String password);
+    User checkUser(String username, String password);
 }

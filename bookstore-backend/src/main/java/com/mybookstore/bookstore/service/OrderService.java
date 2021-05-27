@@ -1,10 +1,10 @@
 package com.mybookstore.bookstore.service;
 
-import com.mybookstore.bookstore.utils.orderutils.OrderWithItems;
+import com.mybookstore.bookstore.entity.Order;
 
 import java.util.List;
 
 public interface OrderService {
-    List<OrderWithItems> getOrders(int userId);
-    Boolean placeOrder(OrderWithItems orderWithItems);
+    List<Order> getOrders(int userId);
+    Boolean placeOrder(Order order);
 }
