@@ -19,12 +19,12 @@ const styles = theme => ({
         marginTop: 80,
         marginLeft: "2vw",
     },
-    bookimg: {
+    bookImg: {
         marginTop: 15,
         marginBottom: 15,
         marginLeft: "4vw",
     },
-    bookname: {
+    bookName: {
         marginTop: 35,
     },
     price: {
@@ -49,18 +49,22 @@ class CartItem extends React.Component {
     constructor(props) {
         super(props);
     };
+
     onNumberChange(value) {
         if(isNaN(value)) {
             return;
         }
-        this.props.onNumberChange(this.props.itemData.id, value);
+        this.props.onNumberChange(this.props.itemData.bookId, value);
     };
+
     remove() {
-        this.props.remove(this.props.itemData.id);
+        this.props.remove(this.props.itemData.bookId);
     };
+
     choose() {
-        this.props.choose(this.props.itemData.id);
+        this.props.choose(this.props.itemData.bookId);
     };
+
     render() {
         const { classes } = this.props;
         return(
@@ -69,7 +73,7 @@ class CartItem extends React.Component {
                     <Grid item xs={1}>
                         <Checkbox
                             className={classes.checkbox}
-                            checked={this.props.itemData.isChosen}
+                            checked={this.props.itemData.chosen}
                             color="primary"
                             inputProps={{ 'aria-label': 'secondary checkbox' }}
                             onClick={this.choose.bind(this)}
@@ -77,10 +81,10 @@ class CartItem extends React.Component {
                     </Grid>
                     <Grid item xs={3}>
                         <img alt={this.props.itemData.name} src={this.props.itemData.image} height={"180px"}
-                             className={classes.bookimg}/>
+                             className={classes.bookImg}/>
                     </Grid>
                     <Grid item xs={4}>
-                        <Typography component="h5" variant="h5" className={classes.bookname}>
+                        <Typography component="h5" variant="h5" className={classes.bookName}>
                             {this.props.itemData.name}
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary">
@@ -98,9 +102,9 @@ class CartItem extends React.Component {
                     </Grid>
                     <Grid item xs={3}>
                         <Typography variant="h6" className={classes.priceCalculate}>
-                            ￥{(this.props.itemData.price/100).toFixed(2)} × {this.props.itemData.num} = ￥{(this.props.itemData.price * this.props.itemData.num/100).toFixed(2)}
+                            ￥{(this.props.itemData.price/100).toFixed(2)} × {this.props.itemData.bookNum} = ￥{(this.props.itemData.price * this.props.itemData.bookNum/100).toFixed(2)}
                         </Typography>
-                        <InputNumber defaultValue={this.props.itemData.num} onChange={this.onNumberChange.bind(this)}
+                        <InputNumber defaultValue={this.props.itemData.bookNum} onChange={this.onNumberChange.bind(this)}
                                      min="1" max={this.props.itemData.storage.toString()}
                                      className={classes.num}
                         />

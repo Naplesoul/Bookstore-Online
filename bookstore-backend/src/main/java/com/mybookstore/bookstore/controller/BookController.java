@@ -1,11 +1,15 @@
 package com.mybookstore.bookstore.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.mybookstore.bookstore.constant.Constant;
 import com.mybookstore.bookstore.entity.Book;
 import com.mybookstore.bookstore.service.BookService;
+import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -25,7 +29,21 @@ public class BookController {
     }
 
     @RequestMapping("/setBook")
-    public Boolean setBook(@RequestBody Book book) {
-        return bookService.setBook(book);
+    public Boolean setBook(@RequestBody JSONObject params) {
+        Integer userId = params.getInteger(Constant.USER_ID);
+        JSONObject bookJson = params.getJSONObject(Constant.BOOK);
+        Book book = bookJson.toJavaObject(Book.class);
+//                JSONObject.parseObject(params.get(Constant.BOOK), Book.class);
+        return bookService.setBook(userId, book);
+    }
+
+    @RequestMapping("/deleteBook")
+        public Boolean deleteBook(@RequestBody Map<String, Integer> params) {
+        return bookService.deleteBook(params.get(Constant.USER_ID), params.get(Constant.BOOK_ID));
+    }
+
+    @RequestMapping("/addBook")
+    public Book addBook(@RequestBody Book book) {
+        return bookService.addBook(book);
     }
 }

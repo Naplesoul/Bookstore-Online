@@ -9,17 +9,11 @@ export const getOrders = (_userId, callback) => {
     postRequest(url, userForm, callback);
 }
 
-export const placeOrder = (_userId, _totalPrice, _items) => {
+export const placeOrder = (_userId, _orderItems, callback) => {
     const url = `${config.apiUrl}/placeOrder`;
     let orderForm = {
         userId: _userId,
-        totalPrice: _totalPrice,
-        items: _items,
+        orderItems: _orderItems,
     };
-    postRequest(url, orderForm, (data) => {
-        if (!data)
-            alert("订单录入失败！");
-        else
-            alert("下单成功！");
-    })
+    postRequest(url, orderForm, callback)
 }

@@ -1,81 +1,54 @@
-import React from "react";
-import {fade, withStyles} from "@material-ui/core/styles";
-import SearchIcon from "@material-ui/icons/Search";
-import InputBase from "@material-ui/core/InputBase";
+import React from 'react';
+import {withStyles} from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
 
 const styles = theme => ({
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
-        },
-        marginRight: theme.spacing(6),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
-            width: 'auto',
-        },
-    },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
+    root: {
+        padding: '2px 4px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        width: 400,
     },
-    inputRoot: {
-        color: 'inherit',
+    input: {
+        marginLeft: theme.spacing(1),
+        flex: 1,
     },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
+    icon: {
+        marginLeft: 5,
+    },
+    divider: {
+        height: 28,
+        margin: 4,
     },
 });
 
-class SearchBox extends React.Component {
+class SearchBox extends React.Component
+{
     constructor(props) {
         super(props);
-    }
+    };
 
-    onSearchTextChange(e) {
-        if (e.which === 13) {
-            this.props.onSearchTextChange(e.target.value.trim());
-        }
+    onTextChange(e) {
+        let text = e.target.value.trim().toLowerCase();
+        this.props.onTextChange(text);
     };
 
     render() {
         const { classes } = this.props;
         return (
-            <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                    <SearchIcon />
-                </div>
+            <Paper className={classes.root}>
+                <SearchIcon className={classes.icon}/>
                 <InputBase
-                    placeholder="Search…"
-                    defaultValue={this.props.searchText}
-                    onKeyPress={this.onSearchTextChange.bind(this)}
-                    classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                    }}
-                    inputProps={{ 'aria-label': 'search' }}
+                    className={classes.input}
+                    value={this.props.text}
+                    placeholder={this.props.placeHolder}
+                    onChange={this.onTextChange.bind(this)}
                 />
-            </div>
+            </Paper>
         );
-    }
-}
+    };
+};
 
 export default withStyles(styles)(SearchBox);

@@ -7,5 +7,7 @@ import java.util.List;
 public interface BookService {
     Book getBookByBookId(Integer bookId);
     List<Book> getBooks();
-    Boolean setBook(Book book);
+    Boolean setBook(Integer userId, Book book);
+    Boolean deleteBook(Integer userId, Integer bookId);
+    Book addBook(Book book);
 }

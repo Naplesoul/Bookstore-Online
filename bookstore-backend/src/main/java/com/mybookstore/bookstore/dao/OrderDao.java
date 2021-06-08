@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface OrderDao {
     List<Order> getOrders(Integer userId);
+    List<Order> getAllOrders();
     Boolean placeOrder(Order order);
 }

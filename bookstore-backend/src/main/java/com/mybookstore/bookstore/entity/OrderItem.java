@@ -21,4 +21,8 @@ public class OrderItem {
     private Integer bookId;
     private Integer bookNum;
     private Integer bookPrice;
+    private String bookName;
+    private String author;
+    private String category;
+    private String image;
 }

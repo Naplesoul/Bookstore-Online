@@ -54,6 +54,7 @@ class UserAvatar extends React.Component{
     logout = () => {
         this.closeMenu();
         this.props.askForLogout();
+        this.props.goHome();
     }
 
     render() {
@@ -69,7 +70,7 @@ class UserAvatar extends React.Component{
                             onClick={this.openMenu}
                             color="inherit"
                         >
-                            <Avatar className={classes.avatar} alt="userImage" src={this.props.user.avatarPath}/>
+                            <Avatar className={classes.avatar} alt="userImage" src={this.props.user.avatar}/>
                         </IconButton>
                         <Menu
                             id="menu-appbar"
@@ -86,12 +87,12 @@ class UserAvatar extends React.Component{
                             open={Boolean(this.state.anchorEl)}
                             onClose={this.closeMenu}
                         >
-                            <MenuItem onClick={this.go2Profile}>My Profile</MenuItem>
-                            <MenuItem onClick={this.logout}>Logout</MenuItem>
+                            <MenuItem onClick={this.go2Profile}>个人信息</MenuItem>
+                            <MenuItem onClick={this.logout}>退出登录</MenuItem>
                         </Menu>
                     </div>
                     <Typography variant="h7" noWrap className={classes.name} onClick={this.openMenu}>
-                        {this.props.user.userName}
+                        {this.props.user.username}
                     </Typography>
                 </div>
             );

@@ -14,6 +14,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Book> findAll();
 
     Book findBookByBookId(Integer bookId);
+    Book findBookByISBN(Integer ISBN);
 
     @Modifying
     @Transactional
@@ -28,4 +29,8 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Transactional
     @Query("update Book b set b.storage = b.storage - :num where b.bookId = :bookId")
     void reduceStorage(Integer bookId, Integer num);
+
+    @Modifying
+    @Transactional
+    void deleteBookByBookId(Integer bookId);
 }
