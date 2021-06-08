@@ -32,7 +32,6 @@ public class BookController {
         Integer userId = params.getInteger(Constant.USER_ID);
         JSONObject bookJson = params.getJSONObject(Constant.BOOK);
         Book book = bookJson.toJavaObject(Book.class);
-//                JSONObject.parseObject(params.get(Constant.BOOK), Book.class);
         return bookService.setBook(userId, book);
     }
 
