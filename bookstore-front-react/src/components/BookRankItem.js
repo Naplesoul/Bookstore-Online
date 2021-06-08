@@ -8,7 +8,10 @@ import Grid from "@material-ui/core/Grid";
 
 const styles = theme => ({
     root: {
-        marginTop: 20,
+    },
+    index: {
+        marginTop: 65,
+        marginLeft: "4vw",
     },
     bookImg: {
         marginTop: 15,
@@ -22,60 +25,51 @@ const styles = theme => ({
         marginTop: 10,
         color: "red",
     },
-    priceCalculate: {
-        color: "red",
-        marginTop: 60,
-        marginLeft: "2.8vw",
-    },
-    num: {
-        marginTop: 30,
-        marginLeft: "3vw",
-    },
-    remove: {
-        marginTop: 80,
+    bookNum: {
+        marginTop: 50,
     },
 });
 
-class OrderItem extends React.Component {
+class BookRankItem extends React.Component {
     constructor(props) {
         super(props);
     };
+
     render() {
         const { classes } = this.props;
         return(
             <div className={classes.root}>
                 <Grid container spacing={3}>
                     <Grid item xs={1}>
-
+                        <Typography component="h5" variant="h5" className={classes.index}>
+                            {this.props.index}
+                        </Typography>
                     </Grid>
-                    <Grid item xs={3}>
-                        <img alt={this.props.orderItem.bookName} src={this.props.orderItem.image} height={"180px"}
+                    <Grid item xs={4}>
+                        <img alt={this.props.book.bookName} src={this.props.book.image} height={"150px"}
                              className={classes.bookImg}/>
                     </Grid>
                     <Grid item xs={4}>
                         <Typography component="h5" variant="h5" className={classes.bookName}>
-                            {this.props.orderItem.bookName}
+                            {this.props.book.bookName}
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary">
-                            {this.props.orderItem.author}
+                            {this.props.book.author}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
-                            分类： {this.props.orderItem.category}
+                            分类： {this.props.book.category}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
-
+                            Id： {this.props.book.bookId}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Typography variant="h5" className={classes.bookNum}>
+                            购买次数：{this.props.book.bookNum}
                         </Typography>
                         <Typography variant="h5" className={classes.price}>
-                            ￥{(this.props.orderItem.bookPrice/100).toFixed(2)}
+                            ￥{(this.props.book.bookPrice/100).toFixed(2)}
                         </Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                        <Typography variant="h6" className={classes.priceCalculate}>
-                            ￥{(this.props.orderItem.bookPrice/100).toFixed(2)} × {this.props.orderItem.bookNum} = ￥{(this.props.orderItem.bookPrice * this.props.orderItem.bookNum/100).toFixed(2)}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={1}>
-
                     </Grid>
                 </Grid>
 
@@ -84,4 +78,4 @@ class OrderItem extends React.Component {
     }
 }
 
-export default withStyles(styles)(OrderItem);
+export default withStyles(styles)(BookRankItem);
