@@ -24,9 +24,41 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public void setBook(Book book) {
+    public Boolean setBook(Book book) {
+        Book existedBook = bookRepository.findBookByBookId(book.getBookId());
+        if (existedBook == null) {
+            return false;
+        }
+        existedBook = bookRepository.findBookByISBN(book.getISBN());
+        if (existedBook != null && !existedBook.getBookId().equals(book.getBookId())) {
+            return false;
+        }
         bookRepository.setBook(book.getBookId(), book.getISBN(), book.getBookName(),
                 book.getCategory(), book.getAuthor(), book.getPrice(), book.getIntro(),
                 book.getStorage(), book.getImage());
+        return true;
+    }
+
+    @Override
+    public Boolean deleteBook(Integer bookId) {
+        Book book = bookRepository.findBookByBookId(bookId);
+        if (book == null) {
+            return false;
+        }
+        bookRepository.deleteBookByBookId(bookId);
+        return true;
+    }
+
+    @Override
+    public Book addBook(Book book) {
+        Book existedBook = bookRepository.findBookByISBN(book.getISBN());
+        if (existedBook != null) {
+            Book error = new Book();
+            error.setBookId(-1);
+            return error;
+        } else {
+            bookRepository.saveAndFlush(book);
+            return book;
+        }
     }
 }

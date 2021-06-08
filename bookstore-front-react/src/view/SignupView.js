@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -12,7 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import {login} from "../services/UserService";
+import {signup} from "../services/UserService";
 
 
 const styles = theme => ({
@@ -46,7 +44,7 @@ const styles = theme => ({
     },
 })
 
-class LoginView extends React.Component {
+class SignupView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -54,24 +52,40 @@ class LoginView extends React.Component {
         }
     };
 
+    checkEmail(strEmail) {
+        return strEmail.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) !== -1;
+    }
+
     submit() {
         let username = document.getElementById("username").value;
         let password = document.getElementById("password").value;
-        if (username === "" || password === "") {
-            alert("请填写用户名和密码");
+        let confirmPassword = document.getElementById("confirmPassword").value;
+        let email = document.getElementById("email").value;
+        if (username === "" || password === "" || confirmPassword === "" || email === "") {
+            alert("信息不完整，请继续填写");
             return;
         }
-        login(username, password, (data) => {
+        if (password !== confirmPassword) {
+            alert("两次输入的密码不匹配，请重新输入");
+            return;
+        }
+        if (password.length < 6) {
+            alert("密码长度至少为6位");
+            return;
+        }
+        if (!this.checkEmail(email)) {
+            alert("邮件地址不合法，请重新输入");
+            return;
+        }
+        signup(username, password, email, (data) => {
             if (data.userId === -1)
-                alert("用户名或密码错误");
-            else if (data.userType === -1)
-                alert("您的账号已被禁用")
+                alert("用户名已被占用");
             else {
                 this.props.login({
                     userId: data.userId,
                     isAuthed: true,
                     username: data.username,
-                    avatar: require("../assets/userimage1.jpg").default,
+                    avatarPath: require("../assets/userimage1.jpg").default,
                     userType: data.userType,
                     userInfo: data.userInfo,
                 });
@@ -79,8 +93,8 @@ class LoginView extends React.Component {
                     redirectPath: "/store",
                 })
             }
-        })
-    };
+        });
+    }
 
     onKeyDown(e) {
         if (e.keyCode === 13) {
@@ -109,7 +123,7 @@ class LoginView extends React.Component {
                             <LockOutlinedIcon />
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            登录
+                            注册
                         </Typography>
                         <form className={classes.form}>
                             <TextField
@@ -122,7 +136,6 @@ class LoginView extends React.Component {
                                 name="username"
                                 autoComplete="username"
                                 autoFocus
-                                onKeyDown={this.onKeyDown.bind(this)}
                             />
                             <TextField
                                 variant="outlined"
@@ -134,11 +147,28 @@ class LoginView extends React.Component {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
-                                onKeyDown={this.onKeyDown.bind(this)}
                             />
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary" />}
-                                label="记住我"
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="password"
+                                label="确认密码"
+                                type="password"
+                                id="confirmPassword"
+                                autoComplete="current-password"
+                            />
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="email"
+                                label="邮箱"
+                                type="email"
+                                id="email"
+                                onKeyDown={this.onKeyDown.bind(this)}
                             />
                             <Button
                                 // type="submit"
@@ -148,12 +178,12 @@ class LoginView extends React.Component {
                                 onClick={this.submit.bind(this)}
                                 className={classes.submit}
                             >
-                                登录
+                                注册
                             </Button>
                             <Grid container>
                                 <Grid item>
-                                    <Link variant="body2" href={"/signup"}>
-                                        注册
+                                    <Link variant="body2" href={"/login"}>
+                                        已有账号？点此登录
                                     </Link>
                                 </Grid>
                             </Grid>
@@ -165,4 +195,4 @@ class LoginView extends React.Component {
     }
 }
 
-export default withStyles(styles)(LoginView);
+export default withStyles(styles)(SignupView);

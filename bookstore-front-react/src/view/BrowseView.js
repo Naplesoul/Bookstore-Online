@@ -18,10 +18,46 @@ const styles = theme => ({
 class BrowseView extends React.Component {
     constructor(props) {
         super(props);
+
+        let searchText = this.props.searchText;
+        let bookIndexes = [];
+        let len = this.props.bookData.length;
+        if (this.props.searchText == null) {
+            for (let i = 0; i < len; ++i)
+                bookIndexes.push(i);
+        } else {
+            for (let i = 0; i < len; ++i) {
+                if (this.props.bookData[i].bookName.toString().toLowerCase().indexOf(searchText) >= 0
+                    || this.props.bookData[i].author.toString().toLowerCase().indexOf(searchText) >= 0
+                    || this.props.bookData[i].category.toString().toLowerCase().indexOf(searchText) >= 0
+                    || this.props.bookData[i].isbn.toString() === searchText)
+                    bookIndexes.push(i);
+            }
+        }
+
+        this.state = {
+            page: 1,
+            pageSize: 15,
+            showBookNum: bookIndexes.length,
+            showBookIndexes: bookIndexes,
+        };
     }
 
-    clickBook(id) {
-        this.props.clickBook(id);
+    clickBook(bookId) {
+        let len = this.props.bookData.length;
+        for (let i = 0; i < len; ++i) {
+            if (this.props.bookData[i].bookId === bookId) {
+                this.props.setInfoBookData(this.props.bookData[i]);
+                this.props.redirectTo("/store/info");
+            }
+        }
+    }
+
+    setPage(_page, _pageSize) {
+        this.setState({
+            page: _page,
+            pageSize: _pageSize,
+        })
     }
 
     render() {
@@ -29,21 +65,19 @@ class BrowseView extends React.Component {
         return(
             <div className={classes.root}>
                 <GridList cellHeight={160} className={classes.gridList} cols={3}>
-                    {this.props.bookData.map((item, index) => {
-                        if (this.props.searchText) {
-                            let searchText = this.props.searchText.toLowerCase();
-                            if (item.name.toString().toLowerCase().indexOf(searchText) >= 0
-                                || item.author.toString().toLowerCase().indexOf(searchText) >= 0
-                                || item.category.toString().toLowerCase().indexOf(searchText) >= 0)
-                                return <BookCard bookInfo={item} clickBook={this.clickBook.bind(this)} />;
-                        } else {
-                            return <BookCard bookInfo={item} clickBook={this.clickBook.bind(this)} />;
-                        }
-
+                    {this.state.showBookIndexes.map((i, index) => {
+                        if (index >= this.state.page *  this.state.pageSize || index < (this.state.page - 1) *  this.state.pageSize)
+                            return null;
+                        else
+                            return <BookCard bookInfo={this.props.bookData[i]} clickBook={this.clickBook.bind(this)} />;
                     })}
                 </GridList>
                 <div className={classes.page}>
-                    <Pagination defaultCurrent={1} total={this.props.bookData.length} defaultPageSize={15} />
+                    <Pagination defaultCurrent={1}
+                                total={this.state.showBookNum}
+                                defaultPageSize={15}
+                                onChange={this.setPage.bind(this)}
+                    />
                 </div>
             </div>
         );

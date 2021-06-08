@@ -14,10 +14,13 @@ import javax.persistence.*;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 public class UserInfo {
     @Id
-    private Integer userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer userInfoId;
 
+    private Integer userId;
     private String nickname;
     private String name;
+    private String email;
     private String tel;
     private String address;
 }

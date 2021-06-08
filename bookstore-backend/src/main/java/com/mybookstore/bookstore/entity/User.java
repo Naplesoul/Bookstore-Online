@@ -18,13 +18,13 @@ public class User {
     private Integer userId;
 
     private String username;
-
-    @Transient
     private String password;
 
+    // 0: normal user
+    // 1: administrator
     private Integer userType;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userId")
     private UserInfo userInfo;
 }

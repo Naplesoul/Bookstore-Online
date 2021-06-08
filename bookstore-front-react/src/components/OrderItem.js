@@ -53,29 +53,29 @@ class OrderItem extends React.Component {
 
                     </Grid>
                     <Grid item xs={3}>
-                        <img alt={this.props.itemData.name} src={this.props.itemData.image} height={"180px"}
+                        <img alt={this.props.orderItem.bookName} src={this.props.orderItem.image} height={"180px"}
                              className={classes.bookimg}/>
                     </Grid>
                     <Grid item xs={4}>
                         <Typography component="h5" variant="h5" className={classes.bookname}>
-                            {this.props.itemData.name}
+                            {this.props.orderItem.bookName}
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary">
-                            {this.props.itemData.author}
+                            {this.props.orderItem.author}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
-                            Category: {this.props.itemData.category}
+                            分类： {this.props.orderItem.category}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
 
                         </Typography>
                         <Typography variant="h5" className={classes.price}>
-                            ￥{(this.props.itemData.price/100).toFixed(2)}
+                            ￥{(this.props.orderItem.bookPrice/100).toFixed(2)}
                         </Typography>
                     </Grid>
                     <Grid item xs={3}>
                         <Typography variant="h6" className={classes.priceCalculate}>
-                            ￥{(this.props.itemData.price/100).toFixed(2)} × {this.props.bookNum} = ￥{(this.props.itemData.price * this.props.bookNum/100).toFixed(2)}
+                            ￥{(this.props.orderItem.bookPrice/100).toFixed(2)} × {this.props.orderItem.bookNum} = ￥{(this.props.orderItem.bookPrice * this.props.orderItem.bookNum/100).toFixed(2)}
                         </Typography>
                     </Grid>
                     <Grid item xs={1}>

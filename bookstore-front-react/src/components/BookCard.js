@@ -32,7 +32,7 @@ class BookCard extends React.Component {
     }
 
     clickBook() {
-        this.props.clickBook(this.props.bookInfo.id)
+        this.props.clickBook(this.props.bookInfo.bookId)
     }
 
     render() {
@@ -43,11 +43,11 @@ class BookCard extends React.Component {
                     <CardMedia
                         className={classes.media}
                         image={this.props.bookInfo.image}
-                        title={this.props.bookInfo.name}
+                        title={this.props.bookInfo.bookName}
                     />
                     <CardContent className={classes.content}>
                         <Typography gutterBottom variant="h6" component="h7">
-                            {this.props.bookInfo.name}
+                            {this.props.bookInfo.bookName}
                         </Typography>
                         <Typography variant="body2" component="p" className={classes.price}>
                             ￥{(this.props.bookInfo.price/100).toFixed(2)}

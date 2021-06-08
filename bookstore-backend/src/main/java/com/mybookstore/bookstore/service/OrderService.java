@@ -5,6 +5,6 @@ import com.mybookstore.bookstore.entity.Order;
 import java.util.List;
 
 public interface OrderService {
-    List<Order> getOrders(int userId);
+    List<Order> getOrders(Integer userId);
     Boolean placeOrder(Order order);
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import {Redirect} from 'react-router-dom';
 import {withStyles} from "@material-ui/core/styles";
 import CartItem from "../components/CartItem";
 import {Card, Grid, Button} from "@material-ui/core";
@@ -36,61 +35,103 @@ const styles = theme => ({
 class CartView extends React.Component {
     constructor(props) {
         super(props);
-        this.getTotalPrice = this.getTotalPrice.bind(this);
         this.state = {
             totalPrice: 0,
         }
     }
 
 
-    onNumberChange(id, num) {
-        this.props.onNumberChange(id, num);
+    onNumberChange(bookId, bookNum) {
+        let cartData = this.props.cartData;
+        let len = cartData.length;
+        for (let i = 0; i < len; ++i) {
+            if (cartData[i].bookId === bookId) {
+                cartData[i].bookNum = bookNum;
+                break;
+            }
+        }
+        this.props.setCartData(cartData);
     };
 
-    remove(id) {
-        this.props.remove(id);
+    remove(bookId) {
+        let cartData = this.props.cartData;
+        let len = cartData.length;
+        for (let i = 0; i < len; ++i) {
+            if (cartData[i].bookId === bookId) {
+                cartData.splice(i, 1);
+                break;
+            }
+        }
+        this.props.setCartData(cartData);
     };
 
-    choose(id) {
-        this.props.choose(id);
+    choose(bookId) {
+        let cartData = this.props.cartData;
+        let len = cartData.length;
+        for (let i = 0; i < len; ++i) {
+            if (cartData[i].bookId === bookId) {
+                cartData[i].chosen = !cartData[i].chosen;
+                break;
+            }
+        }
+        this.props.setCartData(cartData);
     };
 
     getTotalPrice() {
         let totalPrice = 0;
         this.props.cartData.forEach(item => {
-            if(item.isChosen) {
-                totalPrice += item.price * item.num;
-            }
+            if(item.chosen)
+                totalPrice += item.price * item.bookNum;
         });
         return totalPrice;
     }
 
     placeOrder() {
-        let items = [];
-        let removeIds = [];
+        let cartData = [];
+        let orderItems = [];
         let len = this.props.cartData.length;
         for (let i = 0; i < len; ++i) {
-            if (this.props.cartData[i].isChosen) {
-                items.push({
-                    bookId: this.props.cartData[i].id,
-                    bookNum: this.props.cartData[i].num,
-                })
-                removeIds.push(this.props.cartData[i].id);
+            if (this.props.cartData[i].chosen) {
+                orderItems.push({
+                    bookId: this.props.cartData[i].bookId,
+                    bookNum: this.props.cartData[i].bookNum,
+                });
+            } else {
+                cartData.push(this.props.cartData[i]);
             }
         }
-        this.props.removeSomeAndReduceStorage(removeIds);
-        placeOrder(this.props.user.id, this.getTotalPrice(), items);
+        // alter storage
+        len = orderItems.length;
+        if (len <= 0)
+            return;
+        let bookData = this.props.bookData;
+        let bookLen = bookData.length;
+        for (let i = 0; i < len; ++i) {
+            for (let j = 0; j < bookLen; ++j) {
+                if (bookData[j].bookId === orderItems[i].bookId) {
+                    bookData[j].storage -= orderItems[i].bookNum;
+                    break;
+                }
+            }
+        }
+
+        placeOrder(this.props.user.userId, orderItems, (data) => {
+            if (data) {
+                this.props.setCartData(cartData);
+                this.props.setBookData(bookData);
+                alert("下单成功！");
+            } else {
+                alert("订单录入失败！");
+            }
+        });
+
     }
 
     render() {
-        if (!this.props.user.isAuthed)
-            return (
-                <Redirect to={{pathname: "/store"}}/>
-            );
         if (this.props.cartData.length === 0) {
             return (
                 <Typography variant={"h5"} align={"center"}>
-                    Oops! Your cart is empty, go and get some!
+                    购物车空空如也，快去加入一些书吧！
                 </Typography>
             );
         }
@@ -108,7 +149,7 @@ class CartView extends React.Component {
                     <Grid container spacing={3}>
                         <Grid item xs={8}>
                             <Typography variant={"h5"} className={classes.totalPrice}>
-                                Total: ￥{(this.getTotalPrice()/100).toFixed(2)}
+                                总价： ￥{(this.getTotalPrice()/100).toFixed(2)}
                             </Typography>
                         </Grid>
                         <Grid item xs={3}>
@@ -120,7 +161,7 @@ class CartView extends React.Component {
                                 startIcon={<LocalAtmIcon />}
                                 onClick={this.placeOrder.bind(this)}
                             >
-                                BuyNow
+                                下单
                             </Button>
                         </Grid>
                     </Grid>

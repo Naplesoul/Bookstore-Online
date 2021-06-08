@@ -14,17 +14,15 @@ class HomeView extends React.Component {
         super(props);
     }
 
-    clickBook(id) {
-        this.props.clickBook(id);
-    }
-
     render() {
         const { classes } = this.props;
         return(
             <div>
                 <AdsCarousel/>
                 <BrowseView  bookData={this.props.bookData}
-                             clickBook={this.clickBook.bind(this)}
+                             setInfoBookData={this.props.setInfoBookData}
+                             redirectTo={this.props.redirectTo}
+                             searchText={null}
                 />
             </div>
         );

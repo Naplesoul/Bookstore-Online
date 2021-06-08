@@ -4,37 +4,55 @@ import history from './utils/history'
 
 import Frame from "./view/Frame";
 import LoginView from "./view/LoginView";
+import SignupView from "./view/SignupView";
 
 const nullUser = {
-    id: -1,
+    userId: -1,
     isAuthed: false,
-    userName: null,
-    avatarPath: null,
-    isAdmin: false,
+    username: null,
+    avatar: null,
+    userType: null,
+    userInfo: null,
 };
+
+const testUser = {
+    userId: 1,
+    isAuthed: true,
+    username: "admin",
+    password: "admin",
+    avatar: require("./assets/userimage1.jpg").default,
+    userType: 0,
+    userInfo: {
+        userId: 1,
+        nickname: "swh",
+        name: "沈玮杭",
+        tel: "10086",
+        address: "sjtu",
+        email: "shenwhang@outlook.com",
+    }
+}
 
 class MainRouter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: nullUser,
+            user: testUser,
         }
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
     }
 
-    login(loginUser){
+    login(_user){
         this.setState({
-            user: loginUser,
-        })
-
-    }
+            user: _user,
+        });
+    };
 
     logout(){
-        this.setState(() => ({
+        this.setState({
             user: nullUser,
-        }));
-    }
+        });
+    };
 
     render() {
         return(
@@ -44,11 +62,14 @@ class MainRouter extends React.Component {
                 </Route>
                 <Route path={"/store"}>
                     <Frame user={this.state.user}
-                           askForLogout={this.logout}
+                           logout={this.logout}
                     />
                 </Route>
                 <Route exact path={"/login"}>
                     <LoginView login={this.login}/>
+                </Route>
+                <Route exact path={"/signup"}>
+                    <SignupView login={this.login}/>
                 </Route>
             </Router>
         );
