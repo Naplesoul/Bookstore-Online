@@ -65,7 +65,7 @@ class BookRankItem extends React.Component {
                     </Grid>
                     <Grid item xs={2}>
                         <Typography variant="h5" className={classes.bookNum}>
-                            销量：{this.props.book.bookNum}
+                            购买次数：{this.props.book.bookNum}
                         </Typography>
                         <Typography variant="h5" className={classes.price}>
                             ￥{(this.props.book.bookPrice/100).toFixed(2)}

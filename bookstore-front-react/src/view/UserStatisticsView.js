@@ -19,6 +19,9 @@ const styles = theme => ({
         marginTop: 20,
         borderRadius: 10,
     },
+    totalPrice: {
+        color: "red",
+    },
 });
 
 class UserStatisticsView extends React.Component {
@@ -90,6 +93,9 @@ class UserStatisticsView extends React.Component {
                 }
             }
         }
+        processedData.sort((a, b) => {
+            return b.bookNum - a.bookNum;
+        });
         this.setState({
             processedData: processedData,
             totalBookNum: totalBookNum,
@@ -129,7 +135,12 @@ class UserStatisticsView extends React.Component {
                     </Grid>
                     <Grid item xs={3}>
                         <Typography variant="h6">
-                            消费总额：￥{(this.state.totalPrice/100).toFixed(2)}
+                            <span>
+                                消费总额：
+                            </span>
+                            <span className={classes.totalPrice}>
+                                ￥{(this.state.totalPrice/100).toFixed(2)}
+                            </span>
                         </Typography>
                     </Grid>
                 </Grid>
