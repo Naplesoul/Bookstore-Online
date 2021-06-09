@@ -60,7 +60,10 @@ class OrderItem extends React.Component {
                             {this.props.orderItem.author}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
-                            分类： {this.props.orderItem.category}
+                            书籍ID：{this.props.orderItem.bookId}
+                        </Typography>
+                        <Typography variant="subtitle2" color="textSecondary">
+                            分类：{this.props.orderItem.category}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
 

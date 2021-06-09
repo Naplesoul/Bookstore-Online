@@ -4,7 +4,7 @@ import BookItem from "../components/BookItem";
 import {addBook} from "../services/BookService";
 
 const header = [
-    "Id", "ISBN", "书名", "作者", "分类", "单价", "库存", "简介", "图片 URL", "操作"
+    "ID", "ISBN", "书名", "作者", "分类", "单价", "库存", "简介", "图片 URL", "操作"
 ];
 
 const styles = theme => ({
@@ -95,7 +95,7 @@ class BookManagementView extends React.Component {
                     newBookData.push(data);
                     this.props.setBookData(newBookData);
                     this.clearAdd();
-                    alert("录入成功， 新书Id为：" + data.bookId);
+                    alert("录入成功， 新书ID为：" + data.bookId);
                 } else {
                     alert("录入失败，请检查ISBN号是否重复");
                 }
@@ -194,7 +194,7 @@ class BookManagementView extends React.Component {
                     </tr>
                     <tr>
                         <td>
-                            <input value="Id"
+                            <input value="ID"
                                    className={classes.bookId}
                                    disabled
                             />
@@ -279,7 +279,7 @@ class BookManagementView extends React.Component {
                     </tr>
                     <tr>
                         <td>
-                            <input placeholder="Id"
+                            <input placeholder="ID"
                                    className={classes.bookId}
                                    id="searchBookId"
                             />
