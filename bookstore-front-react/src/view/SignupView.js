@@ -85,7 +85,7 @@ class SignupView extends React.Component {
                     userId: data.userId,
                     isAuthed: true,
                     username: data.username,
-                    avatarPath: require("../assets/userimage1.jpg").default,
+                    avatar: require("../assets/userimage1.jpg").default,
                     userType: data.userType,
                     userInfo: data.userInfo,
                 });
