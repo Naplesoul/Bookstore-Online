@@ -36,7 +36,7 @@ class MainRouter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: testUser,
+            user: nullUser,
         }
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
