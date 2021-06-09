@@ -17,6 +17,7 @@ import ProfileView from "./ProfileView";
 import BookManagementView from "./BookManagementView";
 import UserManagementView from "./UserManagementView";
 import UserStatisticsView from "./UserStatisticsView";
+import AdminStatisticsView from "./AdminStatisticsView";
 
 // let _bookData = [
 //     {bookId: 0, isbn: 0, bookName: "The Lord of the Rings", author: "J. R. R. Tolkien", category: "novel", price: 45.90, storage: 500, intro: "The book is a sequel to \"The Hobbit\" and is recognized as the originator of modern fantasy literature. ", image: require("../assets/book0.jpg").default},
@@ -173,6 +174,10 @@ class Frame extends React.Component {
                         </Route>
                         <Route exact path={"/store/management/users"}>
                             <UserManagementView user={this.props.user}/>
+                        </Route>
+                        <Route exact path={"/store/management/statistics"}>
+                            <AdminStatisticsView user={this.props.user}
+                            />
                         </Route>
                     </Router>
                 </main>

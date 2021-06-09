@@ -16,14 +16,14 @@ const nullUser = {
 };
 
 const testUser = {
-    userId: 1,
+    userId: 3,
     isAuthed: true,
     username: "admin",
     password: "admin",
     avatar: require("./assets/userimage1.jpg").default,
-    userType: 0,
+    userType: 1,
     userInfo: {
-        userId: 1,
+        userId: 3,
         nickname: "swh",
         name: "沈玮杭",
         tel: "10086",
