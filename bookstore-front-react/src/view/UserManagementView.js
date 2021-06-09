@@ -4,7 +4,7 @@ import {getUsers} from "../services/UserService";
 import UserItem from "../components/UserItem";
 
 const header = [
-    "Id", "用户名", "昵称", "姓名", "邮箱", "电话", "地址", "状态", "操作"
+    "ID", "用户名", "昵称", "姓名", "邮箱", "电话", "地址", "状态", "操作"
 ];
 
 const styles = theme => ({

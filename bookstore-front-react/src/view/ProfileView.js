@@ -30,6 +30,7 @@ class CartView extends React.Component {
                 </Grid>
                 <Grid item xs={5} className={classes.detail}>
                     <Typography variant={"h4"} className={classes.bookName}>{this.props.user.username}</Typography>
+                    <Typography variant={"h6"}>用户ID： {this.props.user.userId}</Typography>
                     <Typography variant={"h6"}>昵称： {this.props.user.userInfo.nickname}</Typography>
                     <Typography variant={"h6"}>姓名： {this.props.user.userInfo.name}</Typography>
                     <Typography variant={"h6"}>邮箱： {this.props.user.userInfo.email}</Typography>

@@ -39,7 +39,7 @@ class UserRankItem extends React.Component {
                             {this.props.user.username}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
-                            用户Id：{this.props.user.userId}
+                            用户ID：{this.props.user.userId}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
                             昵称：{this.props.user.userInfo.nickname}

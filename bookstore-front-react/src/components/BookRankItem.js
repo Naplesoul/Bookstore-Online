@@ -57,10 +57,10 @@ class BookRankItem extends React.Component {
                             {this.props.book.author}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
-                            分类： {this.props.book.category}
+                            书籍ID： {this.props.book.bookId}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
-                            Id： {this.props.book.bookId}
+                            分类： {this.props.book.category}
                         </Typography>
                     </Grid>
                     <Grid item xs={2}>

@@ -120,7 +120,7 @@ class OrderView extends React.Component {
                                         </Grid>
                                         <Grid item xs={3}>
                                             <Typography component="h6" variant="h6">
-                                                用户Id： {this.props.user.userId}
+                                                用户ID： {this.props.user.userId}
                                             </Typography>
                                         </Grid>
                                     </Grid>
