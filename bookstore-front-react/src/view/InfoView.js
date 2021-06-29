@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {Button} from "@material-ui/core";
 import {Redirect} from "react-router-dom";
+import {getBook} from "../services/BookService";
 
 
 
@@ -42,6 +43,14 @@ const styles = theme => ({
 class InfoView extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            bookData: {},
+        };
+        getBook(this.props.bookId, (data) => {
+            this.setState({
+                bookData: data,
+            });
+        });
     }
 
     addCart() {
@@ -53,7 +62,7 @@ class InfoView extends React.Component {
         let len = cartData.length;
         // if it exists in cart, then add one, set it to chosen
         for (let i = 0; i < len; ++i) {
-            if (cartData[i].bookId === this.props.bookInfo.bookId) {
+            if (cartData[i].bookId === this.state.bookData.bookId) {
                 if (cartData[i].bookNum + 1 <= cartData[i].storage) {
                     cartData[i].bookNum += 1;
                     cartData[i].chosen = true;
@@ -67,20 +76,20 @@ class InfoView extends React.Component {
             }
         }
         // not in cart, add to cart
-        if (this.props.bookInfo.storage === 0) {
+        if (this.state.bookData.storage === 0) {
             alert("此书已无货");
             return;
         }
         cartData.push({
-            bookId: this.props.bookInfo.bookId,
+            bookId: this.state.bookData.bookId,
             bookNum: 1,
             chosen: true,
-            bookName: this.props.bookInfo.bookName,
-            author: this.props.bookInfo.author,
-            category: this.props.bookInfo.category,
-            price: this.props.bookInfo.price,
-            storage: this.props.bookInfo.storage,
-            image: this.props.bookInfo.image,
+            bookName: this.state.bookData.bookName,
+            author: this.state.bookData.author,
+            category: this.state.bookData.category,
+            price: this.state.bookData.price,
+            storage: this.state.bookData.storage,
+            image: this.state.bookData.image,
         });
         this.props.setCartData(cartData);
     };
@@ -95,7 +104,7 @@ class InfoView extends React.Component {
         let found = false;
         // if it exists in cart, then add one, set other books to not chosen
         for (let i = 0; i < len; ++i) {
-            if (cartData[i].bookId === this.props.bookInfo.bookId) {
+            if (cartData[i].bookId === this.state.bookData.bookId) {
                 if (cartData[i].bookNum + 1 <= cartData[i].storage)
                     cartData[i].bookNum += 1;
                 cartData[i].chosen = true;
@@ -110,72 +119,28 @@ class InfoView extends React.Component {
         }
         // not in cart, add
         cartData.push({
-            bookId: this.props.bookInfo.bookId,
+            bookId: this.state.bookData.bookId,
             bookNum: 1,
             chosen: true,
-            bookName: this.props.bookInfo.bookName,
-            author: this.props.bookInfo.author,
-            category: this.props.bookInfo.category,
-            price: this.props.bookInfo.price,
-            storage: this.props.bookInfo.storage,
-            image: this.props.bookInfo.image,
+            bookName: this.state.bookData.bookName,
+            author: this.state.bookData.author,
+            category: this.state.bookData.category,
+            price: this.state.bookData.price,
+            storage: this.state.bookData.storage,
+            image: this.state.bookData.image,
         });
         this.props.setCartData(cartData);
         this.props.redirectTo("/store/cart");
     };
 
-    render() {
-        if (this.props.bookInfo == null)
-            return (
-                <Redirect to={{pathname: "/store"}}/>
-            );
-        const { classes } = this.props;
+    renderButtons() {
         // if is an admin
         if (this.props.user.userType === 1) {
+            return null;
+        } else {
+            const { classes } = this.props;
             return (
-                <Grid container spacing={5} className={classes.root}>
-                    <Grid item xs={5}>
-                        <img alt={"bookPicture"} src={this.props.bookInfo.image} width={"100%"}/>
-                    </Grid>
-                    <Grid item xs={5} className={classes.detail}>
-                        <Typography variant={"h4"} className={classes.bookName}>{this.props.bookInfo.bookName}</Typography>
-                        <Typography variant={"h6"}>作者： {this.props.bookInfo.author}</Typography>
-                        <Typography variant={"h6"}>分类： {this.props.bookInfo.category}</Typography>
-                        <Typography variant={"h6"}>
-                            <span>单价：</span>
-                            <span className={classes.price}>￥{(this.props.bookInfo.price/100).toFixed(2)}</span>
-                        </Typography>
-                        <Typography variant={"h6"}>
-                            <span>库存：</span>
-                            <span className={classes.stock}>{this.props.bookInfo.storage} pieces</span>
-                        </Typography>
-                        <Typography variant={"h6"}>ISBN： {this.props.bookInfo.isbn}</Typography>
-                        <Typography variant={"h6"}>简介：</Typography>
-                        <Typography variant={"h7"}>{this.props.bookInfo.intro}</Typography>
-                    </Grid>
-                </Grid>
-            );
-        }
-        return(
-            <Grid container spacing={5} className={classes.root}>
-                <Grid item xs={5}>
-                    <img alt={"bookPicture"} src={this.props.bookInfo.image} width={"100%"}/>
-                </Grid>
-                <Grid item xs={5} className={classes.detail}>
-                    <Typography variant={"h4"} className={classes.bookName}>{this.props.bookInfo.bookName}</Typography>
-                    <Typography variant={"h6"}>作者： {this.props.bookInfo.author}</Typography>
-                    <Typography variant={"h6"}>分类： {this.props.bookInfo.category}</Typography>
-                    <Typography variant={"h6"}>
-                        <span>单价：</span>
-                        <span className={classes.price}>￥{(this.props.bookInfo.price/100).toFixed(2)}</span>
-                    </Typography>
-                    <Typography variant={"h6"}>
-                        <span>库存：</span>
-                        <span className={classes.stock}>{this.props.bookInfo.storage} pieces</span>
-                    </Typography>
-                    <Typography variant={"h6"}>ISBN： {this.props.bookInfo.isbn}</Typography>
-                    <Typography variant={"h6"}>简介：</Typography>
-                    <Typography variant={"h7"}>{this.props.bookInfo.intro}</Typography>
+                <div>
                     <Button
                         variant="contained"
                         color="primary"
@@ -196,6 +161,35 @@ class InfoView extends React.Component {
                     >
                         立即购买
                     </Button>
+                </div>
+            );
+        }
+    }
+
+    render() {
+        const { classes } = this.props;
+        // if is an admin
+        return (
+            <Grid container spacing={5} className={classes.root}>
+                <Grid item xs={5}>
+                    <img alt={"bookPicture"} src={this.state.bookData.image} width={"100%"}/>
+                </Grid>
+                <Grid item xs={5} className={classes.detail}>
+                    <Typography variant={"h4"} className={classes.bookName}>{this.state.bookData.bookName}</Typography>
+                    <Typography variant={"h6"}>作者： {this.state.bookData.author}</Typography>
+                    <Typography variant={"h6"}>分类： {this.state.bookData.category}</Typography>
+                    <Typography variant={"h6"}>
+                        <span>单价：</span>
+                        <span className={classes.price}>￥{(this.state.bookData.price/100).toFixed(2)}</span>
+                    </Typography>
+                    <Typography variant={"h6"}>
+                        <span>库存：</span>
+                        <span className={classes.stock}>{this.state.bookData.storage} pieces</span>
+                    </Typography>
+                    <Typography variant={"h6"}>ISBN： {this.state.bookData.isbn}</Typography>
+                    <Typography variant={"h6"}>简介：</Typography>
+                    <Typography variant={"h7"}>{this.state.bookData.intro}</Typography>
+                    {this.renderButtons()}
                 </Grid>
             </Grid>
         );

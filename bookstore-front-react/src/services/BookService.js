@@ -1,8 +1,21 @@
 import {config} from "../config";
 import {getRequest, postRequest} from "../utils/ajax";
 
-export const getBooks = (callback) => {
-    const url = `${config.apiUrl}/getBooks`;
+export const getBooks = (page, size, searchText, callback) => {
+    if (searchText == null) {
+        searchText = "";
+    }
+    const url = `${config.apiUrl}/getBooks?page=` + page.toString() + "&size=" + size.toString() + "&searchText=" + searchText;
+    getRequest(url, callback);
+};
+
+export const getBook = (bookId, callback) => {
+    const url = `${config.apiUrl}/getBook?bookId=` + bookId.toString();
+    getRequest(url, callback);
+};
+
+export const getBookCount = (callback) => {
+    const url = `${config.apiUrl}/getBookCount`;
     getRequest(url, callback);
 };
 

@@ -19,8 +19,7 @@ class HomeView extends React.Component {
         return(
             <div>
                 <AdsCarousel/>
-                <BrowseView  bookData={this.props.bookData}
-                             setInfoBookData={this.props.setInfoBookData}
+                <BrowseView  setInfoBook={this.props.setInfoBook}
                              redirectTo={this.props.redirectTo}
                              searchText={null}
                 />
