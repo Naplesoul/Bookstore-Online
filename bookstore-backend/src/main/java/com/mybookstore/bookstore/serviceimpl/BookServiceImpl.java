@@ -6,6 +6,7 @@ import com.mybookstore.bookstore.entity.Book;
 import com.mybookstore.bookstore.entity.User;
 import com.mybookstore.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +26,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getBooks() {
-        return bookDao.getBooks();
+    public Page<Book> getBooks(Integer page, Integer size, String searchText) {
+        return bookDao.getBooks(page, size, searchText);
     }
 
     @Override

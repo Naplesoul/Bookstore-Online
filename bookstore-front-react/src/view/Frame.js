@@ -50,19 +50,10 @@ class Frame extends React.Component {
         this.state = {
             bookData: [],
             cartData: [],
-            infoBookData: null,
+            infoBookId: 1,
             redirectPath: null,
             searchText: null,
         };
-        getBooks((_bookData) => {
-            this.setState({
-                bookData: _bookData,
-                infoPageBook: _bookData[0],
-                // force to homepage when constructed
-                // prevent user from visiting some pages through url when when are not authed
-                redirectPath: "/store",
-            });
-        });
     }
 
     redirectTo(path) {
@@ -83,9 +74,9 @@ class Frame extends React.Component {
         });
     }
 
-    setInfoBookData(infoData) {
+    setInfoBook(bookId) {
         this.setState({
-            infoBookData: infoData,
+            infoBookId: bookId,
         });
     }
 
@@ -126,20 +117,18 @@ class Frame extends React.Component {
                 <main className={classes.content}>
                     <Router>
                         <Route exact path={"/store"}>
-                            <HomeView bookData={this.state.bookData}
-                                      setInfoBookData={this.setInfoBookData.bind(this)}
+                            <HomeView setInfoBook={this.setInfoBook.bind(this)}
                                       redirectTo={this.redirectTo.bind(this)}
                             />
                         </Route>
                         <Route exact path={"/store/books"}>
-                            <BrowseView bookData={this.state.bookData}
-                                        setInfoBookData={this.setInfoBookData.bind(this)}
+                            <BrowseView setInfoBook={this.setInfoBook.bind(this)}
                                         redirectTo={this.redirectTo.bind(this)}
                                         searchText={this.state.searchText}
                             />
                         </Route>
                         <Route exact path={"/store/info"}>
-                            <InfoView bookInfo={this.state.infoBookData}
+                            <InfoView bookId={this.state.infoBookId}
                                       user={this.props.user}
                                       cartData={this.state.cartData}
                                       redirectTo={this.redirectTo.bind(this)}
@@ -148,9 +137,9 @@ class Frame extends React.Component {
                         </Route>
                         <Route exact path={"/store/cart"}>
                             <CartView user={this.props.user}
-                                      bookData={this.state.bookData}
+                                      // bookData={this.state.bookData}
                                       cartData={this.state.cartData}
-                                      setBookData={this.setBookData.bind(this)}
+                                      // setBookData={this.setBookData.bind(this)}
                                       setCartData={this.setCartData.bind(this)}
                             />
                         </Route>

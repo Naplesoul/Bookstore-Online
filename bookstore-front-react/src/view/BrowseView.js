@@ -4,6 +4,7 @@ import BookCard from "../components/BookCard";
 import GridList from '@material-ui/core/GridList';
 import { Pagination } from 'antd';
 import 'antd/dist/antd.css'
+import {getBookCount, getBooks} from "../services/BookService";
 
 
 const styles = theme => ({
@@ -19,62 +20,52 @@ class BrowseView extends React.Component {
     constructor(props) {
         super(props);
 
-        let searchText = this.props.searchText;
-        let bookIndexes = [];
-        let len = this.props.bookData.length;
-        if (this.props.searchText == null) {
-            for (let i = 0; i < len; ++i)
-                bookIndexes.push(i);
-        } else {
-            for (let i = 0; i < len; ++i) {
-                if (this.props.bookData[i].bookName.toString().toLowerCase().indexOf(searchText) >= 0
-                    || this.props.bookData[i].author.toString().toLowerCase().indexOf(searchText) >= 0
-                    || this.props.bookData[i].category.toString().toLowerCase().indexOf(searchText) >= 0
-                    || this.props.bookData[i].isbn.toString() === searchText)
-                    bookIndexes.push(i);
-            }
-        }
-
         this.state = {
-            page: 1,
-            pageSize: 15,
-            showBookNum: bookIndexes.length,
-            showBookIndexes: bookIndexes,
+            bookCount: 0,
+            bookData: [],
         };
+
+        getBooks(1, 15, this.props.searchText, (_bookData) => {
+            this.setState({
+                bookCount: _bookData.totalElements,
+                bookData: _bookData.content,
+            });
+        });
     }
 
     clickBook(bookId) {
-        let len = this.props.bookData.length;
-        for (let i = 0; i < len; ++i) {
-            if (this.props.bookData[i].bookId === bookId) {
-                this.props.setInfoBookData(this.props.bookData[i]);
-                this.props.redirectTo("/store/info");
-            }
-        }
+        this.props.setInfoBook(bookId);
+        this.props.redirectTo("/store/info");
     }
 
     setPage(_page, _pageSize) {
-        this.setState({
-            page: _page,
-            pageSize: _pageSize,
-        })
+        getBooks(_page, _pageSize, this.props.searchText, (_bookData) => {
+            this.setState({
+                bookCount: _bookData.totalElements,
+                bookData: _bookData.content,
+            });
+        });
     }
 
     render() {
+        // if (this.state.bookData.length === 0) {
+        //     return (
+        //         <h1>
+        //             加载中，请稍候...
+        //         </h1>
+        //     );
+        // }
         const { classes } = this.props;
         return(
             <div className={classes.root}>
                 <GridList cellHeight={160} className={classes.gridList} cols={3}>
-                    {this.state.showBookIndexes.map((i, index) => {
-                        if (index >= this.state.page *  this.state.pageSize || index < (this.state.page - 1) *  this.state.pageSize)
-                            return null;
-                        else
-                            return <BookCard bookInfo={this.props.bookData[i]} clickBook={this.clickBook.bind(this)} />;
+                    {this.state.bookData.map((book, index) => {
+                        return <BookCard bookInfo={book} clickBook={this.clickBook.bind(this)} />;
                     })}
                 </GridList>
                 <div className={classes.page}>
                     <Pagination defaultCurrent={1}
-                                total={this.state.showBookNum}
+                                total={this.state.bookCount}
                                 defaultPageSize={15}
                                 onChange={this.setPage.bind(this)}
                     />

@@ -5,6 +5,7 @@ import com.mybookstore.bookstore.constant.Constant;
 import com.mybookstore.bookstore.entity.Book;
 import com.mybookstore.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +19,10 @@ public class BookController {
     private BookService bookService;
 
     @RequestMapping("/getBooks")
-    public List<Book> getBooks() {
-        return bookService.getBooks();
+    public Page<Book> getBooks(@RequestParam("page") Integer page,
+                               @RequestParam("size") Integer size,
+                               @RequestParam("searchText") String searchText) {
+        return bookService.getBooks(page, size, searchText);
     }
 
     @RequestMapping("/getBook")
