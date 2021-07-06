@@ -35,6 +35,14 @@ class SearchBox extends React.Component
         this.props.onTextChange(text);
     };
 
+    onKeyPress(e) {
+        if (this.props.onEnterPress == null)
+            return;
+        if (e.which === 13) {
+            this.props.onEnterPress();
+        }
+    };
+
     render() {
         const { classes } = this.props;
         return (
@@ -45,6 +53,7 @@ class SearchBox extends React.Component
                     value={this.props.text}
                     placeholder={this.props.placeHolder}
                     onChange={this.onTextChange.bind(this)}
+                    onKeyPress={this.onKeyPress.bind(this)}
                 />
             </Paper>
         );

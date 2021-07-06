@@ -1,20 +1,23 @@
 import React from "react";
 import {withStyles} from "@material-ui/core/styles";
-import {getOrders} from "../services/OrderService";
 import Typography from "@material-ui/core/Typography";
 import locale from "antd/es/date-picker/locale/zh_CN";
-import {Card, DatePicker} from "antd";
+import {Card, DatePicker, Pagination} from "antd";
 import Grid from "@material-ui/core/Grid";
 import BookRankItem from "../components/BookRankItem";
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import {Button} from "@material-ui/core";
-import {getUsers} from "../services/UserService";
 import UserRankItem from "../components/UserRankItem";
+import {getConsumptionRank, getSalesRank, getTotalSalesAndConsumption} from "../services/OrderService";
 
 
 
 const { RangePicker } = DatePicker;
+
+const minTime = new Date("2000-01-01 00:00:00");
+const maxTime = new Date("3000-01-01 00:00:00");
+const pageSize = 15;
 
 const styles = theme => ({
     root: {
@@ -27,36 +30,53 @@ const styles = theme => ({
     totalPrice: {
         color: "red",
     },
+    page: {
+        marginTop: '2vh',
+        marginLeft: '33vw',
+    },
 });
 
 class AdminStatisticsView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            orderData: [],
-            userData: [],
             bookRank: [],
             userRank: [],
+            bookCount: 0,
+            userCount: 0,
             totalBookNum: 0,
             totalPrice: 0,
             rankBook: true,
+            page: 1,
+            startTime: minTime,
+            endTime: maxTime,
         };
-
-        getOrders(this.props.user.userId, (_orderData) => {
-            this.setState({
-                orderData: _orderData,
-            });
-            this.updateBook(_orderData);
-            getUsers(this.props.user.userId, (_userData) => {
-                if (_userData != null) {
-                    this.setState({
-                        userData: _userData,
-                    });
-                }
-                this.updateUser(_orderData);
-            });
-        });
+        this.updateData(1, minTime, maxTime);
     };
+
+    updateData(page, startTime, endTime) {
+        getTotalSalesAndConsumption(this.props.user.userId, startTime, endTime, (data) => {
+            this.setState({
+                totalPrice: data.totalConsumption,
+                totalBookNum: data.totalSales,
+            });
+        })
+        getConsumptionRank(page, pageSize, startTime, endTime, (data) => {
+            this.setState({
+                userCount: data.totalElements,
+                userRank: data.content,
+            });
+        })
+        getSalesRank(this.props.user.userId, page, pageSize, startTime, endTime, (data) => {
+            this.setState({
+                bookCount: data.totalElements,
+                bookRank: data.content,
+            });
+        })
+        this.setState({
+            page: page,
+        });
+    }
 
     showBookRank() {
         this.setState({
@@ -72,141 +92,62 @@ class AdminStatisticsView extends React.Component {
 
     onDateChange(dates, dateStrings) {
         if (dates == null) {
-            this.updateBook(this.state.orderData);
-            this.updateUser(this.state.orderData);
+            this.updateData(1, minTime, maxTime);
             return;
         }
-        let start = (new Date(dates[0])).getTime();
-        let end = (new Date(dates[1])).getTime();
-        let orderData = [];
-        let len = this.state.orderData.length;
-        for (let i = 0; i < len; ++i) {
-            let timestamp = (new Date(this.state.orderData[i].orderTime)).getTime();
-            if (timestamp <= end && timestamp >= start) {
-                orderData.push(this.state.orderData[i]);
-            }
-        }
-        this.updateBook(orderData);
-        this.updateUser(orderData);
+        let start = new Date(dates[0]);
+        let end = new Date(dates[1]);
+        this.updateData(1, start, end);
     }
 
-
-
-    updateBook(orderData) {
-        let len = orderData.length;
-        let bookRank = [];
-        let totalBookNum = 0;
-        let totalPrice = 0;
-        for (let i = 0; i < len; ++i) {
-            let itemLen = orderData[i].orderItems.length;
-            totalPrice += orderData[i].totalPrice;
-            for (let j = 0; j < itemLen; ++j) {
-                let bookId = orderData[i].orderItems[j].bookId;
-                let bookNum = orderData[i].orderItems[j].bookNum;
-                totalBookNum += bookNum;
-                let pLen = bookRank.length;
-                let found = false;
-                for (let k = 0; k < pLen; ++k) {
-                    if (bookRank[k].bookId === bookId) {
-                        bookRank[k].bookNum += bookNum;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    bookRank.push({
-                        bookId: bookId,
-                        bookNum: bookNum,
-                        bookName: orderData[i].orderItems[j].bookName,
-                        author: orderData[i].orderItems[j].author,
-                        category: orderData[i].orderItems[j].category,
-                        bookPrice: orderData[i].orderItems[j].bookPrice,
-                        image: orderData[i].orderItems[j].image,
-                    });
-                }
-            }
-        }
-        bookRank.sort((a, b) => {
-            return b.bookNum - a.bookNum;
-        });
-        this.setState({
-            bookRank: bookRank,
-            totalBookNum: totalBookNum,
-            totalPrice: totalPrice,
-        });
+    setPage(page, pageSize) {
+        this.updateData(page, this.state.startTime, this.state.endTime);
     }
-
-    updateUser(orderData) {
-        let len = orderData.length;
-        let userRank = [];
-        for (let i = 0; i < len; ++i) {
-            let userId = orderData[i].userId;
-            let orderPrice = orderData[i].totalPrice;
-            let rankLen = userRank.length;
-            let found = false;
-            for (let j = 0; j < rankLen; ++j) {
-                if (userRank[j].userId === userId) {
-                    userRank[j].totalPrice += orderPrice;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                let userLen = this.state.userData.length;
-                for (let j = 0; j < userLen; ++j) {
-                    if (this.state.userData[j].userId === userId) {
-                        userRank.push({
-                            userId: userId,
-                            totalPrice: orderPrice,
-                            username: this.state.userData[j].username,
-                            userInfo: this.state.userData[j].userInfo,
-                        });
-                    }
-                }
-            }
-        }
-        userRank.sort((a, b) => {
-            return b.totalPrice - a.totalPrice;
-        });
-        this.setState({
-            userRank: userRank,
-        });
-    }
-
 
     renderRank() {
         const { classes } = this.props;
         if (this.state.rankBook) {
             return (
-                <Card className={classes.rank}>
-                    {this.state.bookRank.map((book, index) => {
-                        return (
-                            <BookRankItem book={book} index={index + 1}/>
-                        );
-                    })}
-                </Card>
+                <div>
+                    <Card className={classes.rank}>
+                        {this.state.bookRank.map((rank, index) => {
+                            return (
+                                <BookRankItem book={rank.book} index={index + 1} sales={rank.sales}/>
+                            );
+                        })}
+                    </Card>
+                    <div className={classes.page}>
+                        <Pagination current={this.state.page}
+                                    total={this.state.bookCount}
+                                    defaultPageSize={pageSize}
+                                    onChange={this.setPage.bind(this)}
+                        />
+                    </div>
+                </div>
             );
         } else {
             return (
-                <Card className={classes.rank}>
-                    {this.state.userRank.map((user, index) => {
-                        return (
-                            <UserRankItem user={user} index={index + 1}/>
-                        );
-                    })}
-                </Card>
+                <div>
+                    <Card className={classes.rank}>
+                        {this.state.userRank.map((rank, index) => {
+                            return (
+                                <UserRankItem user={rank.user} index={index + 1} consumption={rank.consumption}/>
+                            );
+                        })}
+                    </Card>
+                    <div className={classes.page}>
+                        <Pagination current={this.state.page}
+                                    total={this.state.userCount}
+                                    defaultPageSize={pageSize}
+                                    onChange={this.setPage.bind(this)}
+                        />
+                    </div>
+                </div>
             );
         }
     }
 
     render() {
-        if (this.state.orderData.length === 0) {
-            return (
-                <Typography variant={"h5"} align={"center"}>
-                    你还没有订单，快去下单吧！
-                </Typography>
-            );
-        }
         const { classes } = this.props;
         return (
             <div className={classes.root}>

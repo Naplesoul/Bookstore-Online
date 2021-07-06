@@ -1,21 +1,22 @@
 import {config} from "../config";
 import {getRequest, postRequest} from "../utils/ajax";
 
-export const getBooks = (page, size, searchText, callback) => {
+export const getBooks = (page, size, searchType, searchText, callback) => {
     if (searchText == null) {
         searchText = "";
     }
-    const url = `${config.apiUrl}/getBooks?page=` + page.toString() + "&size=" + size.toString() + "&searchText=" + searchText;
+    const url = `${config.apiUrl}/getBooks?page=` + page.toString() + "&size="
+        + size.toString() + "&searchType=" + searchType.toString() + "&searchText=" + searchText.trim();
     getRequest(url, callback);
+};
+
+export const filterBooks = (page, size, book, callback) => {
+    const url = `${config.apiUrl}/filterBooks?page=` + page.toString() + "&size=" + size.toString();
+    postRequest(url, book, callback);
 };
 
 export const getBook = (bookId, callback) => {
     const url = `${config.apiUrl}/getBook?bookId=` + bookId.toString();
-    getRequest(url, callback);
-};
-
-export const getBookCount = (callback) => {
-    const url = `${config.apiUrl}/getBookCount`;
     getRequest(url, callback);
 };
 

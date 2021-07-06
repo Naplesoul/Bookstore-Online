@@ -4,7 +4,6 @@ import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import {CssBaseline} from "@material-ui/core";
 
-import {getBooks} from "../services/BookService";
 import HeaderBar from "../components/HeaderBar";
 import LeftDrawer from "../components/LeftDrawer";
 import HomeView from "./HomeView";
@@ -12,7 +11,6 @@ import BrowseView from "./BrowseView";
 import InfoView from "./InfoView";
 import CartView from "./CartView";
 import OrderView from "./OrderView";
-import {getOrders} from "../services/OrderService";
 import ProfileView from "./ProfileView";
 import BookManagementView from "./BookManagementView";
 import UserManagementView from "./UserManagementView";
@@ -51,7 +49,7 @@ class Frame extends React.Component {
             bookData: [],
             cartData: [],
             infoBookId: 1,
-            redirectPath: null,
+            redirectPath: "/store",
             searchText: null,
         };
     }
@@ -137,9 +135,7 @@ class Frame extends React.Component {
                         </Route>
                         <Route exact path={"/store/cart"}>
                             <CartView user={this.props.user}
-                                      // bookData={this.state.bookData}
                                       cartData={this.state.cartData}
-                                      // setBookData={this.setBookData.bind(this)}
                                       setCartData={this.setCartData.bind(this)}
                             />
                         </Route>

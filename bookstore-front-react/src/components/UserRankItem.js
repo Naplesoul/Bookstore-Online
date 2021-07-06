@@ -67,7 +67,7 @@ class UserRankItem extends React.Component {
                             消费金额
                         </Typography>
                         <Typography variant="h5" className={classes.price}>
-                            ￥{(this.props.user.totalPrice/100).toFixed(2)}
+                            ￥{(this.props.consumption/100).toFixed(2)}
                         </Typography>
                     </Grid>
                 </Grid>

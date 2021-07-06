@@ -4,8 +4,10 @@ import BookCard from "../components/BookCard";
 import GridList from '@material-ui/core/GridList';
 import { Pagination } from 'antd';
 import 'antd/dist/antd.css'
-import {getBookCount, getBooks} from "../services/BookService";
+import {getBooks} from "../services/BookService";
+import {config} from "../config";
 
+const pageSize = 15;
 
 const styles = theme => ({
     root: {
@@ -23,9 +25,10 @@ class BrowseView extends React.Component {
         this.state = {
             bookCount: 0,
             bookData: [],
+            page: 1,
         };
 
-        getBooks(1, 15, this.props.searchText, (_bookData) => {
+        getBooks(1, pageSize, config.bookName, this.props.searchText, (_bookData) => {
             this.setState({
                 bookCount: _bookData.totalElements,
                 bookData: _bookData.content,
@@ -39,22 +42,16 @@ class BrowseView extends React.Component {
     }
 
     setPage(_page, _pageSize) {
-        getBooks(_page, _pageSize, this.props.searchText, (_bookData) => {
+        getBooks(_page, pageSize, config.bookName, this.props.searchText, (_bookData) => {
             this.setState({
                 bookCount: _bookData.totalElements,
                 bookData: _bookData.content,
+                page: _page,
             });
         });
     }
 
     render() {
-        // if (this.state.bookData.length === 0) {
-        //     return (
-        //         <h1>
-        //             加载中，请稍候...
-        //         </h1>
-        //     );
-        // }
         const { classes } = this.props;
         return(
             <div className={classes.root}>
@@ -64,9 +61,9 @@ class BrowseView extends React.Component {
                     })}
                 </GridList>
                 <div className={classes.page}>
-                    <Pagination defaultCurrent={1}
+                    <Pagination current={this.state.page}
                                 total={this.state.bookCount}
-                                defaultPageSize={15}
+                                defaultPageSize={pageSize}
                                 onChange={this.setPage.bind(this)}
                     />
                 </div>
