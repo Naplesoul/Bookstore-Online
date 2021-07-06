@@ -1,15 +1,19 @@
 import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import OrderItem from "../components/OrderItem";
-import {Card, DatePicker} from "antd";
+import {DatePicker, Pagination} from "antd";
 import SearchBox from "../components/SearchBox";
 import Grid from "@material-ui/core/Grid";
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import {getOrders} from "../services/OrderService";
+import OrderCard from "../components/OrderCard";
 
 
 const { RangePicker } = DatePicker;
+
+const minTime = new Date("2000-01-01 00:00:00");
+const maxTime = new Date("3000-01-01 00:00:00");
+const pageSize = 15;
 
 const styles = theme => ({
     header: {
@@ -31,6 +35,9 @@ const styles = theme => ({
         margin: 10,
         borderRadius: 10,
     },
+    page: {
+        marginLeft: '33vw',
+    },
 });
 
 class OrderView extends React.Component {
@@ -38,38 +45,50 @@ class OrderView extends React.Component {
         super(props);
         this.state = {
             orderData: [],
+            orderCount: 0,
             searchOrderText: "",
-            startTime: 0,
-            endTime: Number.MAX_VALUE,
+            startTime: minTime,
+            endTime: maxTime,
+            page: 1,
         };
-        getOrders(this.props.user.userId, (data) => {
+        this.getOrders(1, this.state.startTime, this.state.endTime, this.state.searchOrderText);
+    }
+
+    getOrders(page, _startTime, _endTime, _searchText) {
+        getOrders(this.props.user.userId, page, pageSize, _startTime, _endTime, _searchText, (data) => {
             this.setState({
-                orderData: data,
+                orderData: data.content,
+                orderCount: data.totalElements,
+                searchOrderText: _searchText.trim(),
+                startTime: _startTime,
+                endTime: _endTime,
+                page: page,
             });
         });
     }
 
+    updateOrders() {
+        this.getOrders(1, this.state.startTime, this.state.endTime, this.state.searchOrderText);
+    }
 
     onTextChange(text) {
         this.setState({
-            searchOrderText: text,
+            searchOrderText: text.trim(),
         });
     }
 
     onDateChange(dates, dateStrings) {
         if (dates == null) {
-            this.setState({
-                startTime: 0,
-                endTime: Number.MAX_VALUE,
-            })
+            this.getOrders(1, minTime, maxTime, this.state.searchOrderText)
             return;
         }
         let start = new Date(dates[0]);
         let end = new Date(dates[1]);
-        this.setState({
-            startTime: start.getTime(),
-            endTime: end.getTime(),
-        })
+        this.getOrders(1, start, end, this.state.searchOrderText)
+    }
+
+    setPage(_page, _pageSize) {
+        this.getOrders(_page, this.state.startTime, this.state.endTime, this.state.searchOrderText);
     }
 
     render() {
@@ -88,6 +107,7 @@ class OrderView extends React.Component {
                         <SearchBox  placeHolder={"搜索订单..."}
                                     text={this.state.searchOrderText}
                                     onTextChange={this.onTextChange.bind(this)}
+                                    onEnterPress={this.updateOrders.bind(this)}
                                     className={classes.searchBox}
                         />
                     </Grid>
@@ -100,44 +120,17 @@ class OrderView extends React.Component {
                     </Grid>
                 </Grid>
                 {this.state.orderData.map((order, index) => {
-                    let len = order.orderItems.length;
-                    for (let i = 0; i < len; ++i) {
-                        let timestamp = (new Date(order.orderTime)).getTime();
-                        if (order.orderItems[i].bookName.toString().toLowerCase().indexOf(this.state.searchOrderText) >= 0
-                            && timestamp <= this.state.endTime && timestamp >= this.state.startTime) {
-                            return (
-                                <Card className={classes.order}>
-                                    <Grid container spacing={3}>
-                                        <Grid item xs={4}>
-                                            <Typography component="h6" variant="h6">
-                                                订单号： {order.orderId}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={5}>
-                                            <Typography component="h6" variant="h6">
-                                                订单时间： {order.orderTime}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Typography component="h6" variant="h6">
-                                                用户ID： {this.props.user.userId}
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                    <div>
-                                        {order.orderItems.map((item, index) => {
-                                            return (<OrderItem orderItem={item}/>);
-                                        })}
-                                    </div>
-                                    <Typography variant="h5" className={classes.totalPrice}>
-                                        总价： ￥{(order.totalPrice/100).toFixed(2)}
-                                    </Typography>
-                                </Card>
-                            );
-                        }
-                    }
-                    return null;
+                    return (
+                        <OrderCard order={order}/>
+                    );
                 })}
+                <div className={classes.page}>
+                    <Pagination current={this.state.page}
+                                total={this.state.orderCount}
+                                defaultPageSize={pageSize}
+                                onChange={this.setPage.bind(this)}
+                    />
+                </div>
             </div>
         );
     }

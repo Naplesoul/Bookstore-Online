@@ -1,5 +1,5 @@
 import {config} from "../config";
-import {postRequest} from "../utils/ajax";
+import {getRequest, postRequest} from "../utils/ajax";
 
 export const login = (_username, _password, callback) => {
     const url = `${config.apiUrl}/login`;
@@ -23,11 +23,8 @@ export const signup = (_username, _password, _email, callback) => {
 }
 
 export const getUsers = (_userId, callback) => {
-    const url = `${config.apiUrl}/getUsers`;
-    let form = {
-        userId: _userId,
-    };
-    postRequest(url, form, callback);
+    const url = `${config.apiUrl}/getUsers?userId=` + _userId.toString();
+    getRequest(url, callback);
 }
 
 export const setUserType = (_userId, _targetUserId, _targetUserType, callback) => {

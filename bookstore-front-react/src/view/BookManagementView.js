@@ -1,18 +1,34 @@
 import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import BookItem from "../components/BookItem";
-import {addBook} from "../services/BookService";
+import {addBook, filterBooks, getBooks} from "../services/BookService";
+import {config} from "../config";
+import {Pagination} from "antd";
 
 const header = [
     "ID", "ISBN", "书名", "作者", "分类", "单价", "库存", "简介", "图片 URL", "操作"
 ];
+
+const pageSize = 15;
+
+const emptySearch = {
+    bookId: null,
+    isbn: null,
+    bookName: "",
+    author: "",
+    category: "",
+    price: null,
+    storage: null,
+    intro: "",
+    image: "",
+};
 
 const styles = theme => ({
     root: {
         marginLeft: "2vw",
     },
     table: {
-        marginBottom: 70,
+        marginBottom: 50,
     },
     bookId: {
         width: "3vw",
@@ -37,26 +53,64 @@ const styles = theme => ({
     },
     op: {
         width: 90
-    }
+    },
+    page: {
+        marginLeft: '33vw',
+    },
 });
 
 class BookManagementView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchBook: {
-                bookId: "",
-                isbn: "",
-                bookName: "",
-                author: "",
-                category: "",
-                price: "",
-                storage: "",
-                intro: "",
-                image: "",
-            },
+            searchBook: emptySearch,
+            bookCount: 0,
+            currentPage: 1,
+            bookData: [],
         };
+        this.filterBooks(1, pageSize, emptySearch);
     };
+
+    convertString(bookData) {
+        let _bookData = bookData;
+        let len = bookData.length;
+        for (let i = 0; i < len; ++i) {
+            _bookData[i].isbn = _bookData[i].isbn.toString();
+            _bookData[i].price = (_bookData[i].price/100).toFixed(2).toString();
+            _bookData[i].storage = _bookData[i].storage.toString();
+        }
+        return _bookData;
+    }
+
+    filterBooks(page, size, searchBook) {
+        filterBooks(page, size, searchBook, (_bookData) => {
+            this.setState({
+                currentPage: page,
+                searchBook: searchBook,
+                bookCount: _bookData.totalElements,
+                bookData: this.convertString(_bookData.content),
+            });
+        });
+    }
+
+    updateBooks() {
+        filterBooks(this.state.currentPage, pageSize, this.state.searchBook, (_bookData) => {
+            this.setState({
+                bookCount: _bookData.totalElements,
+                bookData: this.convertString(_bookData.content),
+            });
+        });
+    }
+
+    setPage(_page, _pageSize) {
+        filterBooks(_page, _pageSize, this.state.searchBook, (_bookData) => {
+            this.setState({
+                currentPage: _page,
+                bookCount: _bookData.totalElements,
+                bookData: this.convertString(_bookData.content),
+            });
+        });
+    }
 
     addBook() {
         let isbn = document.getElementById("addISBN").value.trim();
@@ -91,39 +145,12 @@ class BookManagementView extends React.Component {
         } else {
             addBook(book, (data) => {
                 if (data.bookId >= 0) {
-                    let newBookData = this.props.bookData;
-                    newBookData.push(data);
-                    this.props.setBookData(newBookData);
-                    this.clearAdd();
+                    this.updateBooks();
                     alert("录入成功， 新书ID为：" + data.bookId);
                 } else {
                     alert("录入失败，请检查ISBN号是否重复");
                 }
             });
-        }
-    }
-
-    deleteBook(bookId) {
-        let bookData = this.props.bookData;
-        let len = bookData.length;
-        for (let i = 0; i < len; ++i) {
-            if (bookData[i].bookId === bookId) {
-                bookData.splice(i, 1);
-                this.props.setBookData(bookData);
-                return;
-            }
-        }
-    }
-
-    setBook(book) {
-        let bookData = this.props.bookData;
-        let len = bookData.length;
-        for (let i = 0; i < len; ++i) {
-            if (bookData[i].bookId === book.bookId) {
-                bookData[i] = book;
-                this.props.setBookData(bookData);
-                return;
-            }
         }
     }
 
@@ -139,19 +166,65 @@ class BookManagementView extends React.Component {
     };
 
     search() {
-        this.setState({
-            searchBook: {
-                bookId: document.getElementById("searchBookId").value.trim().toLowerCase(),
-                isbn: document.getElementById("searchISBN").value.trim().toLowerCase(),
-                bookName: document.getElementById("searchBookName").value.trim().toLowerCase(),
-                author: document.getElementById("searchAuthor").value.trim().toLowerCase(),
-                category: document.getElementById("searchCategory").value.trim().toLowerCase(),
-                price: document.getElementById("searchPrice").value.trim().toLowerCase(),
-                storage: document.getElementById("searchStorage").value.trim().toLowerCase(),
-                intro: document.getElementById("searchIntro").value.trim().toLowerCase(),
-                image: document.getElementById("searchImage").value.trim().toLowerCase(),
+        let bookId = document.getElementById("searchBookId").value.trim().toLowerCase();
+        let isbn = document.getElementById("searchISBN").value.trim().toLowerCase();
+        let bookName = document.getElementById("searchBookName").value.trim().toLowerCase();
+        let author = document.getElementById("searchAuthor").value.trim().toLowerCase();
+        let category = document.getElementById("searchCategory").value.trim().toLowerCase();
+        let price = document.getElementById("searchPrice").value.trim().toLowerCase();
+        let storage = document.getElementById("searchStorage").value.trim().toLowerCase();
+        let intro = document.getElementById("searchIntro").value.trim().toLowerCase();
+        let image = document.getElementById("searchImage").value.trim().toLowerCase();
+
+        if (bookId == null || bookId.length === 0) {
+            bookId = null;
+        } else {
+            bookId = parseInt(bookId);
+            if (isNaN(bookId) || bookId < 0) {
+                alert("书籍ID号应为非负整数");
+                return;
             }
-        });
+        }
+        if (isbn == null || isbn.length === 0) {
+            isbn = null;
+        } else {
+            isbn = parseInt(isbn);
+            if (isNaN(isbn) || isbn < 0) {
+                alert("ISBN号应为非负整数");
+                return;
+            }
+        }
+        if (price == null || price.length === 0) {
+            price = null;
+        } else {
+            price = parseFloat(price);
+            if (isNaN(price) || price < 0) {
+                alert("单价应为正数");
+                return;
+            }
+            price = Math.floor(price * 100);
+        }
+        if (storage == null || storage.length === 0) {
+            storage = null;
+        } else {
+            storage = parseInt(storage);
+            if (isNaN(storage) || storage < 0) {
+                alert("库存应为非负整数");
+                return;
+            }
+        }
+        let searchBook = {
+            bookId: bookId,
+            isbn: isbn,
+            bookName: bookName,
+            author: author,
+            category: category,
+            price: price,
+            storage: storage,
+            intro: intro,
+            image: image,
+        };
+        this.filterBooks(1, pageSize, searchBook);
     };
 
     clearSearch() {
@@ -164,29 +237,30 @@ class BookManagementView extends React.Component {
         document.getElementById("searchStorage").value = "";
         document.getElementById("searchIntro").value = "";
         document.getElementById("searchImage").value = "";
-        this.setState({
-            searchBook: {
-                bookId: "",
-                isbn: "",
-                bookName: "",
-                author: "",
-                category: "",
-                price: "",
-                storage: "",
-                intro: "",
-                image: "",
-            },
-        });
+        this.filterBooks(1, pageSize, emptySearch);
     };
+
+    onBookItemChange(book) {
+        let bookData = this.state.bookData;
+        let len = bookData.length;
+        for (let i = 0; i < len; ++i) {
+            if (bookData[i].bookId === book.bookId) {
+                bookData[i] = book;
+                break;
+            }
+        }
+        this.setState({
+            bookData: bookData,
+        });
+    }
 
     render() {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
-
                 <table className={classes.table}>
                     <tr>
-                        <th colSpan={5}>
+                        <th colSpan={2}>
                             <h2>
                                 录入书籍
                             </h2>
@@ -344,27 +418,23 @@ class BookManagementView extends React.Component {
                         </td>
 
                     </tr>
-                    {this.props.bookData.map((book, index) => {
-                        if ((this.state.searchBook.bookId === "" || book.bookId.toString() === this.state.searchBook.bookId)
-                            && (this.state.searchBook.isbn === "" || book.isbn.toString() === this.state.searchBook.isbn)
-                            && book.bookName.toString().toLowerCase().indexOf(this.state.searchBook.bookName) >= 0
-                            && book.author.toString().toLowerCase().indexOf(this.state.searchBook.author) >= 0
-                            && book.category.toString().toLowerCase().indexOf(this.state.searchBook.category) >= 0
-                            && (this.state.searchBook.price === "" || book.price === parseFloat(this.state.searchBook.price).toFixed(2)*100)
-                            && (this.state.searchBook.storage === "" || book.storage.toString() === this.state.searchBook.storage)
-                            && book.intro.toString().toLowerCase().indexOf(this.state.searchBook.intro) >= 0
-                            && book.image.toString().toLowerCase().indexOf(this.state.searchBook.image) >= 0) {
-                            return (
-                                <BookItem  userId={this.props.user.userId} book={book}
-                                           deleteBook={this.deleteBook.bind(this)}
-                                           setBook={this.setBook.bind(this)}
-                                />
-                            );
-                        } else {
-                            return null;
-                        }
+                    {this.state.bookData.map((book, index) => {
+                        return (
+                            <BookItem  userId={this.props.user.userId}
+                                       book={book}
+                                       update={this.updateBooks.bind(this)}
+                                       onChange={this.onBookItemChange.bind(this)}
+                            />
+                        );
                     })}
                 </table>
+                <div className={classes.page}>
+                    <Pagination current={this.state.currentPage}
+                                total={this.state.bookCount}
+                                defaultPageSize={pageSize}
+                                onChange={this.setPage.bind(this)}
+                    />
+                </div>
             </div>
         );
     }

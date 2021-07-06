@@ -47,7 +47,7 @@ class BookRankItem extends React.Component {
                     </Grid>
                     <Grid item xs={4}>
                         <img alt={this.props.book.bookName} src={this.props.book.image} height={"150px"}
-                             className={classes.bookImg}/>
+                             className={classes.image}/>
                     </Grid>
                     <Grid item xs={4}>
                         <Typography component="h5" variant="h5" className={classes.bookName}>
@@ -65,10 +65,10 @@ class BookRankItem extends React.Component {
                     </Grid>
                     <Grid item xs={2}>
                         <Typography variant="h5" className={classes.bookNum}>
-                            购买次数：{this.props.book.bookNum}
+                            购买次数：{this.props.sales}
                         </Typography>
                         <Typography variant="h5" className={classes.price}>
-                            ￥{(this.props.book.bookPrice/100).toFixed(2)}
+                            ￥{(this.props.book.price/100).toFixed(2)}
                         </Typography>
                     </Grid>
                 </Grid>
