@@ -42,4 +42,9 @@ public class UserController {
         Integer targetUserType = params.get(Constant.TARGET_USER_TYPE);
         return userService.setUserType(userId, targetUserId, targetUserType);
     }
+
+    @RequestMapping("/getDuplicateUsername")
+    public Boolean getDuplicateUsername(@RequestParam(Constant.USERNAME) String username) {
+        return userService.getDuplicateUsername(username);
+    }
 }

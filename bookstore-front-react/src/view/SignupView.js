@@ -10,8 +10,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import {signup} from "../services/UserService";
+import {getDuplicateUsername, signup} from "../services/UserService";
 
+const duplicateHelpText = "该用户名已被占用"
 
 const styles = theme => ({
     root: {
@@ -49,6 +50,8 @@ class SignupView extends React.Component {
         super(props);
         this.state = {
             redirectPath: null,
+            duplicateUsername: false,
+            helpText: "",
         }
     };
 
@@ -102,6 +105,22 @@ class SignupView extends React.Component {
         }
     }
 
+    onUsernameChange(e) {
+        getDuplicateUsername(e.target.value, (data) => {
+            if (data) {
+                this.setState({
+                    duplicateUsername: true,
+                    helpText: duplicateHelpText,
+                });
+            } else {
+                this.setState({
+                    duplicateUsername: false,
+                    helpText: "",
+                });
+            }
+        });
+    }
+
     render() {
         if(this.state.redirectPath){
             let path = this.state.redirectPath;
@@ -135,6 +154,9 @@ class SignupView extends React.Component {
                                 label="用户名"
                                 name="username"
                                 autoComplete="username"
+                                error={this.state.duplicateUsername}
+                                onChange={this.onUsernameChange.bind(this)}
+                                helperText={this.state.helpText}
                                 autoFocus
                             />
                             <TextField

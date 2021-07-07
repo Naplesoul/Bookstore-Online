@@ -51,4 +51,14 @@ public class UserServiceImpl implements UserService {
         }
         return userDao.setUserType(targetUserId, targetUserType);
     }
+
+    @Override
+    public Boolean getDuplicateUsername(String username) {
+        User user = userDao.getUserByUsername(username);
+        if (user != null) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
 }

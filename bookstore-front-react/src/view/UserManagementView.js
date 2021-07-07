@@ -49,7 +49,7 @@ class UserManagementView extends React.Component {
             <div className={classes.root}>
                 <table className={classes.table}>
                     <tr>
-                        <th colSpan={5}>
+                        <th colSpan={2}>
                             <h2>
                                 用户管理
                             </h2>
