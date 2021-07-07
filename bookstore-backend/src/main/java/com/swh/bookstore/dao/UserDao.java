@@ -8,6 +8,7 @@ public interface UserDao {
     User checkUser(String username, String password);
     User getUser(Integer userId);
     User signup(String username, String password, String email);
+    User getUserByUsername(String username);
     List<User> getUsers();
     Boolean setUserType(Integer userId, Integer userType);
 }

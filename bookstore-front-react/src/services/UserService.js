@@ -36,3 +36,8 @@ export const setUserType = (_userId, _targetUserId, _targetUserType, callback) =
     };
     postRequest(url, form, callback);
 }
+
+export const getDuplicateUsername = (_username, callback) => {
+    const url = `${config.apiUrl}/getDuplicateUsername?username=` + _username;
+    getRequest(url, callback);
+}
