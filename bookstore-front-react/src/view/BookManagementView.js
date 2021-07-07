@@ -146,6 +146,7 @@ class BookManagementView extends React.Component {
             addBook(book, (data) => {
                 if (data.bookId >= 0) {
                     this.updateBooks();
+                    this.clearAdd();
                     alert("录入成功， 新书ID为：" + data.bookId);
                 } else {
                     alert("录入失败，请检查ISBN号是否重复");
