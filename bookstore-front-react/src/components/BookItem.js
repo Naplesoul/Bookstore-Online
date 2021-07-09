@@ -1,7 +1,9 @@
 import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import 'fontsource-roboto';
-import {deleteBook, setBook} from "../services/BookService";
+import {deleteBook, setBook, setBookImage} from "../services/BookService";
+import {image2Base64} from "../utils/image2base64";
+import {config} from "../config";
 
 
 
@@ -24,14 +26,20 @@ const styles = theme => ({
     intro: {
         width: "18vw",
     },
-    image: {
-        width: "12vw",
+    uploadImage: {
+        width: "10vw",
+    },
+    viewImage: {
+        width: "3vw",
     },
 });
 
 class BookItem extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            image: null,
+        };
     };
 
     changeISBN(e) {
@@ -76,10 +84,18 @@ class BookItem extends React.Component {
         this.props.onChange(book);
     }
 
-    changeImage(e) {
-        let book = this.props.book;
-        book.image = e.target.value;
-        this.props.onChange(book);
+    uploadImage(e) {
+        if (e.target.files.length === 0) {
+            this.setState({
+                image: null,
+            });
+            return;
+        }
+        image2Base64(e.target.files[0], (data) => {
+            this.setState({
+                image: data,
+            });
+        });
     }
 
     deleteBook() {
@@ -94,9 +110,16 @@ class BookItem extends React.Component {
     }
 
     setBook() {
+        if (this.state.image != null) {
+            setBookImage(this.props.book.bookId, this.state.image, (data) => {
+                if (!data) {
+                    alert("图片上传失败！");
+                }
+            });
+        }
         if (this.props.book.isbn === "" || this.props.book.bookName === "" || this.props.book.author === ""
             || this.props.book.category === "" || this.props.book.price === "" || this.props.book.storage === ""
-            || this.props.book.intro === "" || this.props.book.image === "") {
+            || this.props.book.intro === "") {
             alert("请完整填写信息");
             return;
         }
@@ -109,7 +132,6 @@ class BookItem extends React.Component {
             price: Math.floor(parseFloat(this.props.book.price) * 100),
             intro: this.props.book.intro,
             storage: parseInt(this.props.book.storage),
-            image: this.props.book.image,
         }
         if (isNaN(book.ISBN) || book.ISBN < 0) {
             alert("ISBN号应为非负整数");
@@ -184,9 +206,17 @@ class BookItem extends React.Component {
                     />
                 </td>
                 <td>
-                    <input value={this.props.book.image}
-                           className={classes.image}
-                           onChange={this.changeImage.bind(this)}
+                    <button className={classes.viewImage}>
+                        <a href={`${config.apiUrl}/getBookImage?bookId=` + this.props.book.bookId} target="_blank">
+                            预览
+                        </a>
+                    </button>
+                </td>
+                <td>
+                    <input type={"file"}
+                           className={classes.uploadImage}
+                           onChange={this.uploadImage.bind(this)}
+                           accept={".jpg"}
                     />
                 </td>
                 <td>

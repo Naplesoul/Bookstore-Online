@@ -8,8 +8,10 @@ import com.swh.bookstore.utils.ConsumptionRank;
 import com.swh.bookstore.utils.SalesRank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -66,5 +68,11 @@ public class OrderController {
         Timestamp startTime = Timestamp.valueOf(params.get(Constant.START_TIME));
         Timestamp endTime = Timestamp.valueOf(params.get(Constant.END_TIME));
         return orderService.getTotalSalesAndConsumption(userId, startTime, endTime);
+    }
+
+    @RequestMapping(value = "/getOrderItemImage", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public BufferedImage getOrderItemImage(@RequestParam(Constant.ORDER_ITEM_ID) Integer itemId) {
+        return orderService.getOrderItemImage(itemId);
     }
 }

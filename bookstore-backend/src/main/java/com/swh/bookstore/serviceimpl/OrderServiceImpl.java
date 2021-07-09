@@ -3,7 +3,6 @@ package com.swh.bookstore.serviceimpl;
 import com.swh.bookstore.constant.Constant;
 import com.swh.bookstore.dao.OrderDao;
 import com.swh.bookstore.dao.UserDao;
-import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.entity.Order;
 import com.swh.bookstore.entity.OrderItem;
 import com.swh.bookstore.entity.User;
@@ -17,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -48,7 +48,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Boolean placeOrder(Order order) {
-        return orderDao.placeOrder(order);
+        try {
+            return orderDao.placeOrder(order);
+        } catch (Exception e) {
+            System.out.println("Caught an exception in placeOrder");
+            return false;
+        }
     }
 
     @Override
@@ -73,8 +78,7 @@ public class OrderServiceImpl implements OrderService {
                 if (ranks.containsKey(bookId)) {
                     ranks.get(bookId).setSales(ranks.get(bookId).getSales() + bookNum);
                 } else {
-                    Book book = new Book(item);
-                    SalesRank salesRank = new SalesRank(book, bookNum);
+                    SalesRank salesRank = new SalesRank(item, bookNum);
                     ranks.put(bookId, salesRank);
                 }
             }
@@ -138,5 +142,10 @@ public class OrderServiceImpl implements OrderService {
         map.put(Constant.TOTAL_SALES, totalSales);
         map.put(Constant.TOTAL_CONSUMPTION, totalConsumption);
         return map;
+    }
+
+    @Override
+    public BufferedImage getOrderItemImage(Integer itemId) {
+        return orderDao.getOrderItemImage(itemId);
     }
 }

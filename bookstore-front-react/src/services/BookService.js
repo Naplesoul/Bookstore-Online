@@ -42,3 +42,11 @@ export const deleteBook = (_userId, _bookId, callback) => {
     };
     postRequest(url, form, callback);
 }
+
+export const setBookImage = (bookId, image, callback) => {
+    const url = `${config.apiUrl}/setBookImage?bookId=` + bookId.toString();
+    let form = {
+        image: image.split(',')[1],
+    };
+    postRequest(url, form, callback);
+}

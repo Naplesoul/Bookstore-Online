@@ -8,6 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { InputNumber } from 'element-react';
 import IconButton from "@material-ui/core/IconButton";
 import ClearIcon from '@material-ui/icons/Clear';
+import {config} from "../config";
 
 
 
@@ -80,7 +81,7 @@ class CartItem extends React.Component {
                         />
                     </Grid>
                     <Grid item xs={3}>
-                        <img alt={this.props.itemData.name} src={this.props.itemData.image} height={"180px"}
+                        <img alt={this.props.itemData.name} src={`${config.apiUrl}/getBookImage?bookId=` + this.props.itemData.bookId} height={"180px"}
                              className={classes.bookImg}/>
                     </Grid>
                     <Grid item xs={4}>

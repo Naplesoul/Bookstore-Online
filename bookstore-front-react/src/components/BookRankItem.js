@@ -3,6 +3,7 @@ import {withStyles} from "@material-ui/core/styles";
 import 'fontsource-roboto';
 import Typography from '@material-ui/core/Typography';
 import Grid from "@material-ui/core/Grid";
+import {config} from "../config";
 
 
 
@@ -46,7 +47,7 @@ class BookRankItem extends React.Component {
                         </Typography>
                     </Grid>
                     <Grid item xs={4}>
-                        <img alt={this.props.book.bookName} src={this.props.book.image} height={"150px"}
+                        <img alt={this.props.book.bookName} src={`${config.apiUrl}/getOrderItemImage?orderItemId=` + this.props.book.itemId} height={"150px"}
                              className={classes.image}/>
                     </Grid>
                     <Grid item xs={4}>
@@ -68,7 +69,7 @@ class BookRankItem extends React.Component {
                             购买次数：{this.props.sales}
                         </Typography>
                         <Typography variant="h5" className={classes.price}>
-                            ￥{(this.props.book.price/100).toFixed(2)}
+                            ￥{(this.props.book.bookPrice/100).toFixed(2)}
                         </Typography>
                     </Grid>
                 </Grid>

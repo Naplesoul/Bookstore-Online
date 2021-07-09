@@ -1,12 +1,12 @@
 import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import BookItem from "../components/BookItem";
-import {addBook, filterBooks, getBooks} from "../services/BookService";
-import {config} from "../config";
+import {addBook, filterBooks, setBookImage} from "../services/BookService";
 import {Pagination} from "antd";
+import {image2Base64} from "../utils/image2base64";
 
 const header = [
-    "ID", "ISBN", "书名", "作者", "分类", "单价", "库存", "简介", "图片 URL", "操作"
+    "ID", "ISBN", "书名", "作者", "分类", "单价", "库存", "简介", "图片", "上传图片", "操作"
 ];
 
 const pageSize = 15;
@@ -49,13 +49,16 @@ const styles = theme => ({
         width: "18vw",
     },
     image: {
-        width: "12vw",
+        width: "3vw",
     },
     op: {
         width: 90
     },
     page: {
         marginLeft: '33vw',
+    },
+    uploadImage: {
+        width: "10vw",
     },
 });
 
@@ -67,6 +70,7 @@ class BookManagementView extends React.Component {
             bookCount: 0,
             currentPage: 1,
             bookData: [],
+            uploadImage: null,
         };
         this.filterBooks(1, pageSize, emptySearch);
     };
@@ -120,9 +124,8 @@ class BookManagementView extends React.Component {
         let price = document.getElementById("addPrice").value.trim();
         let storage = document.getElementById("addStorage").value.trim();
         let intro = document.getElementById("addIntro").value.trim();
-        let image = document.getElementById("addImage").value.trim();
         if (isbn === "" || bookName === "" || author === "" || category === ""
-            || price === "" || storage === "" || intro === "" || image === "") {
+            || price === "" || storage === "" || intro === "") {
             alert("请完整填写信息");
             return;
         }
@@ -134,7 +137,6 @@ class BookManagementView extends React.Component {
             price: Math.floor(parseFloat(price) * 100),
             storage: parseInt(storage),
             intro: intro,
-            image: image,
         }
         if (isNaN(book.isbn) || book.isbn < 0) {
             alert("ISBN号应为非负整数");
@@ -143,16 +145,40 @@ class BookManagementView extends React.Component {
         } else if (isNaN(book.storage) || book.storage < 0) {
             alert("库存应为非负整数");
         } else {
-            addBook(book, (data) => {
-                if (data.bookId >= 0) {
+            addBook(book, (newBookId) => {
+                if (newBookId >= 0) {
                     this.updateBooks();
                     this.clearAdd();
-                    alert("录入成功， 新书ID为：" + data.bookId);
+                    if (this.state.uploadImage != null) {
+                        setBookImage(newBookId, this.state.uploadImage, (data) => {
+                            if (!data) {
+                                alert("图片上传失败！");
+                            } else {
+                                alert("录入成功, 新书ID为：" + newBookId);
+                            }
+                        });
+                    } else {
+                        alert("录入成功, 新书ID为：" + newBookId + "\n新书未添加封面，建议立即添加");
+                    }
                 } else {
                     alert("录入失败，请检查ISBN号是否重复");
                 }
             });
         }
+    }
+
+    onUploadImageChange(e) {
+        if (e.target.files.length === 0) {
+            this.setState({
+                uploadImage: null,
+            });
+            return;
+        }
+        image2Base64(e.target.files[0], (data) => {
+            this.setState({
+                uploadImage: data,
+            });
+        });
     }
 
     clearAdd() {
@@ -175,7 +201,6 @@ class BookManagementView extends React.Component {
         let price = document.getElementById("searchPrice").value.trim().toLowerCase();
         let storage = document.getElementById("searchStorage").value.trim().toLowerCase();
         let intro = document.getElementById("searchIntro").value.trim().toLowerCase();
-        let image = document.getElementById("searchImage").value.trim().toLowerCase();
 
         if (bookId == null || bookId.length === 0) {
             bookId = null;
@@ -223,7 +248,6 @@ class BookManagementView extends React.Component {
             price: price,
             storage: storage,
             intro: intro,
-            image: image,
         };
         this.filterBooks(1, pageSize, searchBook);
     };
@@ -317,9 +341,11 @@ class BookManagementView extends React.Component {
                             />
                         </td>
                         <td>
-                            <input placeholder="图片 URL"
-                                   className={classes.image}
+                            <input placeholder="上传图片"
+                                   type={"file"}
+                                   className={classes.uploadImage}
                                    id="addImage"
+                                   onChange={this.onUploadImageChange.bind(this)}
                             />
                         </td>
                         <td>
@@ -332,7 +358,6 @@ class BookManagementView extends React.Component {
                                 清除
                             </button>
                         </td>
-
                     </tr>
                 </table>
                 <table className={classes.table}>
@@ -402,9 +427,17 @@ class BookManagementView extends React.Component {
                             />
                         </td>
                         <td>
-                            <input placeholder="图片 URL"
+                            <input placeholder="图片"
                                    className={classes.image}
                                    id="searchImage"
+                                   disabled
+                            />
+                        </td>
+                        <td>
+                            <input placeholder="上传图片"
+                                   className={classes.uploadImage}
+                                   id="uploadImage"
+                                   disabled
                             />
                         </td>
                         <td>

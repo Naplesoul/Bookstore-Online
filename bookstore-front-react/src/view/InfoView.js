@@ -6,6 +6,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {Button} from "@material-ui/core";
 import {Redirect} from "react-router-dom";
 import {getBook} from "../services/BookService";
+import {config} from "../config";
 
 
 
@@ -89,7 +90,6 @@ class InfoView extends React.Component {
             category: this.state.bookData.category,
             price: this.state.bookData.price,
             storage: this.state.bookData.storage,
-            image: this.state.bookData.image,
         });
         this.props.setCartData(cartData);
     };
@@ -127,7 +127,6 @@ class InfoView extends React.Component {
             category: this.state.bookData.category,
             price: this.state.bookData.price,
             storage: this.state.bookData.storage,
-            image: this.state.bookData.image,
         });
         this.props.setCartData(cartData);
         this.props.redirectTo("/store/cart");
@@ -172,7 +171,7 @@ class InfoView extends React.Component {
         return (
             <Grid container spacing={5} className={classes.root}>
                 <Grid item xs={5}>
-                    <img alt={"bookPicture"} src={this.state.bookData.image} width={"100%"}/>
+                    <img alt={"bookPicture"} src={`${config.apiUrl}/getBookImage?bookId=` + this.props.bookId} width={"100%"}/>
                 </Grid>
                 <Grid item xs={5} className={classes.detail}>
                     <Typography variant={"h4"} className={classes.bookName}>{this.state.bookData.bookName}</Typography>

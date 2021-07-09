@@ -3,6 +3,7 @@ import {withStyles} from "@material-ui/core/styles";
 import 'fontsource-roboto';
 import Typography from '@material-ui/core/Typography';
 import Grid from "@material-ui/core/Grid";
+import {config} from "../config";
 
 
 
@@ -49,7 +50,7 @@ class OrderItem extends React.Component {
 
                     </Grid>
                     <Grid item xs={3}>
-                        <img alt={this.props.orderItem.bookName} src={this.props.orderItem.image} height={"180px"}
+                        <img alt={this.props.orderItem.bookName} src={`${config.apiUrl}/getOrderItemImage?orderItemId=` + this.props.orderItem.itemId} height={"180px"}
                              className={classes.bookImg}/>
                     </Grid>
                     <Grid item xs={4}>

@@ -1,11 +1,11 @@
 package com.swh.bookstore.utils;
 
-import com.swh.bookstore.entity.Book;
+import com.swh.bookstore.entity.OrderItem;
 import lombok.Data;
 
 @Data
 public class SalesRank implements Comparable {
-    Book book;
+    OrderItem book;
     Integer sales;
 
     @Override
@@ -14,7 +14,7 @@ public class SalesRank implements Comparable {
         return to.sales.compareTo(this.sales);
     }
 
-    public SalesRank(Book book, Integer sales) {
+    public SalesRank(OrderItem book, Integer sales) {
         this.book = book;
         this.sales = sales;
     }

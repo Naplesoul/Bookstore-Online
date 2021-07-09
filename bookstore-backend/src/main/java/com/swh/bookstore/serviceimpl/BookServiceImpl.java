@@ -5,9 +5,12 @@ import com.swh.bookstore.dao.UserDao;
 import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.entity.User;
 import com.swh.bookstore.service.BookService;
+import com.swh.bookstore.utils.SimplifiedBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.awt.image.BufferedImage;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -24,8 +27,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<Book> getBooks(Integer page, Integer size, Integer searchType, String searchText) {
-        return bookDao.searchBooks(page, size, searchType, searchText);
+    public Page<SimplifiedBook> getSimplifiedBooks(Integer page, Integer size, String searchText) {
+        return bookDao.searchBooks(page, size, searchText);
     }
 
     @Override
@@ -35,25 +38,50 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Boolean setBook(Integer userId, Book book) {
-        // check if the user is admin
-        User user = userDao.getUser(userId);
-        if (user == null || user.getUserType() != 1) {
+        try {
+            // check if the user is admin
+            User user = userDao.getUser(userId);
+            if (user == null || user.getUserType() != 1) {
+                return false;
+            }
+            return bookDao.setBook(book);
+        } catch (Exception e) {
+            System.out.println("Caught an exception in setBook");
             return false;
         }
-        return bookDao.setBook(book);
     }
 
     @Override
     public Boolean deleteBook(Integer userId, Integer bookId) {
-        // check if the user is admin
-        User user = userDao.getUser(userId);
-        if (user == null || user.getUserType() != 1) {
+        try {
+            // check if the user is admin
+            User user = userDao.getUser(userId);
+            if (user == null || user.getUserType() != 1) {
+                return false;
+            }
+            return bookDao.deleteBook(bookId);
+        } catch (Exception e) {
+            System.out.println("Caught an exception in deleteBook");
             return false;
         }
-        return bookDao.deleteBook(bookId);
     }
 
-    @Override public Book addBook(Book book) {
+    @Override public Integer addBook(Book book) {
         return bookDao.addBook(book);
+    }
+
+    @Override
+    public Boolean setBookImage(Integer bookId, String base64Image) {
+        try {
+            return bookDao.setBookImage(bookId, base64Image);
+        } catch (Exception e) {
+            System.out.println("Caught an exception in setBookImage");
+            return false;
+        }
+    }
+
+    @Override
+    public BufferedImage getBookImage(Integer bookId) {
+        return bookDao.getBookImage(bookId);
     }
 }
