@@ -18,4 +18,6 @@ public class Constant {
     public static final String SEARCH_TEXT = "searchText";
     public static final String TOTAL_CONSUMPTION = "totalConsumption";
     public static final String TOTAL_SALES = "totalSales";
+    public static final String IMAGE = "image";
+    public static final String ORDER_ITEM_ID = "orderItemId";
 }

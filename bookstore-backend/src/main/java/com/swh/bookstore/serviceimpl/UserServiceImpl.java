@@ -41,24 +41,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean setUserType(Integer userId, Integer targetUserId, Integer targetUserType) {
-        if (userId.equals(targetUserId)) {
+        try {
+            if (userId.equals(targetUserId)) {
+                return false;
+            }
+            // check authority
+            User user = userDao.getUser(userId);
+            if (user == null || user.getUserType() != 1) {
+                return false;
+            }
+            return userDao.setUserType(targetUserId, targetUserType);
+        } catch (Exception e) {
+            System.out.println("Caught an exception in setUserType");
             return false;
         }
-        // check authority
-        User user = userDao.getUser(userId);
-        if (user == null || user.getUserType() != 1) {
-            return false;
-        }
-        return userDao.setUserType(targetUserId, targetUserType);
     }
 
     @Override
     public Boolean getDuplicateUsername(String username) {
-        User user = userDao.getUserByUsername(username);
-        if (user != null) {
-            return Boolean.TRUE;
-        } else {
-            return Boolean.FALSE;
+        try {
+            User user = userDao.getUserByUsername(username);
+            return user != null;
+        } catch (Exception e) {
+            System.out.println("Caught an exception in getDuplicateUsername");
+            return true;
         }
     }
 }

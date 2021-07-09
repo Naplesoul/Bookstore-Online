@@ -1,5 +1,6 @@
 package com.swh.bookstore.daoimpl;
 
+import cn.hutool.core.img.ImgUtil;
 import com.swh.bookstore.dao.OrderDao;
 import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.entity.Order;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
+import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -84,5 +86,11 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Order> getOrders(Integer userId, Timestamp startTime, Timestamp endTime) {
         return orderRepository.findDistinctOrdersByUserIdAndOrderTimeGreaterThanAndOrderTimeLessThan(userId, startTime, endTime);
+    }
+
+    @Override
+    public BufferedImage getOrderItemImage(Integer itemId) {
+        String base64Image = orderItemRepository.findOrderItemImageByItemId(itemId).getImage();
+        return ImgUtil.toImage(base64Image);
     }
 }

@@ -2,8 +2,11 @@ package com.swh.bookstore.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 
@@ -23,18 +26,10 @@ public class Book {
     private String author;
     private String category;
     private Integer price;
-    private String intro;
     private Integer storage;
+    private String intro;
+
+    @LazyCollection(LazyCollectionOption.TRUE)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String image;
-
-    public Book(OrderItem orderItem) {
-        this.bookId = orderItem.getBookId();
-        this.bookName = orderItem.getBookName();
-        this.author = orderItem.getAuthor();
-        this.category = orderItem.getCategory();
-        this.price = orderItem.getBookPrice();
-        this.image = orderItem.getImage();
-    }
-
-    public Book() {}
 }

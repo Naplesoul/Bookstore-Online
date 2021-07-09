@@ -1,6 +1,8 @@
 package com.swh.bookstore.repository;
 
 import com.swh.bookstore.entity.Book;
+import com.swh.bookstore.utils.BookImage;
+import com.swh.bookstore.utils.SimplifiedBook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,13 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface BookRepository extends JpaRepository<Book, Integer> {
 
-    Page<Book> findAll(Pageable pageable);
-
-    Page<Book> findByBookNameLike(String searchText, Pageable pageable);
-    Page<Book> findByCategoryLike(String searchText, Pageable pageable);
-    Page<Book> findByAuthorLike(String searchText, Pageable pageable);
-    Page<Book> findByIntroLike(String searchText, Pageable pageable);
-    Page<Book> findByImageLike(String searchText, Pageable pageable);
+    Page<SimplifiedBook> searchSimplifiedBooksByBookNameContaining(String searchText, Pageable pageable);
 
     Page<Book> findBookByBookId(Integer bookId, Pageable pageable);
     Page<Book> findBookByISBN(Integer ISBN, Pageable pageable);
@@ -30,18 +26,16 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     Book findBookByISBN(Integer ISBN);
 
     @Query("from Book b where b.bookName like :bookName and b.category like :category " +
-    "and b.author like :author and b.intro like :intro and b.image like :image")
+    "and b.author like :author and b.intro like :intro")
     Page<Book> filterBooks(String bookName, String category, String author,
-                           String intro, String image, Pageable pageable);
+                           String intro, Pageable pageable);
 
     @Modifying
     @Transactional
     @Query("update Book b set b.ISBN = :ISBN, b.bookName = :bookName, b.category = :category, b.author = :author," +
-            "b.price = :price, b.intro = :intro, b.storage = :storage, b.image = :image where b.bookId = :bookId")
-    void setBook(@Param("bookId") Integer bookId, @Param("ISBN") Integer ISBN, @Param("bookName") String bookName,
-                    @Param("category") String category, @Param("author") String author,
-                    @Param("price") Integer price, @Param("intro") String intro,
-                    @Param("storage") Integer storage, @Param("image") String image);
+            "b.price = :price, b.intro = :intro, b.storage = :storage where b.bookId = :bookId")
+    void setBook(Integer bookId, Integer ISBN, String bookName, String category, String author,
+                 Integer price, String intro, Integer storage);
 
     @Modifying
     @Transactional
@@ -51,4 +45,11 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Modifying
     @Transactional
     void deleteBookByBookId(Integer bookId);
+
+    @Modifying
+    @Transactional
+    @Query("update Book b set b.image = :base64Image where b.bookId = :bookId")
+    void setBookImage(Integer bookId, String base64Image);
+
+    BookImage findBookImageByBookId(Integer bookId);
 }

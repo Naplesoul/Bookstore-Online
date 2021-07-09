@@ -5,6 +5,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import {config} from "../config";
 
 
 const styles = theme => ({
@@ -42,7 +43,7 @@ class BookCard extends React.Component {
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
-                        image={this.props.bookInfo.image}
+                        image={`${config.apiUrl}/getBookImage?bookId=` + this.props.bookInfo.bookId}
                         title={this.props.bookInfo.bookName}
                     />
                     <CardContent className={classes.content}>

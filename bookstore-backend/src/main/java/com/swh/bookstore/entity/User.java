@@ -24,7 +24,7 @@ public class User {
     // 1: administrator
     private Integer userType;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private UserInfo userInfo;
 }

@@ -9,5 +9,4 @@ public class SearchType {
     public static final int PRICE = 5;
     public static final int INTRO = 6;
     public static final int STORAGE = 7;
-    public static final int IMAGE = 8;
 }

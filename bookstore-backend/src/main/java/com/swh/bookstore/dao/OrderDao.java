@@ -4,6 +4,7 @@ import com.swh.bookstore.entity.Order;
 import com.swh.bookstore.entity.OrderItem;
 import org.springframework.data.domain.Page;
 
+import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -16,4 +17,5 @@ public interface OrderDao {
     List<Order> getAllOrders(Timestamp startTime, Timestamp endTime);
     List<Order> getOrders(Integer userId, Timestamp startTime, Timestamp endTime);
     Boolean placeOrder(Order order);
+    BufferedImage getOrderItemImage(Integer itemId);
 }

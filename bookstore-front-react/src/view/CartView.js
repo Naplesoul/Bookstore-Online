@@ -100,20 +100,6 @@ class CartView extends React.Component {
                 cartData.push(this.props.cartData[i]);
             }
         }
-        // // alter storage
-        // len = orderItems.length;
-        // if (len <= 0)
-        //     return;
-        // let bookData = this.props.bookData;
-        // let bookLen = bookData.length;
-        // for (let i = 0; i < len; ++i) {
-        //     for (let j = 0; j < bookLen; ++j) {
-        //         if (bookData[j].bookId === orderItems[i].bookId) {
-        //             bookData[j].storage -= orderItems[i].bookNum;
-        //             break;
-        //         }
-        //     }
-        // }
 
         placeOrder(this.props.user.userId, orderItems, (data) => {
             if (data) {
