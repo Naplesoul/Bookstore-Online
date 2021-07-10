@@ -2,10 +2,8 @@ package com.swh.bookstore.daoimpl;
 
 import cn.hutool.core.img.ImgUtil;
 import com.swh.bookstore.dao.OrderDao;
-import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.entity.Order;
 import com.swh.bookstore.entity.OrderItem;
-import com.swh.bookstore.repository.BookRepository;
 import com.swh.bookstore.repository.OrderItemRepository;
 import com.swh.bookstore.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +22,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Autowired
     OrderRepository orderRepository;
-
-    @Autowired
-    BookRepository bookRepository;
 
     @Override
     public Page<Order> getOrders(Integer userId, Integer page, Integer size,
@@ -50,35 +45,6 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Boolean placeOrder(Order order) {
-
-        Integer totalPrice = 0;
-        for (OrderItem orderItem : order.getOrderItems()) {
-            Book book = bookRepository.findBookByBookId(orderItem.getBookId());
-            Integer bookPrice = book.getPrice();
-            orderItem.setBookPrice(bookPrice);
-            orderItem.setBookName(book.getBookName());
-            orderItem.setAuthor(book.getAuthor());
-            orderItem.setCategory(book.getCategory());
-            orderItem.setImage(book.getImage());
-            totalPrice += bookPrice * orderItem.getBookNum();
-        }
-
-        order.setOrderTime(new Timestamp(System.currentTimeMillis()));
-        order.setTotalPrice(totalPrice);
-        orderRepository.saveAndFlush(order);
-
-        Integer orderId = order.getOrderId();
-        for (OrderItem orderItem : order.getOrderItems()) {
-            orderItem.setOrderId(orderId);
-            bookRepository.reduceStorage(orderItem.getBookId(), orderItem.getBookNum());
-            orderItemRepository.saveAndFlush(orderItem);
-        }
-
-        return true;
-    }
-
-    @Override
     public List<Order> getAllOrders(Timestamp startTime, Timestamp endTime) {
         return orderRepository.findDistinctOrdersByOrderTimeGreaterThanAndOrderTimeLessThan(startTime, endTime);
     }
@@ -92,5 +58,15 @@ public class OrderDaoImpl implements OrderDao {
     public BufferedImage getOrderItemImage(Integer itemId) {
         String base64Image = orderItemRepository.findOrderItemImageByItemId(itemId).getImage();
         return ImgUtil.toImage(base64Image);
+    }
+
+    @Override
+    public Order saveAndFlushOrder(Order order) {
+        return orderRepository.saveAndFlush(order);
+    }
+
+    @Override
+    public OrderItem saveAndFlushOrderItem(OrderItem orderItem) {
+        return orderItemRepository.saveAndFlush(orderItem);
     }
 }

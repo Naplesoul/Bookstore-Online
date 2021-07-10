@@ -19,7 +19,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findAll();
 
     @Modifying
-    @Transactional
     @Query("update User u set u.userType = :userType where u.userId = :userId")
     void setUserType(Integer userId, Integer userType);
 }

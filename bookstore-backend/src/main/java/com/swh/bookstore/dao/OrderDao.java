@@ -16,6 +16,7 @@ public interface OrderDao {
     List<OrderItem> getOrderItems(Integer orderId);
     List<Order> getAllOrders(Timestamp startTime, Timestamp endTime);
     List<Order> getOrders(Integer userId, Timestamp startTime, Timestamp endTime);
-    Boolean placeOrder(Order order);
     BufferedImage getOrderItemImage(Integer itemId);
+    Order saveAndFlushOrder(Order order);
+    OrderItem saveAndFlushOrderItem(OrderItem orderItem);
 }

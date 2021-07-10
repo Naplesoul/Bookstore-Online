@@ -112,4 +112,10 @@ public class BookDaoImpl implements BookDao {
         String base64Image = bookRepository.findBookImageByBookId(bookId).getImage();
         return ImgUtil.toImage(base64Image);
     }
+
+    @Override
+    public Boolean reduceStorage(Integer bookId, Integer num) {
+        bookRepository.reduceStorage(bookId, num);
+        return true;
+    }
 }

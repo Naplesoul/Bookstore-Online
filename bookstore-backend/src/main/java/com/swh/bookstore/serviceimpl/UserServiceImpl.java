@@ -6,6 +6,7 @@ import com.swh.bookstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public User signup(String username, String password, String email) {
         return userDao.signup(username, password, email);
     }
@@ -40,31 +42,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Boolean setUserType(Integer userId, Integer targetUserId, Integer targetUserType) {
-        try {
-            if (userId.equals(targetUserId)) {
-                return false;
-            }
-            // check authority
-            User user = userDao.getUser(userId);
-            if (user == null || user.getUserType() != 1) {
-                return false;
-            }
-            return userDao.setUserType(targetUserId, targetUserType);
-        } catch (Exception e) {
-            System.out.println("Caught an exception in setUserType");
+        if (userId.equals(targetUserId)) {
             return false;
         }
+        // check authority
+        User user = userDao.getUser(userId);
+        if (user == null || user.getUserType() != 1) {
+            return false;
+        }
+        return userDao.setUserType(targetUserId, targetUserType);
     }
 
     @Override
     public Boolean getDuplicateUsername(String username) {
-        try {
-            User user = userDao.getUserByUsername(username);
-            return user != null;
-        } catch (Exception e) {
-            System.out.println("Caught an exception in getDuplicateUsername");
-            return true;
-        }
+        User user = userDao.getUserByUsername(username);
+        return user != null;
     }
 }

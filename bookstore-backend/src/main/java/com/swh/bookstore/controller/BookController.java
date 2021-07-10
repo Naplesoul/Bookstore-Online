@@ -41,15 +41,27 @@ public class BookController {
 
     @RequestMapping("/setBook")
     public Boolean setBook(@RequestBody JSONObject params) {
-        Integer userId = params.getInteger(Constant.USER_ID);
-        JSONObject bookJson = params.getJSONObject(Constant.BOOK);
-        Book book = bookJson.toJavaObject(Book.class);
-        return bookService.setBook(userId, book);
+        try {
+            Integer userId = params.getInteger(Constant.USER_ID);
+            JSONObject bookJson = params.getJSONObject(Constant.BOOK);
+            Book book = bookJson.toJavaObject(Book.class);
+            return bookService.setBook(userId, book);
+        } catch (Exception e) {
+            System.out.println("Caught an exception in setBook");
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @RequestMapping("/deleteBook")
         public Boolean deleteBook(@RequestBody Map<String, Integer> params) {
-        return bookService.deleteBook(params.get(Constant.USER_ID), params.get(Constant.BOOK_ID));
+        try {
+            return bookService.deleteBook(params.get(Constant.USER_ID), params.get(Constant.BOOK_ID));
+        } catch (Exception e) {
+            System.out.println("Caught an exception in deleteBook");
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @RequestMapping("/addBook")
@@ -60,7 +72,13 @@ public class BookController {
     @RequestMapping("/setBookImage")
     public Boolean setBookImage(@RequestParam(Constant.BOOK_ID) Integer bookId,
                                 @RequestBody Map<String, String> base64Image) {
-        return bookService.setBookImage(bookId, base64Image.get(Constant.IMAGE));
+        try {
+            return bookService.setBookImage(bookId, base64Image.get(Constant.IMAGE));
+        } catch (Exception e) {
+            System.out.println("Caught an exception in setBookImage");
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @RequestMapping(value = "/getBookImage", produces = MediaType.IMAGE_JPEG_VALUE)
