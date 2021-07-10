@@ -1,8 +1,10 @@
 package com.swh.bookstore.serviceimpl;
 
 import com.swh.bookstore.constant.Constant;
+import com.swh.bookstore.dao.BookDao;
 import com.swh.bookstore.dao.OrderDao;
 import com.swh.bookstore.dao.UserDao;
+import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.entity.Order;
 import com.swh.bookstore.entity.OrderItem;
 import com.swh.bookstore.entity.User;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.util.*;
@@ -27,6 +30,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private BookDao bookDao;
 
     @Override
     public Page<Order> getOrders(Integer userId, String searchText, Integer page, Integer size,
@@ -47,17 +53,36 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Boolean placeOrder(Order order) {
-        try {
-            User user = userDao.getUser(order.getUserId());
-            if (user == null || user.getUserType() < 0) {
-                return false;
-            }
-            return orderDao.placeOrder(order);
-        } catch (Exception e) {
-            System.out.println("Caught an exception in placeOrder");
+        // check user
+        User user = userDao.getUser(order.getUserId());
+        if (user == null || user.getUserType() < 0) {
             return false;
         }
+        Integer totalPrice = 0;
+        for (OrderItem orderItem : order.getOrderItems()) {
+            Book book = bookDao.getBookByBookId(orderItem.getBookId());
+            Integer bookPrice = book.getPrice();
+            orderItem.setBookPrice(bookPrice);
+            orderItem.setBookName(book.getBookName());
+            orderItem.setAuthor(book.getAuthor());
+            orderItem.setCategory(book.getCategory());
+            orderItem.setImage(book.getImage());
+            totalPrice += bookPrice * orderItem.getBookNum();
+        }
+
+        order.setOrderTime(new Timestamp(System.currentTimeMillis()));
+        order.setTotalPrice(totalPrice);
+        orderDao.saveAndFlushOrder(order);
+
+        Integer orderId = order.getOrderId();
+        for (OrderItem orderItem : order.getOrderItems()) {
+            orderItem.setOrderId(orderId);
+            bookDao.reduceStorage(orderItem.getBookId(), orderItem.getBookNum());
+            orderDao.saveAndFlushOrderItem(orderItem);
+        }
+        return true;
     }
 
     @Override

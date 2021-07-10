@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
 
 @Service
@@ -37,33 +38,25 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Boolean setBook(Integer userId, Book book) {
-        try {
-            // check if the user is admin
-            User user = userDao.getUser(userId);
-            if (user == null || user.getUserType() != 1) {
-                return false;
-            }
-            return bookDao.setBook(book);
-        } catch (Exception e) {
-            System.out.println("Caught an exception in setBook");
+        // check if the user is admin
+        User user = userDao.getUser(userId);
+        if (user == null || user.getUserType() != 1) {
             return false;
         }
+        return bookDao.setBook(book);
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Boolean deleteBook(Integer userId, Integer bookId) {
-        try {
-            // check if the user is admin
-            User user = userDao.getUser(userId);
-            if (user == null || user.getUserType() != 1) {
-                return false;
-            }
-            return bookDao.deleteBook(bookId);
-        } catch (Exception e) {
-            System.out.println("Caught an exception in deleteBook");
+        // check if the user is admin
+        User user = userDao.getUser(userId);
+        if (user == null || user.getUserType() != 1) {
             return false;
         }
+        return bookDao.deleteBook(bookId);
     }
 
     @Override public Integer addBook(Book book) {
@@ -71,13 +64,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Boolean setBookImage(Integer bookId, String base64Image) {
-        try {
-            return bookDao.setBookImage(bookId, base64Image);
-        } catch (Exception e) {
-            System.out.println("Caught an exception in setBookImage");
-            return false;
-        }
+        return bookDao.setBookImage(bookId, base64Image);
     }
 
     @Override
