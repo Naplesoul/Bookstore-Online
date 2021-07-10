@@ -172,7 +172,7 @@ class BookItem extends React.Component {
                 <td>
                     <input value={this.props.book.bookName}
                            className={classes.bookName}
-                           onChange={this.changeBookName}
+                           onChange={this.changeBookName.bind(this)}
                     />
                 </td>
                 <td>
