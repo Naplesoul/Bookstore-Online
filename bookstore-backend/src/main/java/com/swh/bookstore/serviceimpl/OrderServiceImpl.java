@@ -49,6 +49,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Boolean placeOrder(Order order) {
         try {
+            User user = userDao.getUser(order.getUserId());
+            if (user == null || user.getUserType() < 0) {
+                return false;
+            }
             return orderDao.placeOrder(order);
         } catch (Exception e) {
             System.out.println("Caught an exception in placeOrder");
