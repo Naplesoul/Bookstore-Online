@@ -29,22 +29,42 @@ public class UserController {
 
     @RequestMapping("/signup")
     public User signup(@RequestBody Map<String, String> params) {
-        String username = params.get(Constant.USERNAME);
-        String password = params.get(Constant.PASSWORD);
-        String email = params.get(Constant.EMAIL);
-        return userService.signup(username, password, email);
+        try {
+            String username = params.get(Constant.USERNAME);
+            String password = params.get(Constant.PASSWORD);
+            String email = params.get(Constant.EMAIL);
+            return userService.signup(username, password, email);
+        } catch (Exception e) {
+            System.out.println("Caught an exception in signup");
+            e.printStackTrace();
+            User user = new User();
+            user.setUserId(-1);
+            return user;
+        }
     }
 
     @RequestMapping("/setUserType")
     public Boolean setUserType(@RequestBody Map<String, Integer> params) {
-        Integer userId = params.get(Constant.USER_ID);
-        Integer targetUserId = params.get(Constant.TARGET_USER_ID);
-        Integer targetUserType = params.get(Constant.TARGET_USER_TYPE);
-        return userService.setUserType(userId, targetUserId, targetUserType);
+        try {
+            Integer userId = params.get(Constant.USER_ID);
+            Integer targetUserId = params.get(Constant.TARGET_USER_ID);
+            Integer targetUserType = params.get(Constant.TARGET_USER_TYPE);
+            return userService.setUserType(userId, targetUserId, targetUserType);
+        } catch (Exception e) {
+            System.out.println("Caught an exception in setUserType");
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @RequestMapping("/getDuplicateUsername")
     public Boolean getDuplicateUsername(@RequestParam(Constant.USERNAME) String username) {
-        return userService.getDuplicateUsername(username);
+        try {
+            return userService.getDuplicateUsername(username);
+        } catch (Exception e) {
+            System.out.println("Caught an exception in getDuplicateUsername");
+            e.printStackTrace();
+            return true;
+        }
     }
 }

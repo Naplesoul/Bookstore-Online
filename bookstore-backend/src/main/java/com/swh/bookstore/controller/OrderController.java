@@ -40,7 +40,13 @@ public class OrderController {
 
     @RequestMapping("/placeOrder")
     public Boolean placeOrder(@RequestBody Order params) {
-        return orderService.placeOrder(params);
+        try {
+            return orderService.placeOrder(params);
+        } catch (Exception e) {
+            System.out.println("Caught an exception in placeOrder");
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @RequestMapping("/getSalesRank")
