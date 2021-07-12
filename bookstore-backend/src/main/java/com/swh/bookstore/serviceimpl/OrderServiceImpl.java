@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean placeOrder(Order order) {
+    public Boolean placeOrder (Order order) throws Exception {
         // check user
         User user = userDao.getUser(order.getUserId());
         if (user == null || user.getUserType() < 0) {
@@ -63,6 +63,10 @@ public class OrderServiceImpl implements OrderService {
         Integer totalPrice = 0;
         for (OrderItem orderItem : order.getOrderItems()) {
             Book book = bookDao.getBookByBookId(orderItem.getBookId());
+            Integer storage = book.getStorage();
+            if (storage < orderItem.getBookNum()) {
+                throw new Exception("库存不足，无法下单");
+            }
             Integer bookPrice = book.getPrice();
             orderItem.setBookPrice(bookPrice);
             orderItem.setBookName(book.getBookName());
