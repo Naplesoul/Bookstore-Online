@@ -8,8 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 
 
@@ -26,7 +24,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     Book findBookByISBN(Integer ISBN);
 
     @Query("from Book b where b.bookName like :bookName and b.category like :category " +
-    "and b.author like :author and b.intro like :intro")
+            "and b.author like :author and b.intro like :intro")
     Page<Book> filterBooks(String bookName, String category, String author,
                            String intro, Pageable pageable);
 

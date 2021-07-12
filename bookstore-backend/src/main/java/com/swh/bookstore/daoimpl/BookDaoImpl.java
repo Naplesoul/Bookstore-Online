@@ -1,7 +1,6 @@
 package com.swh.bookstore.daoimpl;
 
 import cn.hutool.core.img.ImgUtil;
-import com.swh.bookstore.constant.SearchType;
 import com.swh.bookstore.dao.BookDao;
 import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.repository.BookRepository;
