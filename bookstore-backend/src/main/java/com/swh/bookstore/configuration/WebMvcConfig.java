@@ -1,4 +1,4 @@
-package com.swh.bookstore.Configuration;
+package com.swh.bookstore.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;

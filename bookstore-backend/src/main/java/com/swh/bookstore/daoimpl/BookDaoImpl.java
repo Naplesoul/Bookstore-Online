@@ -4,7 +4,7 @@ import cn.hutool.core.img.ImgUtil;
 import com.swh.bookstore.dao.BookDao;
 import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.repository.BookRepository;
-import com.swh.bookstore.utils.SimplifiedBook;
+import com.swh.bookstore.utils.objects.SimplifiedBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
