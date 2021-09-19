@@ -30,28 +30,37 @@ public class SessionUtil {
     }
 
     public static User getUser() {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        try {
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if (requestAttributes != null) {
+                HttpServletRequest request = requestAttributes.getRequest();
+                HttpSession session = request.getSession(false);
 
-        if (requestAttributes != null) {
-            HttpServletRequest request = requestAttributes.getRequest();
-            HttpSession session = request.getSession(false);
-
-            if (session != null) {
-                return (User) session.getAttribute(Constant.USER);
+                if (session != null) {
+                    return (User) session.getAttribute(Constant.USER);
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Session already invalid");
+            System.out.println(e.getMessage());
         }
         return null;
     }
 
     public static void setUser(Integer userId, User user) {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        try {
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
-        if (requestAttributes != null) {
-            HttpServletRequest request = requestAttributes.getRequest();
-            HttpSession session = request.getSession(true);
+            if (requestAttributes != null) {
+                HttpServletRequest request = requestAttributes.getRequest();
+                HttpSession session = request.getSession(true);
 
-            session.setAttribute(Constant.USER, user);
-            SessionMaintainer.setSessionByUserId(userId, session);
+                session.setAttribute(Constant.USER, user);
+                SessionMaintainer.setSessionByUserId(userId, session);
+            }
+        } catch (Exception e) {
+            System.out.println("Session already invalid");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -60,23 +69,28 @@ public class SessionUtil {
         if (userId == null) {
             return;
         }
-        HttpSession session = SessionMaintainer.getSessionByUserId(userId);
-        if (session == null) {
-            return;
+        try {
+            HttpSession session = SessionMaintainer.getSessionByUserId(userId);
+            if (session == null) {
+                return;
+            }
+            User existedUser = (User) session.getAttribute(Constant.USER);
+            if (existedUser == null) {
+                return;
+            }
+            String newUsername = user.getUsername();
+            Integer newUserType = user.getUserType();
+            UserInfo newUserInfo = user.getUserInfo();
+            User newUser = new User();
+            newUser.setUserId(userId);
+            newUser.setUsername(newUsername == null ? existedUser.getUsername() : newUsername);
+            newUser.setUserType(newUserType == null ? existedUser.getUserType() : newUserType);
+            newUser.setUserInfo(newUserInfo == null ? existedUser.getUserInfo() : newUserInfo);
+            session.setAttribute(Constant.USER, newUser);
+        } catch (Exception e) {
+            System.out.println("Session already invalid");
+            System.out.println(e.getMessage());
         }
-        User existedUser = (User) session.getAttribute(Constant.USER);
-        if (existedUser == null) {
-            return;
-        }
-        String newUsername = user.getUsername();
-        Integer newUserType = user.getUserType();
-        UserInfo newUserInfo = user.getUserInfo();
-        User newUser = new User();
-        newUser.setUserId(userId);
-        newUser.setUsername(newUsername == null ? existedUser.getUsername() : newUsername);
-        newUser.setUserType(newUserType == null ? existedUser.getUserType() : newUserType);
-        newUser.setUserInfo(newUserInfo == null ? existedUser.getUserInfo() : newUserInfo);
-        session.setAttribute(Constant.USER, newUser);
     }
 
     public static void invalidateSession() {

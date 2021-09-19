@@ -9,11 +9,14 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @WebListener
 public class SessionMaintainer implements HttpSessionListener {
 
     private static final Map<Integer, HttpSession> sessionMap = new ConcurrentHashMap<>();
+    private static final Lock lock = new ReentrantLock();
 
     @Override
     public void sessionDestroyed(HttpSessionEvent sessionEvent) {
@@ -27,22 +30,30 @@ public class SessionMaintainer implements HttpSessionListener {
         if (userId == null) {
             return;
         }
+        lock.lock();
         HttpSession existedSession = sessionMap.get(userId);
         if (existedSession == null) {
+            lock.unlock();
             return;
         }
         String sessionId = session.getId();
         String existedSessionId = existedSession.getId();
         if (existedSessionId.equals(sessionId)) {
-            sessionMap.remove(userId);
+            try {
+                session.removeAttribute(Constant.USER);
+                sessionMap.remove(userId);
+            } catch (Exception e) {
+                System.out.println("Session already invalid");
+                System.out.println(e.getMessage());
+            }
         }
+        lock.unlock();
     }
 
     public static void invalidateSessionByUserId(Integer userId) {
         HttpSession session = sessionMap.get(userId);
         if (session != null) {
             session.invalidate();
-            sessionMap.remove(userId);
         }
     }
 
@@ -51,7 +62,18 @@ public class SessionMaintainer implements HttpSessionListener {
         if (existedSession != null) {
             existedSession.invalidate();
         }
-        sessionMap.put(userId, session);
+        lock.lock();
+        try {
+            // check if the session has been invalid
+            User user = (User) session.getAttribute(Constant.USER);
+            if (user != null) {
+                sessionMap.put(userId, session);
+            }
+        } catch (Exception e) {
+            System.out.println("Session already invalid");
+            System.out.println(e.getMessage());
+        }
+        lock.unlock();
     }
 
     public static HttpSession getSessionByUserId(Integer userId) {

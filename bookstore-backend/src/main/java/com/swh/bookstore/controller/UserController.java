@@ -42,7 +42,6 @@ public class UserController {
 
     @RequestMapping("/autoLogin")
     public User autoLogin() {
-        System.out.println("autologin");
         User user = SessionUtil.getUser();
         if (user == null) {
             user = new User();
