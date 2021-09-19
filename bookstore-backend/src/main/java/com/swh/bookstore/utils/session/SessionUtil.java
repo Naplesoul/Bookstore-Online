@@ -48,12 +48,10 @@ public class SessionUtil {
 
         if (requestAttributes != null) {
             HttpServletRequest request = requestAttributes.getRequest();
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
 
-            if (session != null) {
-                session.setAttribute(Constant.USER, user);
-                SessionMaintainer.setSessionByUserId(userId, session);
-            }
+            session.setAttribute(Constant.USER, user);
+            SessionMaintainer.setSessionByUserId(userId, session);
         }
     }
 
