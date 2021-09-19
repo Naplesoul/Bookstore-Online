@@ -35,8 +35,7 @@ public class UserDaoImpl implements UserDao {
         // check if the username is available
         User registeredUser = userRepository.findUserByUsername(username);
         if (registeredUser != null) {
-            user.setUserId(-1);
-            return user;
+            return null;
         }
 
         user.setUsername(username);

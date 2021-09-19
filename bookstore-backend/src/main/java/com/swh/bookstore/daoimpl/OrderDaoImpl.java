@@ -32,6 +32,11 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    public Order getOrderByOrderId(Integer orderId) {
+        return orderRepository.findOrderByOrderId(orderId);
+    }
+
+    @Override
     public Page<Order> getAllOrders(Integer page, Integer size,
                                     Timestamp startTime, Timestamp endTime, String searchText) {
         return orderRepository.findDistinctOrdersByOrderTimeGreaterThanAndOrderTimeLessThanAndOrderItemsBookNameContaining(

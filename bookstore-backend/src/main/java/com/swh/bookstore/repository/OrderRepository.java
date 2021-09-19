@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
+    Order findOrderByOrderId(Integer orderId);
+
     Page<Order> findDistinctOrdersByUserIdAndOrderTimeGreaterThanAndOrderTimeLessThanAndOrderItemsBookNameContaining(
             Integer userId, Timestamp startTime, Timestamp endTime, String searchText,
             Pageable pageable
