@@ -33,6 +33,7 @@ const styles = theme => ({
 
 class HeaderBar extends React.Component
 {
+    // eslint-disable-next-line
     constructor(props) {
         super(props);
     };

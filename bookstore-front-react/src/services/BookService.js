@@ -25,19 +25,17 @@ export const addBook = (bookData, callback) => {
     postRequest(url, bookData, callback);
 };
 
-export const setBook = (_userId, _book, callback) => {
+export const setBook = (_book, callback) => {
     const url = `${config.apiUrl}/setBook`;
     let form = {
-        userId: _userId,
         book: _book,
     };
     postRequest(url, form, callback);
 }
 
-export const deleteBook = (_userId, _bookId, callback) => {
+export const deleteBook = (_bookId, callback) => {
     const url = `${config.apiUrl}/deleteBook`;
     let form = {
-        userId: _userId,
         bookId: _bookId,
     };
     postRequest(url, form, callback);

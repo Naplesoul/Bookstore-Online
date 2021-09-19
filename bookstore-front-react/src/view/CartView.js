@@ -101,7 +101,7 @@ class CartView extends React.Component {
             }
         }
 
-        placeOrder(this.props.user.userId, orderItems, (data) => {
+        placeOrder(orderItems, (data) => {
             if (data) {
                 this.props.setCartData(cartData);
                 // this.props.setBookData(bookData);

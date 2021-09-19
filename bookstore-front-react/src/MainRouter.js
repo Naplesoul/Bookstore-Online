@@ -5,6 +5,8 @@ import history from './utils/history'
 import Frame from "./view/Frame";
 import LoginView from "./view/LoginView";
 import SignupView from "./view/SignupView";
+import {autoLogin, logout} from "./services/UserService";
+import {clearCookie} from "./utils/cookie";
 
 const nullUser = {
     userId: -1,
@@ -15,6 +17,7 @@ const nullUser = {
     userInfo: null,
 };
 
+// eslint-disable-next-line no-unused-vars
 const testUser = {
     userId: 3,
     isAuthed: true,
@@ -40,6 +43,18 @@ class MainRouter extends React.Component {
         }
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
+        autoLogin((user) => {
+            if (user.userId !== -1) {
+                this.login({
+                    userId: user.userId,
+                    isAuthed: true,
+                    username: user.username,
+                    avatar: require("./assets/userimage1.jpg").default,
+                    userType: user.userType,
+                    userInfo: user.userInfo,
+                });
+            }
+        });
     }
 
     login(_user){
@@ -49,6 +64,8 @@ class MainRouter extends React.Component {
     };
 
     logout(){
+        logout((data) => {})
+        clearCookie();
         this.setState({
             user: nullUser,
         });
@@ -66,10 +83,10 @@ class MainRouter extends React.Component {
                     />
                 </Route>
                 <Route exact path={"/login"}>
-                    <LoginView login={this.login}/>
+                    <LoginView login={this.login} user={this.state.user}/>
                 </Route>
                 <Route exact path={"/signup"}>
-                    <SignupView login={this.login}/>
+                    <SignupView login={this.login} user={this.state.user}/>
                 </Route>
             </Router>
         );

@@ -19,7 +19,7 @@ class UserManagementView extends React.Component {
         this.state = {
             userData: [],
         };
-        getUsers(this.props.user.userId, (data) => {
+        getUsers((data) => {
             if (data != null) {
                 this.setState({
                     userData: data,
@@ -56,7 +56,7 @@ class UserManagementView extends React.Component {
                         </th>
                     </tr>
                     <tr>
-                        {header.map((head, index) => {
+                        {header.map((head) => {
                             return (
                                 <th>
                                     {head}
@@ -64,7 +64,7 @@ class UserManagementView extends React.Component {
                             );
                         })}
                     </tr>
-                    {this.state.userData.map((user, index) => {
+                    {this.state.userData.map((user) => {
                         return (
                             <UserItem user={user} operatingUser={this.props.user}
                                       setUserType={this.setUserType.bind(this)}

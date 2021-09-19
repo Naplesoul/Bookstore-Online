@@ -32,6 +32,7 @@ const styles = theme => ({
 });
 
 class BookRankItem extends React.Component {
+    // eslint-disable-next-line
     constructor(props) {
         super(props);
     };

@@ -27,7 +27,9 @@ class BrowseView extends React.Component {
             bookData: [],
             page: 1,
         };
+    }
 
+    componentDidMount() {
         getBooks(1, pageSize, config.bookName, this.props.searchText, (_bookData) => {
             this.setState({
                 bookCount: _bookData.totalElements,
@@ -56,8 +58,8 @@ class BrowseView extends React.Component {
         return(
             <div className={classes.root}>
                 <GridList cellHeight={160} className={classes.gridList} cols={3}>
-                    {this.state.bookData.map((book, index) => {
-                        return <BookCard bookInfo={book} clickBook={this.clickBook.bind(this)} />;
+                    {this.state.bookData.map((book) => {
+                        return <BookCard bookInfo={book} clickBook={this.clickBook.bind(this)} key={book.bookId} />;
                     })}
                 </GridList>
                 <div className={classes.page}>

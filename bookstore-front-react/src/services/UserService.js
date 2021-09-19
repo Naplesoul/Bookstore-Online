@@ -12,6 +12,16 @@ export const login = (_username, _password, callback) => {
     postRequest(url, loginForm, callback);
 }
 
+export const autoLogin = (callback) => {
+    const url = `${config.apiUrl}/autoLogin`;
+    getRequest(url, callback);
+}
+
+export const logout = (callback) => {
+    const url = `${config.apiUrl}/logout`;
+    getRequest(url, callback);
+}
+
 export const signup = (_username, _password, _email, callback) => {
     const url = `${config.apiUrl}/signup`;
     let signupForm = {
@@ -22,15 +32,14 @@ export const signup = (_username, _password, _email, callback) => {
     postRequest(url, signupForm, callback);
 }
 
-export const getUsers = (_userId, callback) => {
-    const url = `${config.apiUrl}/getUsers?userId=` + _userId.toString();
+export const getUsers = (callback) => {
+    const url = `${config.apiUrl}/getUsers`;
     getRequest(url, callback);
 }
 
-export const setUserType = (_userId, _targetUserId, _targetUserType, callback) => {
+export const setUserType = (_targetUserId, _targetUserType, callback) => {
     const url = `${config.apiUrl}/setUserType`;
     let form = {
-        userId: _userId,
         targetUserId: _targetUserId,
         targetUserType: _targetUserType,
     };

@@ -99,7 +99,7 @@ class BookItem extends React.Component {
     }
 
     deleteBook() {
-        deleteBook(this.props.userId, this.props.book.bookId, (data) => {
+        deleteBook(this.props.book.bookId, (data) => {
             if (data) {
                 this.props.update();
                 alert("删除成功");
@@ -140,7 +140,7 @@ class BookItem extends React.Component {
         } else if (isNaN(book.storage) || book.storage < 0) {
             alert("库存应为非负整数");
         } else {
-            setBook(this.props.userId, book, (data) => {
+            setBook(book, (data) => {
                 if (data) {
                     this.props.update();
                     alert("修改成功");
@@ -207,7 +207,7 @@ class BookItem extends React.Component {
                 </td>
                 <td>
                     <button className={classes.viewImage}>
-                        <a href={`${config.apiUrl}/getBookImage?bookId=` + this.props.book.bookId} target="_blank">
+                        <a href={`${config.apiUrl}/getBookImage?bookId=` + this.props.book.bookId} target="_blank" rel="noreferrer" >
                             预览
                         </a>
                     </button>

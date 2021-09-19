@@ -20,7 +20,7 @@ const styles = theme => ({
         height: '100vh',
     },
     image: {
-        backgroundImage: 'url(http://area.sinaapp.com/bingImg/)',
+        backgroundImage: 'url(https://api.dujin.org/bing/1920.php)',
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -49,6 +49,7 @@ const styles = theme => ({
 class LoginView extends React.Component {
     constructor(props) {
         super(props);
+        console.log(this.props.isAuthed)
         this.state = {
             redirectPath: null,
         }
@@ -85,6 +86,15 @@ class LoginView extends React.Component {
     onKeyDown(e) {
         if (e.keyCode === 13) {
             this.submit();
+        }
+    }
+
+    componentDidMount() {
+        if (this.props.user && this.props.user.isAuthed) {
+            alert("您已登录。如需切换账号，请先退出")
+            this.setState({
+                redirectPath: "/store",
+            });
         }
     }
 

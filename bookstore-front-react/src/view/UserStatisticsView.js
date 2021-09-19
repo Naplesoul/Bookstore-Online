@@ -41,17 +41,20 @@ class UserStatisticsView extends React.Component {
             totalPrice: 0,
             page: 1,
         };
-        this.updateData(1, minTime, maxTime);
     };
 
+    componentDidMount() {
+        this.updateData(1, minTime, maxTime);
+    }
+
     updateData(page, startTime, endTime) {
-        getTotalSalesAndConsumption(this.props.user.userId, startTime, endTime, (data) => {
+        getTotalSalesAndConsumption(startTime, endTime, (data) => {
             this.setState({
                 totalPrice: data.totalConsumption,
                 totalBookNum: data.totalSales,
             });
         });
-        getSalesRank(this.props.user.userId, page, pageSize, startTime, endTime, (data) => {
+        getSalesRank(page, pageSize, startTime, endTime, (data) => {
             this.setState({
                 bookCount: data.totalElements,
                 bookRank: data.content,
@@ -112,7 +115,7 @@ class UserStatisticsView extends React.Component {
                 <Card className={classes.rank}>
                     {this.state.bookRank.map((rank, index) => {
                         return (
-                            <BookRankItem book={rank.book} index={index + 1} sales={rank.sales}/>
+                            <BookRankItem book={rank.book} index={index + 1} sales={rank.sales} key={rank.book.bookId}/>
                         );
                     })}
                 </Card>

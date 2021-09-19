@@ -1,5 +1,9 @@
 let getRequest = (url, callback) => {
-    fetch(url)
+    let opts = {
+        method: "GET",
+        credentials: "include"
+    };
+    fetch(url, opts)
         .then((response) => {
             return response.json()
         })
@@ -15,6 +19,7 @@ let postRequest = (url, json, callback) => {
     let opts = {
         method: "POST",
         body: JSON.stringify(json),
+        credentials: "include",
         headers: {
             'Content-Type': 'application/json'
         }

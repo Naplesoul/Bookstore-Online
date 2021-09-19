@@ -55,7 +55,7 @@ class OrderView extends React.Component {
     }
 
     getOrders(page, _startTime, _endTime, _searchText) {
-        getOrders(this.props.user.userId, page, pageSize, _startTime, _endTime, _searchText, (data) => {
+        getOrders(page, pageSize, _startTime, _endTime, _searchText, (data) => {
             this.setState({
                 orderData: data.content,
                 orderCount: data.totalElements,
@@ -121,7 +121,7 @@ class OrderView extends React.Component {
                 </Grid>
                 {this.state.orderData.map((order, index) => {
                     return (
-                        <OrderCard order={order}/>
+                        <OrderCard order={order} key={order.orderId}/>
                     );
                 })}
                 <div className={classes.page}>
