@@ -1,4 +1,4 @@
-package com.swh.bookstore.utils;
+package com.swh.bookstore.utils.objects;
 
 import com.swh.bookstore.entity.OrderItem;
 import lombok.Data;

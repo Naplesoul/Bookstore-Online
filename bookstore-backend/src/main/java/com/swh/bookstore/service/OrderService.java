@@ -2,8 +2,8 @@ package com.swh.bookstore.service;
 
 import com.swh.bookstore.entity.Order;
 import com.swh.bookstore.entity.OrderItem;
-import com.swh.bookstore.utils.ConsumptionRank;
-import com.swh.bookstore.utils.SalesRank;
+import com.swh.bookstore.utils.objects.ConsumptionRank;
+import com.swh.bookstore.utils.objects.SalesRank;
 import org.springframework.data.domain.Page;
 
 import java.awt.image.BufferedImage;

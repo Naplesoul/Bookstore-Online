@@ -1,7 +1,7 @@
 package com.swh.bookstore.repository;
 
 import com.swh.bookstore.entity.OrderItem;
-import com.swh.bookstore.utils.OrderItemImage;
+import com.swh.bookstore.utils.objects.OrderItemImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
