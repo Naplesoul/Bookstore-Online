@@ -28,6 +28,7 @@ const styles = theme => ({
 
 class LeftDrawer extends React.Component
 {
+    // eslint-disable-next-line
     constructor(props) {
         super(props);
     };

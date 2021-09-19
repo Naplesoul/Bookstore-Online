@@ -12,6 +12,7 @@ const styles = (theme) => ({
         display: 'flex',
     },
     name: {
+        color: "white",
         marginTop: theme.spacing(2.3),
         cursor: 'pointer',
     },
@@ -91,7 +92,7 @@ class UserAvatar extends React.Component{
                             <MenuItem onClick={this.logout}>退出登录</MenuItem>
                         </Menu>
                     </div>
-                    <Typography variant="h7" noWrap className={classes.name} onClick={this.openMenu}>
+                    <Typography variant="subtitle2" noWrap className={classes.name} onClick={this.openMenu}>
                         {this.props.user.username}
                     </Typography>
                 </div>

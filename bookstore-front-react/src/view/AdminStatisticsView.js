@@ -55,7 +55,7 @@ class AdminStatisticsView extends React.Component {
     };
 
     updateData(page, startTime, endTime) {
-        getTotalSalesAndConsumption(this.props.user.userId, startTime, endTime, (data) => {
+        getTotalSalesAndConsumption(startTime, endTime, (data) => {
             this.setState({
                 totalPrice: data.totalConsumption,
                 totalBookNum: data.totalSales,
@@ -67,7 +67,7 @@ class AdminStatisticsView extends React.Component {
                 userRank: data.content,
             });
         })
-        getSalesRank(this.props.user.userId, page, pageSize, startTime, endTime, (data) => {
+        getSalesRank(page, pageSize, startTime, endTime, (data) => {
             this.setState({
                 bookCount: data.totalElements,
                 bookRank: data.content,

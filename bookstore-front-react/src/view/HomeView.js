@@ -1,21 +1,15 @@
 import React from "react";
-import {withStyles} from "@material-ui/core/styles";
 import AdsCarousel from "../components/AdsCarousel";
 import BrowseView from "./BrowseView";
 
 
-
-const styles = theme => ({
-
-});
-
 class HomeView extends React.Component {
+    // eslint-disable-next-line
     constructor(props) {
         super(props);
     }
 
     render() {
-        const { classes } = this.props;
         return(
             <div>
                 <AdsCarousel/>
@@ -28,4 +22,4 @@ class HomeView extends React.Component {
     }
 }
 
-export default withStyles(styles)(HomeView);
+export default HomeView;

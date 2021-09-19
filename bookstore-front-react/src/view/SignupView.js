@@ -19,7 +19,7 @@ const styles = theme => ({
         height: '100vh',
     },
     image: {
-        backgroundImage: 'url(http://area.sinaapp.com/bingImg/)',
+        backgroundImage: 'url(https://api.dujin.org/bing/1920.php)',
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -56,6 +56,7 @@ class SignupView extends React.Component {
     };
 
     checkEmail(strEmail) {
+        // eslint-disable-next-line
         return strEmail.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) !== -1;
     }
 
@@ -119,6 +120,15 @@ class SignupView extends React.Component {
                 });
             }
         });
+    }
+
+    componentDidMount() {
+        if (this.props.user && this.props.user.isAuthed) {
+            alert("您已登录。如需注册新账号，请先退出")
+            this.setState({
+                redirectPath: "/store",
+            });
+        }
     }
 
     render() {

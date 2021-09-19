@@ -4,7 +4,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {Button} from "@material-ui/core";
-import {Redirect} from "react-router-dom";
 import {getBook} from "../services/BookService";
 import {config} from "../config";
 
@@ -187,7 +186,7 @@ class InfoView extends React.Component {
                     </Typography>
                     <Typography variant={"h6"}>ISBN： {this.state.bookData.isbn}</Typography>
                     <Typography variant={"h6"}>简介：</Typography>
-                    <Typography variant={"h7"}>{this.state.bookData.intro}</Typography>
+                    <Typography variant={"h6"}>{this.state.bookData.intro}</Typography>
                     {this.renderButtons()}
                 </Grid>
             </Grid>

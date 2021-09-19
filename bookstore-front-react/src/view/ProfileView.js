@@ -17,6 +17,7 @@ const styles = theme => ({
 });
 
 class CartView extends React.Component {
+    // eslint-disable-next-line
     constructor(props) {
         super(props);
     }

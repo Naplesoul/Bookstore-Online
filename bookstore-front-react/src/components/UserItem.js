@@ -1,10 +1,6 @@
 import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import 'fontsource-roboto';
-import Typography from '@material-ui/core/Typography';
-import Grid from "@material-ui/core/Grid";
-import {Input, TextField} from "@material-ui/core";
-import {deleteBook, setBook} from "../services/BookService";
 import {setUserType} from "../services/UserService";
 
 
@@ -37,13 +33,14 @@ const styles = theme => ({
 });
 
 class BookItem extends React.Component {
+    // eslint-disable-next-line
     constructor(props) {
         super(props);
     };
 
     setUserType() {
         let type = (this.props.user.userType === -1) ? 0 : -1;
-        setUserType(this.props.operatingUser.userId, this.props.user.userId, type, (data) => {
+        setUserType(this.props.user.userId, type, (data) => {
             if (data) {
                 this.props.setUserType(this.props.user.userId, type);
                 alert("修改成功");

@@ -38,6 +38,7 @@ const styles = theme => ({
 });
 
 class OrderItem extends React.Component {
+    // eslint-disable-next-line
     constructor(props) {
         super(props);
     };

@@ -21,6 +21,9 @@ const styles = theme => ({
         padding: 0,
         marginLeft: 20,
     },
+    bookName: {
+        marginBottom: 0,
+    },
     price: {
         color: 'red',
         marginBottom: 10,
@@ -28,6 +31,7 @@ const styles = theme => ({
 });
 
 class BookCard extends React.Component {
+    // eslint-disable-next-line
     constructor(props) {
         super(props);
     }
@@ -47,7 +51,7 @@ class BookCard extends React.Component {
                         title={this.props.bookInfo.bookName}
                     />
                     <CardContent className={classes.content}>
-                        <Typography gutterBottom variant="h6" component="h7">
+                        <Typography gutterBottom variant="h6" component="h6" className={classes.bookName}>
                             {this.props.bookInfo.bookName}
                         </Typography>
                         <Typography variant="body2" component="p" className={classes.price}>

@@ -26,6 +26,7 @@ const styles = theme => ({
 
 class SearchBox extends React.Component
 {
+    // eslint-disable-next-line
     constructor(props) {
         super(props);
     };

@@ -369,7 +369,7 @@ class BookManagementView extends React.Component {
                         </th>
                     </tr>
                     <tr>
-                        {header.map((head, index) => {
+                        {header.map((head) => {
                             return (
                                 <th>
                                     {head}
