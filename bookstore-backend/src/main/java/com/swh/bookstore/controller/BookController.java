@@ -5,6 +5,7 @@ import com.swh.bookstore.constant.Constant;
 import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.service.BookService;
 import com.swh.bookstore.utils.objects.SimplifiedBook;
+import com.swh.bookstore.utils.session.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -42,10 +43,13 @@ public class BookController {
     @RequestMapping("/setBook")
     public Boolean setBook(@RequestBody JSONObject params) {
         try {
-            Integer userId = params.getInteger(Constant.USER_ID);
+            if (!SessionUtil.isAdmin()) {
+                System.out.println("User unauthorized");
+                return false;
+            }
             JSONObject bookJson = params.getJSONObject(Constant.BOOK);
             Book book = bookJson.toJavaObject(Book.class);
-            return bookService.setBook(userId, book);
+            return bookService.setBook(book);
         } catch (Exception e) {
             System.out.println("Caught an exception in setBook");
             e.printStackTrace();
@@ -56,7 +60,11 @@ public class BookController {
     @RequestMapping("/deleteBook")
         public Boolean deleteBook(@RequestBody Map<String, Integer> params) {
         try {
-            return bookService.deleteBook(params.get(Constant.USER_ID), params.get(Constant.BOOK_ID));
+            if (!SessionUtil.isAdmin()) {
+                System.out.println("User unauthorized");
+                return false;
+            }
+            return bookService.deleteBook(params.get(Constant.BOOK_ID));
         } catch (Exception e) {
             System.out.println("Caught an exception in deleteBook");
             e.printStackTrace();
@@ -66,6 +74,10 @@ public class BookController {
 
     @RequestMapping("/addBook")
     public Integer addBook(@RequestBody Book book) {
+        if (!SessionUtil.isAdmin()) {
+            System.out.println("User unauthorized");
+            return -1;
+        }
         return bookService.addBook(book);
     }
 
@@ -73,6 +85,10 @@ public class BookController {
     public Boolean setBookImage(@RequestParam(Constant.BOOK_ID) Integer bookId,
                                 @RequestBody Map<String, String> base64Image) {
         try {
+            if (!SessionUtil.isAdmin()) {
+                System.out.println("User unauthorized");
+                return false;
+            }
             return bookService.setBookImage(bookId, base64Image.get(Constant.IMAGE));
         } catch (Exception e) {
             System.out.println("Caught an exception in setBookImage");

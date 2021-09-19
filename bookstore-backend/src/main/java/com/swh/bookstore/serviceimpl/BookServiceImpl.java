@@ -1,9 +1,7 @@
 package com.swh.bookstore.serviceimpl;
 
 import com.swh.bookstore.dao.BookDao;
-import com.swh.bookstore.dao.UserDao;
 import com.swh.bookstore.entity.Book;
-import com.swh.bookstore.entity.User;
 import com.swh.bookstore.service.BookService;
 import com.swh.bookstore.utils.objects.SimplifiedBook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +16,6 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private BookDao bookDao;
-
-    @Autowired
-    private UserDao userDao;
 
     @Override
     public Book getBookByBookId(Integer bookId) {
@@ -39,23 +34,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean setBook(Integer userId, Book book) {
-        // check if the user is admin
-        User user = userDao.getUser(userId);
-        if (user == null || user.getUserType() != 1) {
-            return false;
-        }
+    public Boolean setBook(Book book) {
         return bookDao.setBook(book);
     }
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean deleteBook(Integer userId, Integer bookId) {
-        // check if the user is admin
-        User user = userDao.getUser(userId);
-        if (user == null || user.getUserType() != 1) {
-            return false;
-        }
+    public Boolean deleteBook(Integer bookId) {
         return bookDao.deleteBook(bookId);
     }
 

@@ -3,6 +3,7 @@ package com.swh.bookstore.controller;
 import com.swh.bookstore.constant.Constant;
 import com.swh.bookstore.entity.User;
 import com.swh.bookstore.service.UserService;
+import com.swh.bookstore.utils.session.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +20,51 @@ public class UserController {
     public User login(@RequestBody Map<String, String> params) {
         String username = params.get(Constant.USERNAME);
         String password = params.get(Constant.PASSWORD);
-        return userService.checkUser(username, password);
+        User user = userService.checkUser(username, password);
+        if (user == null) {
+            user = new User();
+            user.setUserId(-1);
+            return user;
+        }
+        Integer userId = user.getUserId();
+        Integer userType = user.getUserType();
+        if (userId == null || userType == null) {
+            user = new User();
+            user.setUserId(-1);
+            return user;
+        }
+        user.setPassword(null);
+        if (userType >= 0) {
+            SessionUtil.setUser(userId, user);
+        }
+        return user;
+    }
+
+    @RequestMapping("/autoLogin")
+    public User autoLogin() {
+        System.out.println("autologin");
+        User user = SessionUtil.getUser();
+        if (user == null) {
+            user = new User();
+            user.setUserId(-1);
+            return user;
+        }
+        return user;
+    }
+
+    @RequestMapping("/logout")
+    public Boolean logout() {
+        SessionUtil.invalidateSession();
+        return true;
     }
 
     @RequestMapping("/getUsers")
-    public List<User> getUsers(@RequestParam(Constant.USER_ID) Integer userId) {
-        return userService.getUsers(userId);
+    public List<User> getUsers() {
+        if (SessionUtil.isAdmin()) {
+            return userService.getUsers();
+        }
+        System.out.println("User unauthorized");
+        return null;
     }
 
     @RequestMapping("/signup")
@@ -33,7 +73,17 @@ public class UserController {
             String username = params.get(Constant.USERNAME);
             String password = params.get(Constant.PASSWORD);
             String email = params.get(Constant.EMAIL);
-            return userService.signup(username, password, email);
+            User user = userService.signup(username, password, email);
+            if (user == null) {
+                user = new User();
+                user.setUserId(-1);
+                return user;
+            }
+            Integer userId = user.getUserId();
+            user.setPassword(null);
+            SessionUtil.setUser(userId, user);
+            return user;
+
         } catch (Exception e) {
             System.out.println("Caught an exception in signup");
             e.printStackTrace();
@@ -46,10 +96,22 @@ public class UserController {
     @RequestMapping("/setUserType")
     public Boolean setUserType(@RequestBody Map<String, Integer> params) {
         try {
-            Integer userId = params.get(Constant.USER_ID);
-            Integer targetUserId = params.get(Constant.TARGET_USER_ID);
-            Integer targetUserType = params.get(Constant.TARGET_USER_TYPE);
-            return userService.setUserType(userId, targetUserId, targetUserType);
+            Integer userId = params.get(Constant.TARGET_USER_ID);
+            Integer userType = params.get(Constant.TARGET_USER_TYPE);
+            User user = SessionUtil.getUser();
+            if (user == null || user.getUserType() != 1 || userId.equals(user.getUserId())) {
+                System.out.println("User unauthorized");
+                return false;
+            }
+            if (userType < 0) {
+                SessionUtil.invalidateSessionByUserId(userId);
+            } else {
+                User newUser = new User();
+                newUser.setUserId(userId);
+                newUser.setUserType(userType);
+                SessionUtil.updateUser(newUser);
+            }
+            return userService.setUserType(userId, userType);
         } catch (Exception e) {
             System.out.println("Caught an exception in setUserType");
             e.printStackTrace();

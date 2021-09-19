@@ -35,31 +35,32 @@ public class OrderServiceImpl implements OrderService {
     private BookDao bookDao;
 
     @Override
-    public Page<Order> getOrders(Integer userId, String searchText, Integer page, Integer size,
+    public Page<Order> getOrders(Integer userId, Integer userType, String searchText, Integer page, Integer size,
                                  Timestamp startTime, Timestamp endTime) {
-        User user = userDao.getUser(userId);
-        if (user == null)
-            return null;
-        Integer userType = user.getUserType();
         if (userType == 1)
             return orderDao.getAllOrders(page, size, startTime, endTime, searchText);
-        else
+        else if (userType == 0)
             return orderDao.getOrders(userId, page, size, startTime, endTime, searchText);
+        else
+            return null;
     }
 
     @Override
-    public List<OrderItem> getOrderItems(Integer orderId) {
-        return orderDao.getOrderItems(orderId);
+    public List<OrderItem> getOrderItems(Integer userId, Integer userType, Integer orderId) {
+        if (userType == 1) {
+            return orderDao.getOrderItems(orderId);
+        }
+        Order order = orderDao.getOrderByOrderId(orderId);
+        Integer orderUserId = order.getUserId();
+        if (userId.equals(orderUserId)) {
+            return orderDao.getOrderItems(orderId);
+        }
+        return null;
     }
 
     @Override
     @Transactional(rollbackOn = Exception.class)
     public Boolean placeOrder (Order order) throws Exception {
-        // check user
-        User user = userDao.getUser(order.getUserId());
-        if (user == null || user.getUserType() < 0) {
-            return false;
-        }
         Integer totalPrice = 0;
         for (OrderItem orderItem : order.getOrderItems()) {
             Book book = bookDao.getBookByBookId(orderItem.getBookId());
@@ -90,14 +91,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<SalesRank> getSalesRank(Integer userId, Integer page, Integer size, Timestamp startTime, Timestamp endTime) {
-        User user = userDao.getUser(userId);
-        if (user == null) {
-            return null;
-        }
+    public Page<SalesRank> getSalesRank(Integer userId, Integer userType, Integer page, Integer size, Timestamp startTime, Timestamp endTime) {
         List<Order> orders;
         // if the user is admin, fetch all orders
-        if (user.getUserType() == 1) {
+        if (userType == 1) {
             orders = orderDao.getAllOrders(startTime, endTime);
         } else {
             orders = orderDao.getOrders(userId, startTime, endTime);
@@ -150,16 +147,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Map<String, Integer> getTotalSalesAndConsumption(Integer userId, Timestamp startTime, Timestamp endTime) {
+    public Map<String, Integer> getTotalSalesAndConsumption(Integer userId, Integer userType, Timestamp startTime, Timestamp endTime) {
         Integer totalSales = 0;
         Integer totalConsumption = 0;
-        User user = userDao.getUser(userId);
-        if (user == null) {
-            return null;
-        }
         List<Order> orders;
         // if the user is admin, fetch all orders
-        if (user.getUserType() == 1) {
+        if (userType == 1) {
             orders = orderDao.getAllOrders(startTime, endTime);
         } else {
             orders = orderDao.getOrders(userId, startTime, endTime);

@@ -1,6 +1,7 @@
 package com.swh.bookstore.constant;
 
 public class Constant {
+    public static final String USER = "user";
     public static final String USER_ID = "userId";
     public static final String TARGET_USER_ID = "targetUserId";
     public static final String TARGET_USER_TYPE = "targetUserType";
@@ -21,3 +22,4 @@ public class Constant {
     public static final String IMAGE = "image";
     public static final String ORDER_ITEM_ID = "orderItemId";
 }
+
