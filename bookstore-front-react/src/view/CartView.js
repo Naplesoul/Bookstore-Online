@@ -105,7 +105,7 @@ class CartView extends React.Component {
             if (data) {
                 this.props.setCartData(cartData);
                 // this.props.setBookData(bookData);
-                alert("下单成功！");
+                alert("订单已接收，正在处理...");
             } else {
                 alert("订单录入失败！");
             }
