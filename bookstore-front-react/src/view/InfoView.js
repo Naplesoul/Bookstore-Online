@@ -186,7 +186,7 @@ class InfoView extends React.Component {
                     </Typography>
                     <Typography variant={"h6"}>ISBN： {this.state.bookData.isbn}</Typography>
                     <Typography variant={"h6"}>简介：</Typography>
-                    <Typography variant={"h6"}>{this.state.bookData.intro}</Typography>
+                    <Typography variant={"body1"}>{this.state.bookData.intro}</Typography>
                     {this.renderButtons()}
                 </Grid>
             </Grid>
