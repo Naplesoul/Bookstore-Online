@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.swh.bookstore.constant.Constant;
 import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.service.BookService;
-import com.swh.bookstore.utils.objects.SimplifiedBook;
+import com.swh.bookstore.utils.dto.SimplifiedBook;
 import com.swh.bookstore.utils.session.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

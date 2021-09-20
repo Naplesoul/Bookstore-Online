@@ -1,7 +1,7 @@
 package com.swh.bookstore.service;
 
 import com.swh.bookstore.entity.Book;
-import com.swh.bookstore.utils.objects.SimplifiedBook;
+import com.swh.bookstore.utils.dto.SimplifiedBook;
 import org.springframework.data.domain.Page;
 
 import java.awt.image.BufferedImage;

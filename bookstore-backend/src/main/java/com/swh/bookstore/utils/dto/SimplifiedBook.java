@@ -1,4 +1,4 @@
-package com.swh.bookstore.utils.objects;
+package com.swh.bookstore.utils.dto;
 
 public interface SimplifiedBook {
     Integer getBookId();

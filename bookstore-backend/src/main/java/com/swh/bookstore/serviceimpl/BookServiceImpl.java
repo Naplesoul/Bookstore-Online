@@ -3,7 +3,7 @@ package com.swh.bookstore.serviceimpl;
 import com.swh.bookstore.dao.BookDao;
 import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.service.BookService;
-import com.swh.bookstore.utils.objects.SimplifiedBook;
+import com.swh.bookstore.utils.dto.SimplifiedBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

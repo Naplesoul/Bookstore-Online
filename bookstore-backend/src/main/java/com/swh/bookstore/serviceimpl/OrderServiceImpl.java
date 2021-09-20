@@ -9,14 +9,18 @@ import com.swh.bookstore.entity.Order;
 import com.swh.bookstore.entity.OrderItem;
 import com.swh.bookstore.entity.User;
 import com.swh.bookstore.service.OrderService;
-import com.swh.bookstore.utils.objects.ConsumptionRank;
-import com.swh.bookstore.utils.objects.SalesRank;
+import com.swh.bookstore.utils.dto.ConsumptionRank;
+import com.swh.bookstore.utils.dto.OrderMessage;
+import com.swh.bookstore.utils.dto.SalesRank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
@@ -25,6 +29,9 @@ import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+    @Autowired
+    WebApplicationContext applicationContext;
+
     @Autowired
     private OrderDao orderDao;
 
@@ -59,9 +66,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Boolean placeOrder(OrderMessage orderMessage) {
+        JmsTemplate jmsTemplate = applicationContext.getBean(JmsTemplate.class);
+        jmsTemplate.convertAndSend("orderTmp", orderMessage);
+        return true;
+    }
+
+    @JmsListener(destination = "orderTmp")
+    public void orderReceiver(OrderMessage orderMessage) {
+        Order order = orderMessage.getOrder();
+        System.out.println("Order received");
+        try {
+            saveOrder(order);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     @Transactional(rollbackOn = Exception.class)
-    public Boolean placeOrder (Order order) throws Exception {
-        Integer totalPrice = 0;
+    public void saveOrder(Order order) throws Exception {
+        int totalPrice = 0;
         for (OrderItem orderItem : order.getOrderItems()) {
             Book book = bookDao.getBookByBookId(orderItem.getBookId());
             Integer storage = book.getStorage();
@@ -87,7 +112,6 @@ public class OrderServiceImpl implements OrderService {
             bookDao.reduceStorage(orderItem.getBookId(), orderItem.getBookNum());
             orderDao.saveAndFlushOrderItem(orderItem);
         }
-        return true;
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.swh.bookstore.repository;
 
 import com.swh.bookstore.entity.Book;
-import com.swh.bookstore.utils.objects.BookImage;
-import com.swh.bookstore.utils.objects.SimplifiedBook;
+import com.swh.bookstore.utils.dto.BookImage;
+import com.swh.bookstore.utils.dto.SimplifiedBook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

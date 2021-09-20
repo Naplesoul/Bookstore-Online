@@ -5,8 +5,9 @@ import com.swh.bookstore.entity.Order;
 import com.swh.bookstore.entity.OrderItem;
 import com.swh.bookstore.entity.User;
 import com.swh.bookstore.service.OrderService;
-import com.swh.bookstore.utils.objects.ConsumptionRank;
-import com.swh.bookstore.utils.objects.SalesRank;
+import com.swh.bookstore.utils.dto.ConsumptionRank;
+import com.swh.bookstore.utils.dto.OrderMessage;
+import com.swh.bookstore.utils.dto.SalesRank;
 import com.swh.bookstore.utils.session.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,25 +63,19 @@ public class OrderController {
     }
 
     @RequestMapping("/placeOrder")
-    public Boolean placeOrder(@RequestBody Order order) {
-        try {
-            User user = SessionUtil.getUser();
-            if (user == null) {
-                System.out.println("User unauthorized");
-                return false;
-            }
-            Integer userId = user.getUserId();
-            if (userId == null) {
-                System.out.println("User unauthorized");
-                return false;
-            }
-            order.setUserId(userId);
-            return orderService.placeOrder(order);
-        } catch (Exception e) {
-            System.out.println("Caught an exception in placeOrder");
-            e.printStackTrace();
+    public Boolean placeOrder(@RequestBody OrderMessage order) {
+        User user = SessionUtil.getUser();
+        if (user == null) {
+            System.out.println("User unauthorized");
             return false;
         }
+        Integer userId = user.getUserId();
+        if (userId == null) {
+            System.out.println("User unauthorized");
+            return false;
+        }
+        order.setUserId(userId);
+        return orderService.placeOrder(order);
     }
 
     @RequestMapping("/getSalesRank")

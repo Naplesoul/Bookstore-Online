@@ -2,8 +2,9 @@ package com.swh.bookstore.service;
 
 import com.swh.bookstore.entity.Order;
 import com.swh.bookstore.entity.OrderItem;
-import com.swh.bookstore.utils.objects.ConsumptionRank;
-import com.swh.bookstore.utils.objects.SalesRank;
+import com.swh.bookstore.utils.dto.ConsumptionRank;
+import com.swh.bookstore.utils.dto.OrderMessage;
+import com.swh.bookstore.utils.dto.SalesRank;
 import org.springframework.data.domain.Page;
 
 import java.awt.image.BufferedImage;
@@ -15,7 +16,7 @@ public interface OrderService {
     Page<Order> getOrders(Integer userId, Integer userType, String searchText, Integer page, Integer size,
                           Timestamp startTime, Timestamp endTime);
     List<OrderItem> getOrderItems(Integer userId, Integer userType, Integer orderId);
-    Boolean placeOrder(Order order) throws Exception;
+    Boolean placeOrder(OrderMessage order);
     Page<SalesRank> getSalesRank(Integer userId, Integer userType, Integer page, Integer size, Timestamp startTime, Timestamp endTime);
     Page<ConsumptionRank> getConsumptionRank(Integer page, Integer size, Timestamp startTime, Timestamp endTime);
     Map<String, Integer> getTotalSalesAndConsumption(Integer userId, Integer userType, Timestamp startTime, Timestamp endTime);

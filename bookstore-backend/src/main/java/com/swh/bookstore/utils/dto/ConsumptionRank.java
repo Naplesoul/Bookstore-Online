@@ -1,4 +1,4 @@
-package com.swh.bookstore.utils.objects;
+package com.swh.bookstore.utils.dto;
 
 import com.swh.bookstore.entity.User;
 import lombok.Data;
