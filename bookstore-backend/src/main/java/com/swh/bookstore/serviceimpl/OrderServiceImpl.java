@@ -60,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderDao.getOrderByOrderId(orderId);
         Integer orderUserId = order.getUserId();
         if (userId.equals(orderUserId)) {
-            return orderDao.getOrderItems(orderId);
+            return order.getOrderItems();
         }
         return null;
     }
@@ -68,42 +68,40 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Boolean placeOrder(OrderMessage orderMessage) {
         JmsTemplate jmsTemplate = applicationContext.getBean(JmsTemplate.class);
-        jmsTemplate.convertAndSend("orderTmp", orderMessage);
+        jmsTemplate.convertAndSend("orderReceiver", orderMessage);
         return true;
     }
 
-    @JmsListener(destination = "orderTmp")
-    public void orderReceiver(OrderMessage orderMessage) {
-        Order order = orderMessage.getOrder();
-        System.out.println("Order received");
-        try {
-            saveOrder(order);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
+    @JmsListener(destination = "orderReceiver")
     @Transactional(rollbackOn = Exception.class)
-    public void saveOrder(Order order) throws Exception {
-        int totalPrice = 0;
-        for (OrderItem orderItem : order.getOrderItems()) {
-            Book book = bookDao.getBookByBookId(orderItem.getBookId());
-            Integer storage = book.getStorage();
-            if (storage < orderItem.getBookNum()) {
-                throw new Exception("库存不足，无法下单");
+    public void receiveOrder(OrderMessage orderMessage) {
+        Order order = orderMessage.getOrder();
+        try {
+            int totalPrice = 0;
+            for (OrderItem orderItem : order.getOrderItems()) {
+                Book book = bookDao.getBookByBookId(orderItem.getBookId());
+                Integer storage = book.getStorage();
+                if (storage < orderItem.getBookNum()) {
+                    throw new Exception("库存不足");
+                }
+                Integer bookPrice = book.getPrice();
+                orderItem.setBookPrice(bookPrice);
+                orderItem.setBookName(book.getBookName());
+                orderItem.setAuthor(book.getAuthor());
+                orderItem.setCategory(book.getCategory());
+                orderItem.setImage(book.getImage());
+                totalPrice += bookPrice * orderItem.getBookNum();
             }
-            Integer bookPrice = book.getPrice();
-            orderItem.setBookPrice(bookPrice);
-            orderItem.setBookName(book.getBookName());
-            orderItem.setAuthor(book.getAuthor());
-            orderItem.setCategory(book.getCategory());
-            orderItem.setImage(book.getImage());
-            totalPrice += bookPrice * orderItem.getBookNum();
+
+            order.setOrderTime(new Timestamp(System.currentTimeMillis()));
+            order.setTotalPrice(totalPrice);
+
+        } catch (Exception e) {
+            System.out.println("下单失败");
+            e.printStackTrace();
+            return;
         }
 
-        order.setOrderTime(new Timestamp(System.currentTimeMillis()));
-        order.setTotalPrice(totalPrice);
         orderDao.saveAndFlushOrder(order);
 
         Integer orderId = order.getOrderId();

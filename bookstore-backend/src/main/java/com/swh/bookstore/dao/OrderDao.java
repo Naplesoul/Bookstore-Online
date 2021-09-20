@@ -4,7 +4,6 @@ import com.swh.bookstore.entity.Order;
 import com.swh.bookstore.entity.OrderItem;
 import org.springframework.data.domain.Page;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.util.List;
