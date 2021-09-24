@@ -13,11 +13,7 @@ public class SessionUtil {
 
     public static boolean checkAuth() {
         User user = getUser();
-        if (user == null) {
-            return false;
-        }
-        Integer userType = user.getUserType();
-        return userType != null && userType >= 0;
+        return user != null;
     }
 
     public static boolean isAdmin() {
@@ -25,8 +21,7 @@ public class SessionUtil {
         if (user == null) {
             return false;
         }
-        Integer userType = user.getUserType();
-        return userType != null && userType == 1;
+        return user.getUserType().equals(1);
     }
 
     public static User getUser() {
@@ -37,9 +32,18 @@ public class SessionUtil {
                 HttpSession session = request.getSession(false);
 
                 if (session != null) {
-                    return (User) session.getAttribute(Constant.USER);
+                    User user = (User) session.getAttribute(Constant.USER);
+                    if (user != null) {
+                        Integer userId = user.getUserId();
+                        Integer userType = user.getUserType();
+                        if (userId != null && userId > 0
+                                && userType != null && userType >= 0) {
+                            return user;
+                        }
+                    }
                 }
             }
+            return null;
         } catch (Exception e) {
             System.out.println("Session already invalid");
             System.out.println(e.getMessage());

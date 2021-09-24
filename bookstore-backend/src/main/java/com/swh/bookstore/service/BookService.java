@@ -14,5 +14,5 @@ public interface BookService {
     Boolean deleteBook(Integer bookId);
     Integer addBook(Book book);
     Boolean setBookImage(Integer bookId, String base64Image);
-    BufferedImage getBookImage(Integer BookId);
+    BufferedImage getBookImage(Integer bookId);
 }

@@ -1,13 +1,16 @@
 package com.swh.bookstore.daoimpl;
 
+import cn.hutool.core.img.ImgUtil;
 import com.swh.bookstore.dao.UserDao;
 import com.swh.bookstore.entity.User;
 import com.swh.bookstore.entity.UserInfo;
 import com.swh.bookstore.repository.UserRepository;
 import com.swh.bookstore.repository.UserInfoRepository;
+import com.swh.bookstore.utils.dto.UserAvatar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 @Repository
@@ -73,5 +76,33 @@ public class UserDaoImpl implements UserDao {
         }
         userRepository.setUserType(userId, userType);
         return true;
+    }
+
+    @Override
+    public Boolean setUserInfo(Integer userId, UserInfo userInfo) {
+        UserInfo existedUserInfo = userInfoRepository.findUserInfoByUserId(userId);
+        if (existedUserInfo == null) {
+            return false;
+        }
+        userInfoRepository.setUserInfo(userId, userInfo.getNickname(), userInfo.getName(),
+                userInfo.getEmail(), userInfo.getTel(), userInfo.getAddress());
+        return true;
+    }
+
+    @Override
+    public Boolean setAvatar(Integer userId, String base64Image) {
+        userInfoRepository.setAvatar(userId, base64Image);
+        return true;
+    }
+
+    @Override
+    public BufferedImage getAvatar(Integer userId) {
+        try {
+            String base64Image = userInfoRepository.findUserAvatarByUserId(userId).getAvatar();
+            return ImgUtil.toImage(base64Image);
+        } catch (Exception e) {
+            System.out.println("Fail to get user avatar");
+            return null;
+        }
     }
 }

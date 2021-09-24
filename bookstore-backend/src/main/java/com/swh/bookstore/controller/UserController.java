@@ -2,11 +2,13 @@ package com.swh.bookstore.controller;
 
 import com.swh.bookstore.constant.Constant;
 import com.swh.bookstore.entity.User;
+import com.swh.bookstore.entity.UserInfo;
 import com.swh.bookstore.service.UserService;
 import com.swh.bookstore.utils.session.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 
@@ -98,7 +100,7 @@ public class UserController {
             Integer userId = params.get(Constant.TARGET_USER_ID);
             Integer userType = params.get(Constant.TARGET_USER_TYPE);
             User user = SessionUtil.getUser();
-            if (user == null || user.getUserType() != 1 || userId.equals(user.getUserId())) {
+            if (user == null || !user.getUserType().equals(1) || userId.equals(user.getUserId())) {
                 System.out.println("User unauthorized");
                 return false;
             }
@@ -127,5 +129,46 @@ public class UserController {
             e.printStackTrace();
             return true;
         }
+    }
+
+    @RequestMapping("/setUserInfo")
+    public Boolean setUserInfo(@RequestBody Map<String, UserInfo> params) {
+        try {
+            User user = SessionUtil.getUser();
+            if (user == null) {
+                System.out.println("User unauthorized");
+                return false;
+            }
+            Integer userId = user.getUserId();
+            UserInfo userInfo = params.get(Constant.USER_INFO);
+            return userService.setUserInfo(userId, userInfo);
+        } catch (Exception e) {
+            System.out.println("Caught an exception in setUserInfo");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @RequestMapping("/setAvatar")
+    public Boolean setBookImage(@RequestBody Map<String, String> base64Image) {
+        try {
+            User user = SessionUtil.getUser();
+            if (user == null) {
+                System.out.println("User unauthorized");
+                return false;
+            }
+            Integer userId = user.getUserId();
+            return userService.setAvatar(userId, base64Image.get(Constant.IMAGE));
+        } catch (Exception e) {
+            System.out.println("Caught an exception in setAvatar");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @RequestMapping("/getAvatar")
+    @ResponseBody
+    public BufferedImage getAvatar(@RequestParam(Constant.USER_ID) Integer userId) {
+        return userService.getAvatar(userId);
     }
 }

@@ -28,6 +28,7 @@ public class OrderItem {
     private String author;
     private String category;
 
+    @Basic(fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.TRUE)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String image;

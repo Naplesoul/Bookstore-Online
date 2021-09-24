@@ -61,8 +61,13 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public BufferedImage getOrderItemImage(Integer itemId) {
-        String base64Image = orderItemRepository.findOrderItemImageByItemId(itemId).getImage();
-        return ImgUtil.toImage(base64Image);
+        try {
+            String base64Image = orderItemRepository.findOrderItemImageByItemId(itemId).getImage();
+            return ImgUtil.toImage(base64Image);
+        } catch (Exception e) {
+            System.out.println("Fail to get order item image");
+            return null;
+        }
     }
 
     @Override

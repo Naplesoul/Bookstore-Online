@@ -108,8 +108,13 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public BufferedImage getBookImage(Integer bookId) {
-        String base64Image = bookRepository.findBookImageByBookId(bookId).getImage();
-        return ImgUtil.toImage(base64Image);
+        try {
+            String base64Image = bookRepository.findBookImageByBookId(bookId).getImage();
+            return ImgUtil.toImage(base64Image);
+        } catch (Exception e) {
+            System.out.println("Fail to get book image");
+            return null;
+        }
     }
 
     @Override

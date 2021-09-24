@@ -1,6 +1,5 @@
 package com.swh.bookstore.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.swh.bookstore.constant.Constant;
 import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.service.BookService;
@@ -41,14 +40,13 @@ public class BookController {
     }
 
     @RequestMapping("/setBook")
-    public Boolean setBook(@RequestBody JSONObject params) {
+    public Boolean setBook(@RequestBody Map<String, Book> params) {
         try {
             if (!SessionUtil.isAdmin()) {
                 System.out.println("User unauthorized");
                 return false;
             }
-            JSONObject bookJson = params.getJSONObject(Constant.BOOK);
-            Book book = bookJson.toJavaObject(Book.class);
+            Book book = params.get(Constant.BOOK);
             return bookService.setBook(book);
         } catch (Exception e) {
             System.out.println("Caught an exception in setBook");

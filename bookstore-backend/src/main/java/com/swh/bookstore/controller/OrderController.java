@@ -39,10 +39,6 @@ public class OrderController {
         }
         Integer userId = user.getUserId();
         Integer userType = user.getUserType();
-        if (userId == null || userType == null) {
-            System.out.println("User unauthorized");
-            return null;
-        }
         return orderService.getOrders(userId, userType, searchText, page, size, startTime, endTime);
     }
 
@@ -55,10 +51,6 @@ public class OrderController {
         }
         Integer userId = user.getUserId();
         Integer userType = user.getUserType();
-        if (userId == null || userType == null) {
-            System.out.println("User unauthorized");
-            return null;
-        }
         return orderService.getOrderItems(userId, userType, orderId);
     }
 
@@ -70,10 +62,6 @@ public class OrderController {
             return false;
         }
         Integer userId = user.getUserId();
-        if (userId == null) {
-            System.out.println("User unauthorized");
-            return false;
-        }
         order.setUserId(userId);
         return orderService.placeOrder(order);
     }
@@ -89,10 +77,6 @@ public class OrderController {
         }
         Integer userId = user.getUserId();
         Integer userType = user.getUserType();
-        if (userId == null || userType == null) {
-            System.out.println("User unauthorized");
-            return null;
-        }
         Timestamp startTime = Timestamp.valueOf(params.get(Constant.START_TIME));
         Timestamp endTime = Timestamp.valueOf(params.get(Constant.END_TIME));
         return orderService.getSalesRank(userId, userType, page, size, startTime, endTime);
@@ -120,10 +104,6 @@ public class OrderController {
         }
         Integer userId = user.getUserId();
         Integer userType = user.getUserType();
-        if (userId == null || userType == null) {
-            System.out.println("User unauthorized");
-            return null;
-        }
         Timestamp startTime = Timestamp.valueOf(params.get(Constant.START_TIME));
         Timestamp endTime = Timestamp.valueOf(params.get(Constant.END_TIME));
         return orderService.getTotalSalesAndConsumption(userId, userType, startTime, endTime);

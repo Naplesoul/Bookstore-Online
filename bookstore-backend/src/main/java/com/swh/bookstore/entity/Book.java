@@ -21,6 +21,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bookId;
 
+    @JsonProperty("ISBN")
     private Integer ISBN;
     private String bookName;
     private String author;
@@ -29,6 +30,7 @@ public class Book {
     private Integer storage;
     private String intro;
 
+    @Basic(fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.TRUE)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String image;

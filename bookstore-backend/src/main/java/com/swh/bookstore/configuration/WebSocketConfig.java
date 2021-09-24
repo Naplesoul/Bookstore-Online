@@ -1,6 +1,6 @@
 package com.swh.bookstore.configuration;
 
-import com.swh.bookstore.chat.ChatMessageDistributor;
+import com.swh.bookstore.chat.ChatRoom;
 import com.swh.bookstore.utils.session.WebSocketSessionConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     }
 
     @Bean
-    public ChatMessageDistributor myHandler() {
-        return new ChatMessageDistributor();
+    public ChatRoom myHandler() {
+        return new ChatRoom();
     }
 }
