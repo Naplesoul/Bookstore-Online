@@ -9,6 +9,7 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import PeopleIcon from '@material-ui/icons/People';
 import CartIcon from "./CartIcon";
+import ChatIcon from "./ChatIcon";
 
 const drawerWidth = 240;
 
@@ -42,6 +43,14 @@ class LeftDrawer extends React.Component
         this.props.setSearchText(null);
         if (this.props.user.isAuthed)
             this.props.redirectTo("/store/cart");
+        else
+            this.props.redirectTo("/login");
+    }
+
+    goToChatRoom() {
+        this.props.setSearchText(null);
+        if (this.props.user.isAuthed)
+            this.props.redirectTo("/store/chatRoom");
         else
             this.props.redirectTo("/login");
     }
@@ -124,6 +133,12 @@ class LeftDrawer extends React.Component
                                 </ListItemIcon>
                                 <ListItemText>购物车</ListItemText>
                             </ListItem>
+                            <ListItem button onClick={this.goToChatRoom.bind(this)}>
+                                <ListItemIcon>
+                                    <ChatIcon number={this.props.newMessageCount} />
+                                </ListItemIcon>
+                                <ListItemText>讨论区</ListItemText>
+                            </ListItem>
                             <ListItem button onClick={this.goToOrders.bind(this)}>
                                 <ListItemIcon><AssignmentIcon/></ListItemIcon>
                                 <ListItemText>我的订单</ListItemText>
@@ -157,6 +172,12 @@ class LeftDrawer extends React.Component
                                 <ListItemIcon><MenuBookIcon/></ListItemIcon>
                                 <ListItemText>图书管理</ListItemText>
                             </ListItem>
+                            <ListItem button onClick={this.goToChatRoom.bind(this)}>
+                                <ListItemIcon>
+                                    <ChatIcon number={this.props.newMessageCount} />
+                                </ListItemIcon>
+                                <ListItemText>讨论区</ListItemText>
+                            </ListItem>
                             <ListItem button onClick={this.goToOrdersManage.bind(this)}>
                                 <ListItemIcon><AssignmentIcon/></ListItemIcon>
                                 <ListItemText>订单管理</ListItemText>
@@ -164,6 +185,10 @@ class LeftDrawer extends React.Component
                             <ListItem button onClick={this.goToUserManage.bind(this)}>
                                 <ListItemIcon><PeopleIcon/></ListItemIcon>
                                 <ListItemText>用户管理</ListItemText>
+                            </ListItem>
+                            <ListItem button onClick={this.goToProfile.bind(this)}>
+                                <ListItemIcon><AccountBoxIcon/></ListItemIcon>
+                                <ListItemText>我的信息</ListItemText>
                             </ListItem>
                             <ListItem button onClick={this.goToStatistics.bind(this)}>
                                 <ListItemIcon><EqualizerIcon/></ListItemIcon>

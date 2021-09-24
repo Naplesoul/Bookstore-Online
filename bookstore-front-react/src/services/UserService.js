@@ -50,3 +50,17 @@ export const getDuplicateUsername = (_username, callback) => {
     const url = `${config.apiUrl}/getDuplicateUsername?username=` + _username;
     getRequest(url, callback);
 }
+
+export const setUserInfo = (userInfo, callback) => {
+    const url = `${config.apiUrl}/setUserInfo`;
+    let form = { userInfo };
+    postRequest(url, form, callback);
+}
+
+export const setAvatar = (image, callback) => {
+    const url = `${config.apiUrl}/setAvatar`;
+    let form = {
+        image: image.split(',')[1],
+    };
+    postRequest(url, form, callback);
+}

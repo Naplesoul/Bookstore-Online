@@ -6,7 +6,6 @@ import {image2Base64} from "../utils/image2base64";
 import {config} from "../config";
 
 
-
 const styles = theme => ({
     bookId: {
         width: "3vw",
@@ -44,7 +43,7 @@ class BookItem extends React.Component {
 
     changeISBN(e) {
         let book = this.props.book;
-        book.isbn = e.target.value;
+        book.ISBN = e.target.value;
         this.props.onChange(book);
     }
 
@@ -117,7 +116,7 @@ class BookItem extends React.Component {
                 }
             });
         }
-        if (this.props.book.isbn === "" || this.props.book.bookName === "" || this.props.book.author === ""
+        if (this.props.book.ISBN === "" || this.props.book.bookName === "" || this.props.book.author === ""
             || this.props.book.category === "" || this.props.book.price === "" || this.props.book.storage === ""
             || this.props.book.intro === "") {
             alert("请完整填写信息");
@@ -125,7 +124,7 @@ class BookItem extends React.Component {
         }
         let book = {
             bookId: this.props.book.bookId,
-            ISBN: parseInt(this.props.book.isbn),
+            ISBN: parseInt(this.props.book.ISBN),
             bookName: this.props.book.bookName,
             author: this.props.book.author,
             category: this.props.book.category,
@@ -164,7 +163,7 @@ class BookItem extends React.Component {
                     />
                 </td>
                 <td>
-                    <input value={this.props.book.isbn}
+                    <input value={this.props.book.ISBN}
                            className={classes.bookId}
                            onChange={this.changeISBN.bind(this)}
                     />

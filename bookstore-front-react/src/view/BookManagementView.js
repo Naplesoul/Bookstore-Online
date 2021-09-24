@@ -13,7 +13,7 @@ const pageSize = 15;
 
 const emptySearch = {
     bookId: null,
-    isbn: null,
+    ISBN: null,
     bookName: "",
     author: "",
     category: "",
@@ -79,7 +79,7 @@ class BookManagementView extends React.Component {
         let _bookData = bookData;
         let len = bookData.length;
         for (let i = 0; i < len; ++i) {
-            _bookData[i].isbn = _bookData[i].isbn.toString();
+            _bookData[i].ISBN = _bookData[i].ISBN.toString();
             _bookData[i].price = (_bookData[i].price/100).toFixed(2).toString();
             _bookData[i].storage = _bookData[i].storage.toString();
         }
@@ -117,20 +117,20 @@ class BookManagementView extends React.Component {
     }
 
     addBook() {
-        let isbn = document.getElementById("addISBN").value.trim();
+        let ISBN = document.getElementById("addISBN").value.trim();
         let bookName = document.getElementById("addBookName").value.trim();
         let author = document.getElementById("addAuthor").value.trim();
         let category = document.getElementById("addCategory").value.trim();
         let price = document.getElementById("addPrice").value.trim();
         let storage = document.getElementById("addStorage").value.trim();
         let intro = document.getElementById("addIntro").value.trim();
-        if (isbn === "" || bookName === "" || author === "" || category === ""
+        if (ISBN === "" || bookName === "" || author === "" || category === ""
             || price === "" || storage === "" || intro === "") {
             alert("请完整填写信息");
             return;
         }
         let book = {
-            isbn: parseInt(isbn),
+            ISBN: parseInt(ISBN),
             bookName: bookName,
             author: author,
             category: category,
@@ -138,7 +138,7 @@ class BookManagementView extends React.Component {
             storage: parseInt(storage),
             intro: intro,
         }
-        if (isNaN(book.isbn) || book.isbn < 0) {
+        if (isNaN(book.ISBN) || book.ISBN < 0) {
             alert("ISBN号应为非负整数");
         } else if (isNaN(book.price) || book.price <= 0) {
             alert("单价应为正数");
@@ -194,7 +194,7 @@ class BookManagementView extends React.Component {
 
     search() {
         let bookId = document.getElementById("searchBookId").value.trim().toLowerCase();
-        let isbn = document.getElementById("searchISBN").value.trim().toLowerCase();
+        let ISBN = document.getElementById("searchISBN").value.trim().toLowerCase();
         let bookName = document.getElementById("searchBookName").value.trim().toLowerCase();
         let author = document.getElementById("searchAuthor").value.trim().toLowerCase();
         let category = document.getElementById("searchCategory").value.trim().toLowerCase();
@@ -211,11 +211,11 @@ class BookManagementView extends React.Component {
                 return;
             }
         }
-        if (isbn == null || isbn.length === 0) {
-            isbn = null;
+        if (ISBN == null || ISBN.length === 0) {
+            ISBN = null;
         } else {
-            isbn = parseInt(isbn);
-            if (isNaN(isbn) || isbn < 0) {
+            ISBN = parseInt(ISBN);
+            if (isNaN(ISBN) || ISBN < 0) {
                 alert("ISBN号应为非负整数");
                 return;
             }
@@ -240,14 +240,14 @@ class BookManagementView extends React.Component {
             }
         }
         let searchBook = {
-            bookId: bookId,
-            isbn: isbn,
-            bookName: bookName,
-            author: author,
-            category: category,
-            price: price,
-            storage: storage,
-            intro: intro,
+            bookId,
+            ISBN,
+            bookName,
+            author,
+            category,
+            price,
+            storage,
+            intro,
         };
         this.filterBooks(1, pageSize, searchBook);
     };

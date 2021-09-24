@@ -7,6 +7,7 @@ import LoginView from "./view/LoginView";
 import SignupView from "./view/SignupView";
 import {autoLogin, logout} from "./services/UserService";
 import {clearCookie} from "./utils/cookie";
+import {config} from "./config";
 
 const nullUser = {
     userId: -1,
@@ -49,7 +50,7 @@ class MainRouter extends React.Component {
                     userId: user.userId,
                     isAuthed: true,
                     username: user.username,
-                    avatar: require("./assets/userimage1.jpg").default,
+                    avatar: `${config.apiUrl}/getAvatar?userId=${user.userId}`,
                     userType: user.userType,
                     userInfo: user.userInfo,
                 });

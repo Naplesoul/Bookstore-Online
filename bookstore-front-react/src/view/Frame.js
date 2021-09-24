@@ -16,9 +16,12 @@ import BookManagementView from "./BookManagementView";
 import UserManagementView from "./UserManagementView";
 import UserStatisticsView from "./UserStatisticsView";
 import AdminStatisticsView from "./AdminStatisticsView";
+import ChatRoomView from "./ChatRoomView";
+import {chatService} from "../services/ChatService";
+import {config} from "../config";
 
 // let _bookData = [
-//     {bookId: 0, isbn: 0, bookName: "The Lord of the Rings", author: "J. R. R. Tolkien", category: "novel", price: 45.90, storage: 500, intro: "The book is a sequel to \"The Hobbit\" and is recognized as the originator of modern fantasy literature. ", image: require("../assets/book0.jpg").default},
+//     {bookId: 0, ISBN: 0, bookName: "The Lord of the Rings", author: "J. R. R. Tolkien", category: "novel", price: 45.90, storage: 500, intro: "The book is a sequel to \"The Hobbit\" and is recognized as the originator of modern fantasy literature. ", image: require("../assets/book0.jpg").default},
 // ];
 //
 //
@@ -40,18 +43,19 @@ const styles = theme => ({
 
 
 
-
 class Frame extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            bookData: [],
             cartData: [],
+            newMessageCount: 0,
+            messages: [],
             infoBookId: 1,
             redirectPath: "/store",
             searchText: null,
         };
+        chatService.registerNewMessageListener("Frame", this.addMessage.bind(this));
     }
 
     redirectTo(path) {
@@ -60,10 +64,40 @@ class Frame extends React.Component {
         });
     }
 
-    setBookData(_bookData) {
-        this.setState({
-            bookData: _bookData,
-        });
+    refresh() {
+        this.redirectTo(window.location.pathname);
+    }
+
+    addMessage(msg) {
+        const newMsg = { date: new Date() };
+        switch (msg.messageType) {
+            case 'text':
+                newMsg.position = msg.userId ? 'left' : 'right';
+                newMsg.type = 'text';
+                newMsg.text = msg.message;
+                newMsg.title = msg.userId ? (msg.userType === 1 ? "管理员" : msg.username) : "您";
+                newMsg.avatar = `${config.apiUrl}/getAvatar?userId=${msg.userId ? msg.userId : this.props.user.userId}`
+                break;
+            case 'leave':
+                newMsg.type = 'system';
+                newMsg.text = `${msg.userId === this.props.user.userId ? "您" : (msg.userType === 1 ? "管理员" : msg.username)} 离开了聊天室`;
+                break;
+            case 'join':
+                newMsg.type = 'system';
+                newMsg.text = `${msg.userId === this.props.user.userId ? "您" : (msg.userType === 1 ? "管理员" : msg.username)} 加入了聊天室`;
+                break;
+            default:
+        }
+        const messages = this.state.messages;
+        messages.push(newMsg);
+        this.setState({ messages });
+        if (window.location.pathname !== "/store/chatRoom") {
+            this.setState({ newMessageCount: this.state.newMessageCount + 1 });
+        }
+    }
+
+    clearNewMessageCount() {
+        this.setState({ newMessageCount: 0 });
     }
 
     setCartData(_cartData) {
@@ -111,6 +145,7 @@ class Frame extends React.Component {
                     redirectTo={this.redirectTo.bind(this)}
                     cartData={this.state.cartData}
                     setSearchText={this.setSearchText.bind(this)}
+                    newMessageCount={this.state.newMessageCount}
                 />
                 <main className={classes.content}>
                     <Router>
@@ -133,6 +168,13 @@ class Frame extends React.Component {
                                       setCartData={this.setCartData.bind(this)}
                             />
                         </Route>
+                        <Route exact path={"/store/chatRoom"}>
+                            <ChatRoomView user={this.props.user}
+                                          messages={this.state.messages}
+                                          addMessage={this.addMessage.bind(this)}
+                                          clearNewMessageCount={this.clearNewMessageCount.bind(this)}
+                            />
+                        </Route>
                         <Route exact path={"/store/cart"}>
                             <CartView user={this.props.user}
                                       cartData={this.state.cartData}
@@ -145,6 +187,7 @@ class Frame extends React.Component {
                         </Route>
                         <Route exact path={"/store/profile"}>
                             <ProfileView user={this.props.user}
+                                         refresh={this.refresh.bind(this)}
                             />
                         </Route>
                         <Route exact path={"/store/statistics"}>
@@ -152,10 +195,7 @@ class Frame extends React.Component {
                             />
                         </Route>
                         <Route exact path={"/store/management/books"}>
-                            <BookManagementView user={this.props.user}
-                                                bookData={this.state.bookData}
-                                                setBookData={this.setBookData.bind(this)}
-                            />
+                            <BookManagementView user={this.props.user}/>
                         </Route>
                         <Route exact path={"/store/management/users"}>
                             <UserManagementView user={this.props.user}/>
@@ -169,6 +209,6 @@ class Frame extends React.Component {
             </div>
         );
     }
-};
+}
 
 export default withStyles(styles)(Frame);

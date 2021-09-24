@@ -11,6 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import {getDuplicateUsername, signup} from "../services/UserService";
+import {config} from "../config";
+import {checkEmail} from "../utils/inputCheck";
 
 const duplicateHelpText = "该用户名已被占用"
 
@@ -55,11 +57,6 @@ class SignupView extends React.Component {
         }
     };
 
-    checkEmail(strEmail) {
-        // eslint-disable-next-line
-        return strEmail.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) !== -1;
-    }
-
     submit() {
         let username = document.getElementById("username").value;
         let password = document.getElementById("password").value;
@@ -77,7 +74,7 @@ class SignupView extends React.Component {
             alert("密码长度至少为6位");
             return;
         }
-        if (!this.checkEmail(email)) {
+        if (!checkEmail(email)) {
             alert("邮件地址不合法，请重新输入");
             return;
         }
@@ -89,7 +86,7 @@ class SignupView extends React.Component {
                     userId: data.userId,
                     isAuthed: true,
                     username: data.username,
-                    avatar: require("../assets/userimage1.jpg").default,
+                    avatar: `${config.apiUrl}/getAvatar?userId=${data.userId}`,
                     userType: data.userType,
                     userInfo: data.userInfo,
                 });

@@ -184,7 +184,7 @@ class InfoView extends React.Component {
                         <span>库存：</span>
                         <span className={classes.stock}>{this.state.bookData.storage} pieces</span>
                     </Typography>
-                    <Typography variant={"h6"}>ISBN： {this.state.bookData.isbn}</Typography>
+                    <Typography variant={"h6"}>ISBN： {this.state.bookData.ISBN}</Typography>
                     <Typography variant={"h6"}>简介：</Typography>
                     <Typography variant={"body1"}>{this.state.bookData.intro}</Typography>
                     {this.renderButtons()}

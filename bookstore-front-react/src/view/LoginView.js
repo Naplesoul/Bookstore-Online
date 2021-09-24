@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import {login} from "../services/UserService";
+import {config} from "../config";
 
 
 const styles = theme => ({
@@ -49,7 +50,6 @@ const styles = theme => ({
 class LoginView extends React.Component {
     constructor(props) {
         super(props);
-        console.log(this.props.isAuthed)
         this.state = {
             redirectPath: null,
         }
@@ -72,7 +72,7 @@ class LoginView extends React.Component {
                     userId: data.userId,
                     isAuthed: true,
                     username: data.username,
-                    avatar: require("../assets/userimage1.jpg").default,
+                    avatar: `${config.apiUrl}/getAvatar?userId=${data.userId}`,
                     userType: data.userType,
                     userInfo: data.userInfo,
                 });
