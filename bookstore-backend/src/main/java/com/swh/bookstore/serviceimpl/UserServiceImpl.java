@@ -6,8 +6,8 @@ import com.swh.bookstore.entity.UserInfo;
 import com.swh.bookstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public User signup(String username, String password, String email) {
         return userDao.signup(username, password, email);
     }
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public Boolean setUserType(Integer userId, Integer userType) {
         return userDao.setUserType(userId, userType);
     }
@@ -45,13 +45,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public Boolean setUserInfo(Integer userId, UserInfo userInfo) {
         return userDao.setUserInfo(userId, userInfo);
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public Boolean setAvatar(Integer userId, String base64Image) {
         return userDao.setAvatar(userId, base64Image);
     }

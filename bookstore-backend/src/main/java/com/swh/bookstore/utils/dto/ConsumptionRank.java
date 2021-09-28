@@ -4,13 +4,12 @@ import com.swh.bookstore.entity.User;
 import lombok.Data;
 
 @Data
-public class ConsumptionRank implements Comparable {
+public class ConsumptionRank implements Comparable<ConsumptionRank> {
     User user;
     Integer consumption;
 
     @Override
-    public int compareTo(Object o) {
-        ConsumptionRank to = (ConsumptionRank) o;
+    public int compareTo(ConsumptionRank to) {
         return to.consumption.compareTo(this.consumption);
     }
 

@@ -4,13 +4,12 @@ import com.swh.bookstore.entity.OrderItem;
 import lombok.Data;
 
 @Data
-public class SalesRank implements Comparable {
+public class SalesRank implements Comparable<SalesRank> {
     OrderItem book;
     Integer sales;
 
     @Override
-    public int compareTo(Object o) {
-        SalesRank to = (SalesRank) o;
+    public int compareTo(SalesRank to) {
         return to.sales.compareTo(this.sales);
     }
 

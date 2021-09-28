@@ -17,6 +17,7 @@ public interface OrderService {
                           Timestamp startTime, Timestamp endTime);
     List<OrderItem> getOrderItems(Integer userId, Integer userType, Integer orderId);
     Boolean placeOrder(OrderMessage order);
+    void receiveOrder(Order order) throws Exception;
     Page<SalesRank> getSalesRank(Integer userId, Integer userType, Integer page, Integer size, Timestamp startTime, Timestamp endTime);
     Page<ConsumptionRank> getConsumptionRank(Integer page, Integer size, Timestamp startTime, Timestamp endTime);
     Map<String, Integer> getTotalSalesAndConsumption(Integer userId, Integer userType, Timestamp startTime, Timestamp endTime);

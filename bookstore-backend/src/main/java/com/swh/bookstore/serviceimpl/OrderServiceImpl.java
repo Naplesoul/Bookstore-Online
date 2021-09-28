@@ -17,12 +17,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.util.*;
@@ -72,35 +73,28 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
-    @JmsListener(destination = "orderReceiver")
-    @Transactional(rollbackOn = Exception.class)
-    public void receiveOrder(OrderMessage orderMessage) {
-        Order order = orderMessage.getOrder();
-        try {
-            int totalPrice = 0;
-            for (OrderItem orderItem : order.getOrderItems()) {
-                Book book = bookDao.getBookByBookId(orderItem.getBookId());
-                Integer storage = book.getStorage();
-                if (storage < orderItem.getBookNum()) {
-                    throw new Exception("库存不足");
-                }
-                Integer bookPrice = book.getPrice();
-                orderItem.setBookPrice(bookPrice);
-                orderItem.setBookName(book.getBookName());
-                orderItem.setAuthor(book.getAuthor());
-                orderItem.setCategory(book.getCategory());
-                orderItem.setImage(book.getImage());
-                totalPrice += bookPrice * orderItem.getBookNum();
+    @Transactional(propagation = Propagation.REQUIRED,
+            isolation = Isolation.REPEATABLE_READ,
+            rollbackFor = Exception.class)
+    public void receiveOrder(Order order) throws Exception {
+        int totalPrice = 0;
+        for (OrderItem orderItem : order.getOrderItems()) {
+            Book book = bookDao.getBookByBookId(orderItem.getBookId());
+            Integer storage = book.getStorage();
+            if (storage < orderItem.getBookNum()) {
+                throw new Exception("库存不足");
             }
-
-            order.setOrderTime(new Timestamp(System.currentTimeMillis()));
-            order.setTotalPrice(totalPrice);
-
-        } catch (Exception e) {
-            System.out.println("下单失败");
-            e.printStackTrace();
-            return;
+            Integer bookPrice = book.getPrice();
+            orderItem.setBookPrice(bookPrice);
+            orderItem.setBookName(book.getBookName());
+            orderItem.setAuthor(book.getAuthor());
+            orderItem.setCategory(book.getCategory());
+            orderItem.setImage(book.getImage());
+            totalPrice += bookPrice * orderItem.getBookNum();
         }
+
+        order.setOrderTime(new Timestamp(System.currentTimeMillis()));
+        order.setTotalPrice(totalPrice);
 
         orderDao.saveAndFlushOrder(order);
 

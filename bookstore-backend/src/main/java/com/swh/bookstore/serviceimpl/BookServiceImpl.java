@@ -7,8 +7,9 @@ import com.swh.bookstore.utils.dto.SimplifiedBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
 
 @Service
@@ -33,13 +34,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(isolation = Isolation.REPEATABLE_READ, rollbackFor = Exception.class)
     public Boolean setBook(Book book) {
         return bookDao.setBook(book);
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(isolation = Isolation.REPEATABLE_READ, rollbackFor = Exception.class)
     public Boolean deleteBook(Integer bookId) {
         return bookDao.deleteBook(bookId);
     }
@@ -49,7 +50,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public Boolean setBookImage(Integer bookId, String base64Image) {
         return bookDao.setBookImage(bookId, base64Image);
     }
