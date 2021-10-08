@@ -5,7 +5,7 @@ import history from './utils/history'
 import Frame from "./view/Frame";
 import LoginView from "./view/LoginView";
 import SignupView from "./view/SignupView";
-import {autoLogin, logout} from "./services/UserService";
+import {autoLogin, getVisitCount, logout} from "./services/UserService";
 import {clearCookie} from "./utils/cookie";
 import {config} from "./config";
 
@@ -41,6 +41,7 @@ class MainRouter extends React.Component {
         super(props);
         this.state = {
             user: nullUser,
+            visitCount: 0,
         }
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
@@ -53,6 +54,13 @@ class MainRouter extends React.Component {
                     avatar: `${config.apiUrl}/getAvatar?userId=${user.userId}`,
                     userType: user.userType,
                     userInfo: user.userInfo,
+                });
+            }
+        });
+        getVisitCount((data) => {
+            if (data) {
+                this.setState({
+                    visitCount: data,
                 });
             }
         });
@@ -81,6 +89,7 @@ class MainRouter extends React.Component {
                 <Route path={"/store"}>
                     <Frame user={this.state.user}
                            logout={this.logout}
+                           visitCount={this.state.visitCount}
                     />
                 </Route>
                 <Route exact path={"/login"}>

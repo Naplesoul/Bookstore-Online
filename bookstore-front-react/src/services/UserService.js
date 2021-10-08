@@ -64,3 +64,8 @@ export const setAvatar = (image, callback) => {
     };
     postRequest(url, form, callback);
 }
+
+export const getVisitCount = (callback) => {
+    const url = `${config.apiUrl}/getVisitCount`;
+    getRequest(url, callback)
+}

@@ -146,6 +146,7 @@ class Frame extends React.Component {
                     cartData={this.state.cartData}
                     setSearchText={this.setSearchText.bind(this)}
                     newMessageCount={this.state.newMessageCount}
+                    visitCount={this.props.visitCount}
                 />
                 <main className={classes.content}>
                     <Router>

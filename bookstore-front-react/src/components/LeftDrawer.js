@@ -8,6 +8,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import PeopleIcon from '@material-ui/icons/People';
+import WhatshotIcon from '@material-ui/icons/Whatshot';
 import CartIcon from "./CartIcon";
 import ChatIcon from "./ChatIcon";
 
@@ -150,6 +151,10 @@ class LeftDrawer extends React.Component
                             <ListItem button onClick={this.goToUserStatistics.bind(this)}>
                                 <ListItemIcon><EqualizerIcon/></ListItemIcon>
                                 <ListItemText>统计数据</ListItemText>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemIcon><WhatshotIcon/></ListItemIcon>
+                                <ListItemText>访问量：{this.props.visitCount}</ListItemText>
                             </ListItem>
                         </List>
                     </div>
