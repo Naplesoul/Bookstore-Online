@@ -18,6 +18,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    private static Integer visitCount = 0;
+
+    @RequestMapping("/getVisitCount")
+    public static synchronized Integer getVisitCount() {
+        visitCount += 1;
+        return visitCount;
+    }
+
     @RequestMapping("/login")
     public User login(@RequestBody Map<String, String> params) {
         String username = params.get(Constant.USERNAME);

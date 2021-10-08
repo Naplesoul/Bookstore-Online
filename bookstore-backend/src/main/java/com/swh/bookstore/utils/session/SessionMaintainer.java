@@ -15,6 +15,8 @@ import java.util.concurrent.locks.ReentrantLock;
 @WebListener
 public class SessionMaintainer implements HttpSessionListener {
 
+    // store session of users that have been logged in
+    // used to support SSO (Single Sign On)
     private static final Map<Integer, HttpSession> sessionMap = new ConcurrentHashMap<>();
     private static final Lock lock = new ReentrantLock();
 
