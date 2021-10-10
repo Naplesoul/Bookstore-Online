@@ -23,21 +23,24 @@ public class UserDaoImpl implements UserDao {
     @Autowired
     UserInfoRepository userInfoRepository;
 
-    // key pattern: user:userId:username:password
+    // key pattern: user:userId:username
     @Autowired
     RedisUtil redisUtil;
 
     @Override
     public User checkUser(String username, String password) {
-        Set<String> keys = redisUtil.keys("user:*:" + username + ":" + password);
+        Set<String> keys = redisUtil.keys("user:*:" + username);
         for (String key : keys) {
-            return JSONArray.parseObject(redisUtil.get(key).toString(), User.class);
+            User user = JSONArray.parseObject(redisUtil.get(key).toString(), User.class);
+            if (password.equals(user.getPassword())) {
+                return user;
+            }
         }
         User user = userRepository.findUserByUsernameAndPassword(username, password);
 
         if (user != null) {
             redisUtil.set(
-                    "user:" + user.getUserId() + ":" + username + ":" + password,
+                    "user:" + user.getUserId() + ":" + username,
                     JSONArray.toJSON(user)
             );
         }
@@ -55,7 +58,7 @@ public class UserDaoImpl implements UserDao {
 
         if (user != null) {
             redisUtil.set(
-                    "user:" + userId + ":" + user.getUsername() + ":" + user.getPassword(),
+                    "user:" + userId + ":" + user.getUsername(),
                     JSONArray.toJSON(user)
             );
         }
@@ -88,7 +91,7 @@ public class UserDaoImpl implements UserDao {
         user.setUserInfo(userInfo);
 
         redisUtil.set(
-            "user:" + user.getUserId() + ":" + username + ":" + password,
+            "user:" + user.getUserId() + ":" + username,
             JSONArray.toJSON(user)
         );
         return user;
@@ -96,7 +99,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserByUsername(String username) {
-        Set<String> keys = redisUtil.keys("user:*:" + username + ":*");
+        Set<String> keys = redisUtil.keys("user:*:" + username);
         for (String key : keys) {
             return JSONArray.parseObject(redisUtil.get(key).toString(), User.class);
         }
@@ -104,7 +107,7 @@ public class UserDaoImpl implements UserDao {
 
         if (user != null) {
             redisUtil.set(
-                    "user:" + user.getUserId() + ":" + username + ":" + user.getPassword(),
+                    "user:" + user.getUserId() + ":" + username,
                     JSONArray.toJSON(user)
             );
         }

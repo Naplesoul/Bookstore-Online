@@ -81,6 +81,13 @@ public class UserController {
     public User signup(@RequestBody Map<String, String> params) {
         try {
             String username = params.get(Constant.USERNAME);
+            if (username.contains(":") || username.contains("*") || username.contains("：")
+                    || username.contains("/") || username.contains("\\") || username.contains("!")
+                    || username.contains("?") || username.contains("&") || username.contains("|")) {
+                User user = new User();
+                user.setUserId(-1);
+                return user;
+            }
             String password = params.get(Constant.PASSWORD);
             String email = params.get(Constant.EMAIL);
             User user = userService.signup(username, password, email);
