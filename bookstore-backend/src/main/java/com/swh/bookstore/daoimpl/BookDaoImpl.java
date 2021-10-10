@@ -1,9 +1,11 @@
 package com.swh.bookstore.daoimpl;
 
 import cn.hutool.core.img.ImgUtil;
+import com.alibaba.fastjson.JSONArray;
 import com.swh.bookstore.dao.BookDao;
 import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.repository.BookRepository;
+import com.swh.bookstore.utils.cache.RedisUtil;
 import com.swh.bookstore.utils.dto.SimplifiedBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.awt.image.BufferedImage;
+import java.util.Set;
 
 
 @Repository
@@ -19,9 +22,27 @@ public class BookDaoImpl implements BookDao {
     @Autowired
     private BookRepository bookRepository;
 
+    // key pattern: book:bookId:bookName
+    @Autowired
+    RedisUtil redisUtil;
+
     @Override
     public Book getBookByBookId(Integer bookId) {
-        return bookRepository.findBookByBookId(bookId);
+        Set<String> keys = redisUtil.keys("book:" + bookId + ":*");
+        for (String key : keys) {
+            return JSONArray.parseObject(redisUtil.get(key).toString(), Book.class);
+        }
+
+        Book book = bookRepository.findBookByBookId(bookId);
+
+        if (book != null) {
+            redisUtil.set(
+                    "book:" + bookId + ":" + book.getBookName(),
+                    JSONArray.toJSON(book)
+            );
+        }
+
+        return book;
     }
 
     @Override
@@ -66,6 +87,11 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Boolean setBook(Book book) {
+        Set<String> keys = redisUtil.keys("book:" + book.getBookId() + ":*");
+        for (String key : keys) {
+            redisUtil.del(key);
+        }
+
         Book existedBook = bookRepository.findBookByBookId(book.getBookId());
         if (existedBook == null) {
             return false;
@@ -81,6 +107,11 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Boolean deleteBook(Integer bookId) {
+        Set<String> keys = redisUtil.keys("book:" + bookId + ":*");
+        for (String key : keys) {
+            redisUtil.del(key);
+        }
+
         Book book = bookRepository.findBookByBookId(bookId);
         if (book == null) {
             return false;
@@ -102,6 +133,11 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Boolean setBookImage(Integer bookId, String base64Image) {
+        Set<String> keys = redisUtil.keys("book:" + bookId + ":*");
+        for (String key : keys) {
+            redisUtil.del(key);
+        }
+
         bookRepository.setBookImage(bookId, base64Image);
         return true;
     }
@@ -109,6 +145,16 @@ public class BookDaoImpl implements BookDao {
     @Override
     public BufferedImage getBookImage(Integer bookId) {
         try {
+            Set<String> keys = redisUtil.keys("book:" + bookId + ":*");
+            for (String key : keys) {
+                Book book = JSONArray.parseObject(redisUtil.get(key).toString(), Book.class);
+                if (book != null) {
+                    String base64Image = bookRepository.findBookImageByBookId(bookId).getImage();
+                    if (base64Image != null && base64Image.length() > 0)
+                        return ImgUtil.toImage(base64Image);
+                }
+            }
+
             String base64Image = bookRepository.findBookImageByBookId(bookId).getImage();
             return ImgUtil.toImage(base64Image);
         } catch (Exception e) {
@@ -119,7 +165,23 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Boolean reduceStorage(Integer bookId, Integer num) {
+        boolean foundInRedis = false;
+        Book book = null;
+        Set<String> keys = redisUtil.keys("book:" + bookId + ":*");
+        for (String key : keys) {
+            book = JSONArray.parseObject(redisUtil.get(key).toString(), Book.class);
+            foundInRedis = true;
+            redisUtil.del(key);
+        }
+
         bookRepository.reduceStorage(bookId, num);
+        if (foundInRedis && book != null) {
+            book.setStorage(book.getStorage() - num);
+            redisUtil.set(
+                    "book:" + bookId + ":" + book.getBookName(),
+                    JSONArray.toJSON(book)
+            );
+        }
         return true;
     }
 }

@@ -6,6 +6,7 @@ import com.swh.bookstore.entity.UserInfo;
 import com.swh.bookstore.service.UserService;
 import com.swh.bookstore.utils.session.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.image.BufferedImage;
@@ -174,7 +175,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/getAvatar")
+    @RequestMapping(value = "/getAvatar", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public BufferedImage getAvatar(@RequestParam(Constant.USER_ID) Integer userId) {
         return userService.getAvatar(userId);

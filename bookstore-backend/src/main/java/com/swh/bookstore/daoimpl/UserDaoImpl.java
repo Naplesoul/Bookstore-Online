@@ -1,17 +1,19 @@
 package com.swh.bookstore.daoimpl;
 
 import cn.hutool.core.img.ImgUtil;
+import com.alibaba.fastjson.JSONArray;
 import com.swh.bookstore.dao.UserDao;
 import com.swh.bookstore.entity.User;
 import com.swh.bookstore.entity.UserInfo;
 import com.swh.bookstore.repository.UserRepository;
 import com.swh.bookstore.repository.UserInfoRepository;
-import com.swh.bookstore.utils.dto.UserAvatar;
+import com.swh.bookstore.utils.cache.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -21,14 +23,44 @@ public class UserDaoImpl implements UserDao {
     @Autowired
     UserInfoRepository userInfoRepository;
 
+    // key pattern: user:userId:username:password
+    @Autowired
+    RedisUtil redisUtil;
+
     @Override
     public User checkUser(String username, String password) {
-        return userRepository.findUserByUsernameAndPassword(username, password);
+        Set<String> keys = redisUtil.keys("user:*:" + username + ":" + password);
+        for (String key : keys) {
+            return JSONArray.parseObject(redisUtil.get(key).toString(), User.class);
+        }
+        User user = userRepository.findUserByUsernameAndPassword(username, password);
+
+        if (user != null) {
+            redisUtil.set(
+                    "user:" + user.getUserId() + ":" + username + ":" + password,
+                    JSONArray.toJSON(user)
+            );
+        }
+
+        return user;
     }
 
     @Override
     public User getUser(Integer userId) {
-        return userRepository.findUserByUserId(userId);
+        Set<String> keys = redisUtil.keys("user:" + userId + ":*");
+        for (String key : keys) {
+            return JSONArray.parseObject(redisUtil.get(key).toString(), User.class);
+        }
+        User user = userRepository.findUserByUserId(userId);
+
+        if (user != null) {
+            redisUtil.set(
+                    "user:" + userId + ":" + user.getUsername() + ":" + user.getPassword(),
+                    JSONArray.toJSON(user)
+            );
+        }
+
+        return user;
     }
 
     @Override
@@ -55,12 +87,29 @@ public class UserDaoImpl implements UserDao {
 
         user.setUserInfo(userInfo);
 
+        redisUtil.set(
+            "user:" + user.getUserId() + ":" + username + ":" + password,
+            JSONArray.toJSON(user)
+        );
         return user;
     }
 
     @Override
     public User getUserByUsername(String username) {
-        return userRepository.findUserByUsername(username);
+        Set<String> keys = redisUtil.keys("user:*:" + username + ":*");
+        for (String key : keys) {
+            return JSONArray.parseObject(redisUtil.get(key).toString(), User.class);
+        }
+        User user = userRepository.findUserByUsername(username);
+
+        if (user != null) {
+            redisUtil.set(
+                    "user:" + user.getUserId() + ":" + username + ":" + user.getPassword(),
+                    JSONArray.toJSON(user)
+            );
+        }
+
+        return user;
     }
 
     @Override
@@ -70,6 +119,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Boolean setUserType(Integer userId, Integer userType) {
+        Set<String> keys = redisUtil.keys("user:" + userId + ":*");
+        for (String key : keys) {
+            redisUtil.del(key);
+        }
+
         User user = userRepository.findUserByUserId(userId);
         if (user == null) {
             return false;
@@ -80,6 +134,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Boolean setUserInfo(Integer userId, UserInfo userInfo) {
+        Set<String> keys = redisUtil.keys("user:" + userId + ":*");
+        for (String key : keys) {
+            redisUtil.del(key);
+        }
+
         UserInfo existedUserInfo = userInfoRepository.findUserInfoByUserId(userId);
         if (existedUserInfo == null) {
             return false;
@@ -91,6 +150,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Boolean setAvatar(Integer userId, String base64Image) {
+        Set<String> keys = redisUtil.keys("user:" + userId + ":*");
+        for (String key : keys) {
+            redisUtil.del(key);
+        }
+
         userInfoRepository.setAvatar(userId, base64Image);
         return true;
     }
@@ -98,6 +162,16 @@ public class UserDaoImpl implements UserDao {
     @Override
     public BufferedImage getAvatar(Integer userId) {
         try {
+            Set<String> keys = redisUtil.keys("user:" + userId + ":*");
+            for (String key : keys) {
+                User user = JSONArray.parseObject(redisUtil.get(key).toString(), User.class);
+                if (user != null && user.getUserInfo() != null) {
+                    String base64Image = user.getUserInfo().getAvatar();
+                    if (base64Image != null && base64Image.length() > 0)
+                        return ImgUtil.toImage(base64Image);
+                }
+            }
+
             String base64Image = userInfoRepository.findUserAvatarByUserId(userId).getAvatar();
             return ImgUtil.toImage(base64Image);
         } catch (Exception e) {
