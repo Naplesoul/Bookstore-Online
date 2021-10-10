@@ -78,6 +78,13 @@ class SignupView extends React.Component {
             alert("邮件地址不合法，请重新输入");
             return;
         }
+        if (username.indexOf(":") !== -1 || username.indexOf("：") !== -1 || username.indexOf("*") !== -1
+            || username.indexOf("/") !== -1 || username.indexOf("\\") !== -1
+            || username.indexOf("!") !== -1 || username.indexOf("?") !== -1
+            || username.indexOf("&") !== -1 || username.indexOf("|") !== -1) {
+            alert("用户名中不能包含 : * ! ? 等特殊字符");
+            return;
+        }
         signup(username, password, email, (data) => {
             if (data.userId === -1)
                 alert("用户名已被占用");
