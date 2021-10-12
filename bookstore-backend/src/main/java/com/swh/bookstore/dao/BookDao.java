@@ -5,11 +5,13 @@ import com.swh.bookstore.utils.dto.SimplifiedBook;
 import org.springframework.data.domain.Page;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public interface BookDao {
     Book getBookByBookId(Integer bookId);
-    Page<SimplifiedBook> searchBooks(Integer page, Integer size, String searchText);
     Page<Book> filterBooks(Book book, Integer page, Integer size);
+    List<Book> getBooks();
+    Page<SimplifiedBook> getBooks(Integer page, Integer size);
     Boolean setBook(Book book);
     Boolean deleteBook(Integer bookId);
     Integer addBook(Book book);

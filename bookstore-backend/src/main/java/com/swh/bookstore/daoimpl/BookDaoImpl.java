@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Set;
 
 
@@ -23,6 +24,7 @@ public class BookDaoImpl implements BookDao {
     private BookRepository bookRepository;
 
     // key pattern: book:bookId:bookName
+    // key for image: bookImage:bookId
     @Autowired
     RedisUtil redisUtil;
 
@@ -36,6 +38,7 @@ public class BookDaoImpl implements BookDao {
         Book book = bookRepository.findBookByBookId(bookId);
 
         if (book != null) {
+            book.setImage(null);
             redisUtil.set(
                     "book:" + bookId + ":" + book.getBookName(),
                     JSONArray.toJSON(book)
@@ -46,9 +49,14 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public Page<SimplifiedBook> searchBooks(Integer page, Integer size, String searchText) {
+    public List<Book> getBooks() {
+        return bookRepository.findAll();
+    }
+
+    @Override
+    public Page<SimplifiedBook> getBooks(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        return bookRepository.searchSimplifiedBooksByBookNameContaining(searchText, pageable);
+        return bookRepository.findSimplifiedBooksBy(pageable);
     }
 
     @Override
@@ -133,7 +141,7 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Boolean setBookImage(Integer bookId, String base64Image) {
-        Set<String> keys = redisUtil.keys("book:" + bookId + ":*");
+        Set<String> keys = redisUtil.keys("bookImage:" + bookId);
         for (String key : keys) {
             redisUtil.del(key);
         }
@@ -145,17 +153,19 @@ public class BookDaoImpl implements BookDao {
     @Override
     public BufferedImage getBookImage(Integer bookId) {
         try {
-            Set<String> keys = redisUtil.keys("book:" + bookId + ":*");
+            Set<String> keys = redisUtil.keys("bookImage:" + bookId);
             for (String key : keys) {
-                Book book = JSONArray.parseObject(redisUtil.get(key).toString(), Book.class);
-                if (book != null) {
-                    String base64Image = bookRepository.findBookImageByBookId(bookId).getImage();
-                    if (base64Image != null && base64Image.length() > 0)
-                        return ImgUtil.toImage(base64Image);
-                }
+                return ImgUtil.toImage(redisUtil.get(key).toString());
             }
 
             String base64Image = bookRepository.findBookImageByBookId(bookId).getImage();
+
+            if (base64Image != null) {
+                redisUtil.set(
+                        "bookImage:" + bookId,
+                        base64Image
+                );
+            }
             return ImgUtil.toImage(base64Image);
         } catch (Exception e) {
             System.out.println("Fail to get book image");

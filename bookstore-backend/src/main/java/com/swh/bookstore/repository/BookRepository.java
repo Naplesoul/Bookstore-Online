@@ -9,11 +9,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 
 
 public interface BookRepository extends JpaRepository<Book, Integer> {
 
-    Page<SimplifiedBook> searchSimplifiedBooksByBookNameContaining(String searchText, Pageable pageable);
+
+    List<Book> findAll();
+    Page<SimplifiedBook> findSimplifiedBooksBy(Pageable pageable);
 
     Page<Book> findBookByBookId(Integer bookId, Pageable pageable);
     Page<Book> findBookByISBN(Integer ISBN, Pageable pageable);

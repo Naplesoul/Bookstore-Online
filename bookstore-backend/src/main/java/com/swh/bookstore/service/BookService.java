@@ -8,7 +8,9 @@ import java.awt.image.BufferedImage;
 
 public interface BookService {
     Book getBookByBookId(Integer bookId);
-    Page<SimplifiedBook> getSimplifiedBooks(Integer page, Integer size, String searchText);
+    Page<SimplifiedBook> getBooks(Integer page, Integer size);
+    Page<SimplifiedBook> searchBooks(Integer page, Integer size, String searchText);
+    Page<SimplifiedBook> searchBooksByIntro(Integer page, Integer size, String searchText);
     Page<Book> filterBooks(Book book, Integer page, Integer size);
     Boolean setBook(Book book);
     Boolean deleteBook(Integer bookId);

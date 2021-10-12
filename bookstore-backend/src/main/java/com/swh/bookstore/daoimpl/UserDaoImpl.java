@@ -24,6 +24,7 @@ public class UserDaoImpl implements UserDao {
     UserInfoRepository userInfoRepository;
 
     // key pattern: user:userId:username
+    // key for avatar: avatar:userId
     @Autowired
     RedisUtil redisUtil;
 
@@ -39,6 +40,7 @@ public class UserDaoImpl implements UserDao {
         User user = userRepository.findUserByUsernameAndPassword(username, password);
 
         if (user != null) {
+            user.getUserInfo().setAvatar(null);
             redisUtil.set(
                     "user:" + user.getUserId() + ":" + username,
                     JSONArray.toJSON(user)
@@ -57,6 +59,7 @@ public class UserDaoImpl implements UserDao {
         User user = userRepository.findUserByUserId(userId);
 
         if (user != null) {
+            user.getUserInfo().setAvatar(null);
             redisUtil.set(
                     "user:" + userId + ":" + user.getUsername(),
                     JSONArray.toJSON(user)
@@ -85,6 +88,7 @@ public class UserDaoImpl implements UserDao {
         UserInfo userInfo = new UserInfo();
         userInfo.setEmail(email);
         userInfo.setUserId(user.getUserId());
+        userInfo.setAvatar(null);
 
         userInfoRepository.save(userInfo);
 
@@ -106,6 +110,7 @@ public class UserDaoImpl implements UserDao {
         User user = userRepository.findUserByUsername(username);
 
         if (user != null) {
+            user.getUserInfo().setAvatar(null);
             redisUtil.set(
                     "user:" + user.getUserId() + ":" + username,
                     JSONArray.toJSON(user)
@@ -153,7 +158,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Boolean setAvatar(Integer userId, String base64Image) {
-        Set<String> keys = redisUtil.keys("user:" + userId + ":*");
+        Set<String> keys = redisUtil.keys("avatar:" + userId);
         for (String key : keys) {
             redisUtil.del(key);
         }
@@ -165,17 +170,19 @@ public class UserDaoImpl implements UserDao {
     @Override
     public BufferedImage getAvatar(Integer userId) {
         try {
-            Set<String> keys = redisUtil.keys("user:" + userId + ":*");
+            Set<String> keys = redisUtil.keys("avatar:" + userId);
             for (String key : keys) {
-                User user = JSONArray.parseObject(redisUtil.get(key).toString(), User.class);
-                if (user != null && user.getUserInfo() != null) {
-                    String base64Image = user.getUserInfo().getAvatar();
-                    if (base64Image != null && base64Image.length() > 0)
-                        return ImgUtil.toImage(base64Image);
-                }
+                return ImgUtil.toImage(redisUtil.get(key).toString());
             }
 
             String base64Image = userInfoRepository.findUserAvatarByUserId(userId).getAvatar();
+
+            if (base64Image != null) {
+                redisUtil.set(
+                        "avatar:" + userId,
+                        base64Image
+                );
+            }
             return ImgUtil.toImage(base64Image);
         } catch (Exception e) {
             System.out.println("Fail to get user avatar");
