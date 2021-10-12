@@ -1,50 +1,52 @@
 import {config} from "../config";
-import {getRequest, postRequest} from "../utils/ajax";
+import {deleteRequest, getRequest, postRequest, putRequest} from "../utils/ajax";
 
-export const getBooks = (page, size, searchType, searchText, callback) => {
+export const getBooks = (page, size, searchText, callback) => {
+    let url;
     if (searchText == null) {
-        searchText = "";
+        url = `${config.apiUrl}/books?page=${page.toString()}&size=${size.toString()}`;
+    } else {
+        url = `${config.apiUrl}/books?page=${page.toString()}&size=${size.toString()}&searchText=${searchText.trim()}`;
     }
-    const url = `${config.apiUrl}/getBooks?page=` + page.toString() + "&size="
-        + size.toString() + "&searchType=" + searchType.toString() + "&searchText=" + searchText.trim();
     getRequest(url, callback);
 };
 
 export const filterBooks = (page, size, book, callback) => {
-    const url = `${config.apiUrl}/filterBooks?page=` + page.toString() + "&size=" + size.toString();
-    postRequest(url, book, callback);
+    const url = `${config.apiUrl}/admin/books?page=${page.toString()}&size=${size.toString()}`
+        + `&bookId=${book.bookId ? book.bookId.toString() : ""}&ISBN=${book.ISBN ? book.ISBN.toString() : ""}`
+        + `&bookName=${book.bookName ? book.bookName : ""}&author=${book.author ? book.author : ""}`
+        + `&category=${book.category ? book.category : ""}&price=${book.price ? book.price.toString() : ""}`
+        + `&storage=${book.storage ? book.storage.toString() : ""}&intro=${book.intro ? book.intro : ""}`
+    getRequest(url, callback);
 };
 
 export const getBook = (bookId, callback) => {
-    const url = `${config.apiUrl}/getBook?bookId=` + bookId.toString();
+    const url = `${config.apiUrl}/book?bookId=` + bookId.toString();
     getRequest(url, callback);
 };
 
 export const addBook = (bookData, callback) => {
-    const url = `${config.apiUrl}/addBook`;
+    const url = `${config.apiUrl}/admin/book`;
     postRequest(url, bookData, callback);
 };
 
 export const setBook = (_book, callback) => {
-    const url = `${config.apiUrl}/setBook`;
+    const url = `${config.apiUrl}/admin/book`;
     let form = {
         book: _book,
     };
-    postRequest(url, form, callback);
+    putRequest(url, form, callback);
 }
 
 export const deleteBook = (_bookId, callback) => {
-    const url = `${config.apiUrl}/deleteBook`;
-    let form = {
-        bookId: _bookId,
-    };
-    postRequest(url, form, callback);
+    const url = `${config.apiUrl}/admin/book?bookId=${_bookId.toString()}`;
+    deleteRequest(url, callback);
 }
 
 export const setBookImage = (bookId, image, callback) => {
-    const url = `${config.apiUrl}/setBookImage?bookId=` + bookId.toString();
+    const url = `${config.apiUrl}/admin/bookImage?bookId=` + bookId.toString();
     let form = {
         image: image.split(',')[1],
     };
-    postRequest(url, form, callback);
+    putRequest(url, form, callback);
 }

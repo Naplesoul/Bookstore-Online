@@ -206,7 +206,7 @@ class BookItem extends React.Component {
                 </td>
                 <td>
                     <button className={classes.viewImage}>
-                        <a href={`${config.apiUrl}/getBookImage?bookId=` + this.props.book.bookId} target="_blank" rel="noreferrer" >
+                        <a href={`${config.apiUrl}/bookImage?bookId=` + this.props.book.bookId} target="_blank" rel="noreferrer" >
                             预览
                         </a>
                     </button>

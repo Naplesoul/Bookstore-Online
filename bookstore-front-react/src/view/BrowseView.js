@@ -30,7 +30,7 @@ class BrowseView extends React.Component {
     }
 
     componentDidMount() {
-        getBooks(1, pageSize, config.bookName, this.props.searchText, (_bookData) => {
+        getBooks(1, pageSize, this.props.searchText, (_bookData) => {
             this.setState({
                 bookCount: _bookData.totalElements,
                 bookData: _bookData.content,
@@ -44,7 +44,7 @@ class BrowseView extends React.Component {
     }
 
     setPage(_page, _pageSize) {
-        getBooks(_page, pageSize, config.bookName, this.props.searchText, (_bookData) => {
+        getBooks(_page, pageSize, this.props.searchText, (_bookData) => {
             this.setState({
                 bookCount: _bookData.totalElements,
                 bookData: _bookData.content,
