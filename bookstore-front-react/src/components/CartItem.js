@@ -82,7 +82,7 @@ class CartItem extends React.Component {
                         />
                     </Grid>
                     <Grid item xs={3}>
-                        <img alt={this.props.itemData.name} src={`${config.apiUrl}/bookImage?bookId=` + this.props.itemData.bookId} height={"180px"}
+                        <img alt={this.props.itemData.name} src={`${config.apiUrl}/bookImage/${this.props.itemData.bookId}`} height={"180px"}
                              className={classes.bookImg}/>
                     </Grid>
                     <Grid item xs={4}>

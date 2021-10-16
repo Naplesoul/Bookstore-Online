@@ -170,7 +170,7 @@ class InfoView extends React.Component {
         return (
             <Grid container spacing={5} className={classes.root}>
                 <Grid item xs={5}>
-                    <img alt={"bookPicture"} src={`${config.apiUrl}/bookImage?bookId=` + this.props.bookId} width={"100%"}/>
+                    <img alt={"bookPicture"} src={`${config.apiUrl}/bookImage/${this.props.bookId}`} width={"100%"}/>
                 </Grid>
                 <Grid item xs={5} className={classes.detail}>
                     <Typography variant={"h4"} className={classes.bookName}>{this.state.bookData.bookName}</Typography>

@@ -51,7 +51,7 @@ class MainRouter extends React.Component {
                     userId: user.userId,
                     isAuthed: true,
                     username: user.username,
-                    avatar: `${config.apiUrl}/getAvatar?userId=${user.userId}`,
+                    avatar: `${config.apiUrl}/avatar/${user.userId}`,
                     userType: user.userType,
                     userInfo: user.userInfo,
                 });

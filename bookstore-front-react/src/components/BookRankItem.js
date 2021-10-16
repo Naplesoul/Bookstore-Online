@@ -48,7 +48,7 @@ class BookRankItem extends React.Component {
                         </Typography>
                     </Grid>
                     <Grid item xs={4}>
-                        <img alt={this.props.book.bookName} src={`${config.apiUrl}/getOrderItemImage?orderItemId=` + this.props.book.itemId} height={"150px"}
+                        <img alt={this.props.book.bookName} src={`${config.apiUrl}/orderItemImage/${this.props.book.itemId}`} height={"150px"}
                              className={classes.image}/>
                     </Grid>
                     <Grid item xs={4}>

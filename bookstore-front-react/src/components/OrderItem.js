@@ -51,7 +51,7 @@ class OrderItem extends React.Component {
 
                     </Grid>
                     <Grid item xs={3}>
-                        <img alt={this.props.orderItem.bookName} src={`${config.apiUrl}/getOrderItemImage?orderItemId=` + this.props.orderItem.itemId} height={"180px"}
+                        <img alt={this.props.orderItem.bookName} src={`${config.apiUrl}/orderItemImage/${this.props.orderItem.itemId}`} height={"180px"}
                              className={classes.bookImg}/>
                     </Grid>
                     <Grid item xs={4}>

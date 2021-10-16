@@ -1,8 +1,8 @@
 import {config} from "../config";
-import {getRequest, postRequest} from "../utils/ajax";
+import {deleteRequest, getRequest, postRequest, putRequest} from "../utils/ajax";
 
 export const login = (_username, _password, callback) => {
-    const url = `${config.apiUrl}/login`;
+    const url = `${config.apiUrl}/session`;
     let loginForm = {
         username: _username,
         password: _password,
@@ -13,17 +13,17 @@ export const login = (_username, _password, callback) => {
 }
 
 export const autoLogin = (callback) => {
-    const url = `${config.apiUrl}/autoLogin`;
+    const url = `${config.apiUrl}/session`;
     getRequest(url, callback);
 }
 
 export const logout = (callback) => {
-    const url = `${config.apiUrl}/logout`;
-    getRequest(url, callback);
+    const url = `${config.apiUrl}/session`;
+    deleteRequest(url, callback);
 }
 
 export const signup = (_username, _password, _email, callback) => {
-    const url = `${config.apiUrl}/signup`;
+    const url = `${config.apiUrl}/user`;
     let signupForm = {
         username: _username,
         password: _password,
@@ -33,39 +33,38 @@ export const signup = (_username, _password, _email, callback) => {
 }
 
 export const getUsers = (callback) => {
-    const url = `${config.apiUrl}/getUsers`;
+    const url = `${config.apiUrl}/admin/users`;
     getRequest(url, callback);
 }
 
 export const setUserType = (_targetUserId, _targetUserType, callback) => {
-    const url = `${config.apiUrl}/setUserType`;
+    const url = `${config.apiUrl}/admin/userType/${_targetUserId}`;
     let form = {
-        targetUserId: _targetUserId,
         targetUserType: _targetUserType,
     };
-    postRequest(url, form, callback);
+    putRequest(url, form, callback);
 }
 
-export const getDuplicateUsername = (_username, callback) => {
-    const url = `${config.apiUrl}/getDuplicateUsername?username=` + _username;
+export const getReduplicateUsername = (_username, callback) => {
+    const url = `${config.apiUrl}/reduplicatedUsername/${_username}`;
     getRequest(url, callback);
 }
 
 export const setUserInfo = (userInfo, callback) => {
-    const url = `${config.apiUrl}/setUserInfo`;
+    const url = `${config.apiUrl}/userInfo`;
     let form = { userInfo };
-    postRequest(url, form, callback);
+    putRequest(url, form, callback);
 }
 
 export const setAvatar = (image, callback) => {
-    const url = `${config.apiUrl}/setAvatar`;
+    const url = `${config.apiUrl}/avatar`;
     let form = {
         image: image.split(',')[1],
     };
-    postRequest(url, form, callback);
+    putRequest(url, form, callback);
 }
 
 export const getVisitCount = (callback) => {
-    const url = `${config.apiUrl}/getVisitCount`;
+    const url = `${config.apiUrl}/visitCount`;
     getRequest(url, callback)
 }

@@ -76,7 +76,7 @@ class Frame extends React.Component {
                 newMsg.type = 'text';
                 newMsg.text = msg.message;
                 newMsg.title = msg.userId ? (msg.userType === 1 ? "管理员" : msg.username) : "您";
-                newMsg.avatar = `${config.apiUrl}/getAvatar?userId=${msg.userId ? msg.userId : this.props.user.userId}`
+                newMsg.avatar = `${config.apiUrl}/avatar/${msg.userId ? msg.userId : this.props.user.userId}`
                 break;
             case 'leave':
                 newMsg.type = 'system';

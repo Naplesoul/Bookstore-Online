@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import {getDuplicateUsername, signup} from "../services/UserService";
+import {getReduplicateUsername, signup} from "../services/UserService";
 import {config} from "../config";
 import {checkEmail} from "../utils/inputCheck";
 
@@ -93,7 +93,7 @@ class SignupView extends React.Component {
                     userId: data.userId,
                     isAuthed: true,
                     username: data.username,
-                    avatar: `${config.apiUrl}/getAvatar?userId=${data.userId}`,
+                    avatar: `${config.apiUrl}/avatar/${data.userId}`,
                     userType: data.userType,
                     userInfo: data.userInfo,
                 });
@@ -111,7 +111,7 @@ class SignupView extends React.Component {
     }
 
     onUsernameChange(e) {
-        getDuplicateUsername(e.target.value, (data) => {
+        getReduplicateUsername(e.target.value, (data) => {
             if (data) {
                 this.setState({
                     duplicateUsername: true,

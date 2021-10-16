@@ -5,7 +5,6 @@ import GridList from '@material-ui/core/GridList';
 import { Pagination } from 'antd';
 import 'antd/dist/antd.css'
 import {getBooks} from "../services/BookService";
-import {config} from "../config";
 
 const pageSize = 15;
 

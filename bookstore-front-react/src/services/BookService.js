@@ -21,7 +21,7 @@ export const filterBooks = (page, size, book, callback) => {
 };
 
 export const getBook = (bookId, callback) => {
-    const url = `${config.apiUrl}/book?bookId=` + bookId.toString();
+    const url = `${config.apiUrl}/book/${bookId.toString()}`;
     getRequest(url, callback);
 };
 
@@ -39,12 +39,12 @@ export const setBook = (_book, callback) => {
 }
 
 export const deleteBook = (_bookId, callback) => {
-    const url = `${config.apiUrl}/admin/book?bookId=${_bookId.toString()}`;
+    const url = `${config.apiUrl}/admin/book/${_bookId.toString()}`;
     deleteRequest(url, callback);
 }
 
 export const setBookImage = (bookId, image, callback) => {
-    const url = `${config.apiUrl}/admin/bookImage?bookId=` + bookId.toString();
+    const url = `${config.apiUrl}/admin/bookImage/${bookId.toString()}`;
     let form = {
         image: image.split(',')[1],
     };

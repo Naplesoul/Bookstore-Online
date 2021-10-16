@@ -72,7 +72,7 @@ class LoginView extends React.Component {
                     userId: data.userId,
                     isAuthed: true,
                     username: data.username,
-                    avatar: `${config.apiUrl}/getAvatar?userId=${data.userId}`,
+                    avatar: `${config.apiUrl}/avatar/${data.userId}`,
                     userType: data.userType,
                     userInfo: data.userInfo,
                 });

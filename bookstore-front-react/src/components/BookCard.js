@@ -47,7 +47,7 @@ class BookCard extends React.Component {
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
-                        image={`${config.apiUrl}/bookImage?bookId=` + this.props.bookInfo.bookId}
+                        image={`${config.apiUrl}/bookImage/${this.props.bookInfo.bookId}`}
                         title={this.props.bookInfo.bookName}
                     />
                     <CardContent className={classes.content}>
