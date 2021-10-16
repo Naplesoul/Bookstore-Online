@@ -151,6 +151,29 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    public String getBase64BookImage(Integer bookId) {
+        try {
+            Set<String> keys = redisUtil.keys("bookImage:" + bookId);
+            for (String key : keys) {
+                return redisUtil.get(key).toString();
+            }
+
+            String base64Image = bookRepository.findBookImageByBookId(bookId).getImage();
+
+            if (base64Image != null) {
+                redisUtil.set(
+                        "bookImage:" + bookId,
+                        base64Image
+                );
+            }
+            return base64Image;
+        } catch (Exception e) {
+            System.out.println("Fail to get book image");
+            return null;
+        }
+    }
+
+    @Override
     public BufferedImage getBookImage(Integer bookId) {
         try {
             Set<String> keys = redisUtil.keys("bookImage:" + bookId);

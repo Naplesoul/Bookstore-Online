@@ -24,25 +24,8 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @RequestMapping("/getOrders")
-    public Page<Order> getOrders(@RequestParam(Constant.PAGE) Integer page,
-                                 @RequestParam(Constant.SIZE) Integer size,
-                                 @RequestParam(Constant.SEARCH_TEXT) String searchText,
-                                 @RequestBody Map<String, String> params) {
-        Timestamp startTime = Timestamp.valueOf(params.get(Constant.START_TIME));
-        Timestamp endTime = Timestamp.valueOf(params.get(Constant.END_TIME));
-        User user = SessionUtil.getUser();
-        if (user == null) {
-            System.out.println("User unauthorized");
-            return null;
-        }
-        Integer userId = user.getUserId();
-        Integer userType = user.getUserType();
-        return orderService.getOrders(userId, userType, searchText, page, size, startTime, endTime);
-    }
-
-    @RequestMapping("/getOrderItems")
-    public List<OrderItem> getOrderItems(@RequestParam(Constant.ORDER_ID) Integer orderId) {
+    @GetMapping("/orderItems/{orderId}")
+    public List<OrderItem> getOrderItems(@PathVariable("orderId") Integer orderId) {
         User user = SessionUtil.getUser();
         if (user == null) {
             System.out.println("User unauthorized");
@@ -53,7 +36,7 @@ public class OrderController {
         return orderService.getOrderItems(userId, userType, orderId);
     }
 
-    @RequestMapping("/placeOrder")
+    @PostMapping("/order")
     public Boolean placeOrder(@RequestBody OrderMessage order) {
         User user = SessionUtil.getUser();
         if (user == null) {
@@ -65,10 +48,21 @@ public class OrderController {
         return orderService.placeOrder(order);
     }
 
-    @RequestMapping("/getSalesRank")
-    public Page<SalesRank> getSalesRank(@RequestParam(Constant.PAGE) Integer page,
-                                        @RequestParam(Constant.SIZE) Integer size,
-                                        @RequestBody Map<String, String> params) {
+    @GetMapping(value = "/orderItemImage/{orderItemId}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public BufferedImage getOrderItemImage(@PathVariable("orderItemId") Integer itemId) {
+        return orderService.getOrderItemImage(itemId);
+    }
+
+    // 按条件获取订单等操作不可避免地要使用请求参数，用get请求没法带request body
+    @GetMapping("/orders")
+    public Page<Order> getOrders(@RequestParam(Constant.PAGE) Integer page,
+                                 @RequestParam(Constant.SIZE) Integer size,
+                                 @RequestParam(Constant.SEARCH_TEXT) String searchText,
+                                 @RequestParam(Constant.START_TIME) String _startTime,
+                                 @RequestParam(Constant.END_TIME) String _endTime) {
+        Timestamp startTime = Timestamp.valueOf(_startTime);
+        Timestamp endTime = Timestamp.valueOf(_endTime);
         User user = SessionUtil.getUser();
         if (user == null) {
             System.out.println("User unauthorized");
@@ -76,26 +70,44 @@ public class OrderController {
         }
         Integer userId = user.getUserId();
         Integer userType = user.getUserType();
-        Timestamp startTime = Timestamp.valueOf(params.get(Constant.START_TIME));
-        Timestamp endTime = Timestamp.valueOf(params.get(Constant.END_TIME));
+        return orderService.getOrders(userId, userType, searchText, page, size, startTime, endTime);
+    }
+
+    @GetMapping("/salesRank")
+    public Page<SalesRank> getSalesRank(@RequestParam(Constant.PAGE) Integer page,
+                                        @RequestParam(Constant.SIZE) Integer size,
+                                        @RequestParam(Constant.START_TIME) String _startTime,
+                                        @RequestParam(Constant.END_TIME) String _endTime) {
+        User user = SessionUtil.getUser();
+        if (user == null) {
+            System.out.println("User unauthorized");
+            return null;
+        }
+        Integer userId = user.getUserId();
+        Integer userType = user.getUserType();
+        Timestamp startTime = Timestamp.valueOf(_startTime);
+        Timestamp endTime = Timestamp.valueOf(_endTime);
         return orderService.getSalesRank(userId, userType, page, size, startTime, endTime);
     }
 
-    @RequestMapping("/getConsumptionRank")
+    @GetMapping("/consumptionRank")
     public Page<ConsumptionRank> getConsumptionRank(@RequestParam(Constant.PAGE) Integer page,
                                                     @RequestParam(Constant.SIZE) Integer size,
-                                                    @RequestBody Map<String, String> params) {
+                                                    @RequestParam(Constant.START_TIME) String _startTime,
+                                                    @RequestParam(Constant.END_TIME) String _endTime) {
         if (!SessionUtil.isAdmin()) {
             System.out.println("User unauthorized");
             return null;
         }
-        Timestamp startTime = Timestamp.valueOf(params.get(Constant.START_TIME));
-        Timestamp endTime = Timestamp.valueOf(params.get(Constant.END_TIME));
+        Timestamp startTime = Timestamp.valueOf(_startTime);
+        Timestamp endTime = Timestamp.valueOf(_endTime);
         return orderService.getConsumptionRank(page, size, startTime, endTime);
     }
 
-    @RequestMapping("/getTotalSalesAndConsumption")
-    public Map<String, Integer> getTotalSalesAndConsumption(@RequestBody Map<String, String> params) {
+    @GetMapping("/totalSalesAndConsumption")
+    public Map<String, Integer> getTotalSalesAndConsumption(
+            @RequestParam(Constant.START_TIME) String _startTime,
+            @RequestParam(Constant.END_TIME) String _endTime) {
         User user = SessionUtil.getUser();
         if (user == null) {
             System.out.println("User unauthorized");
@@ -103,14 +115,8 @@ public class OrderController {
         }
         Integer userId = user.getUserId();
         Integer userType = user.getUserType();
-        Timestamp startTime = Timestamp.valueOf(params.get(Constant.START_TIME));
-        Timestamp endTime = Timestamp.valueOf(params.get(Constant.END_TIME));
+        Timestamp startTime = Timestamp.valueOf(_startTime);
+        Timestamp endTime = Timestamp.valueOf(_endTime);
         return orderService.getTotalSalesAndConsumption(userId, userType, startTime, endTime);
-    }
-
-    @RequestMapping(value = "/getOrderItemImage", produces = MediaType.IMAGE_JPEG_VALUE)
-    @ResponseBody
-    public BufferedImage getOrderItemImage(@RequestParam(Constant.ORDER_ITEM_ID) Integer itemId) {
-        return orderService.getOrderItemImage(itemId);
     }
 }

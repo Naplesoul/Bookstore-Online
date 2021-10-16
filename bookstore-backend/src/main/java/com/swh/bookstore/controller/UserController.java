@@ -20,13 +20,13 @@ public class UserController {
 
     private static Integer visitCount = 0;
 
-    @RequestMapping("/getVisitCount")
+    @GetMapping("/visitCount")
     public static synchronized Integer getVisitCount() {
         visitCount += 1;
         return visitCount;
     }
 
-    @RequestMapping("/login")
+    @PostMapping("/session")
     public User login(@RequestBody Map<String, String> params) {
         String username = params.get(Constant.USERNAME);
         String password = params.get(Constant.PASSWORD);
@@ -50,7 +50,7 @@ public class UserController {
         return user;
     }
 
-    @RequestMapping("/autoLogin")
+    @GetMapping("/session")
     public User autoLogin() {
         User user = SessionUtil.getUser();
         if (user == null) {
@@ -61,13 +61,13 @@ public class UserController {
         return user;
     }
 
-    @RequestMapping("/logout")
+    @DeleteMapping("/session")
     public Boolean logout() {
         SessionUtil.invalidateSession();
         return true;
     }
 
-    @RequestMapping("/getUsers")
+    @GetMapping("/admin/users")
     public List<User> getUsers() {
         if (SessionUtil.isAdmin()) {
             return userService.getUsers();
@@ -76,7 +76,7 @@ public class UserController {
         return null;
     }
 
-    @RequestMapping("/signup")
+    @PostMapping("/user")
     public User signup(@RequestBody Map<String, String> params) {
         try {
             String username = params.get(Constant.USERNAME);
@@ -109,10 +109,10 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/setUserType")
-    public Boolean setUserType(@RequestBody Map<String, Integer> params) {
+    @PutMapping("/admin/userType/{userId}")
+    public Boolean setUserType(@PathVariable("userId") Integer userId,
+                               @RequestBody Map<String, Integer> params) {
         try {
-            Integer userId = params.get(Constant.TARGET_USER_ID);
             Integer userType = params.get(Constant.TARGET_USER_TYPE);
             User user = SessionUtil.getUser();
             if (user == null || !user.getUserType().equals(1) || userId.equals(user.getUserId())) {
@@ -135,8 +135,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/getDuplicateUsername")
-    public Boolean getDuplicateUsername(@RequestParam(Constant.USERNAME) String username) {
+    @GetMapping("/reduplicatedUsername/{username}")
+    public Boolean getDuplicateUsername(@PathVariable("username") String username) {
         try {
             return userService.getDuplicateUsername(username);
         } catch (Exception e) {
@@ -146,7 +146,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/setUserInfo")
+    @PutMapping("/userInfo")
     public Boolean setUserInfo(@RequestBody Map<String, UserInfo> params) {
         try {
             User user = SessionUtil.getUser();
@@ -156,7 +156,12 @@ public class UserController {
             }
             Integer userId = user.getUserId();
             UserInfo userInfo = params.get(Constant.USER_INFO);
-            return userService.setUserInfo(userId, userInfo);
+            if (userService.setUserInfo(userId, userInfo)) {
+                user.setUserInfo(userInfo);
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             System.out.println("Caught an exception in setUserInfo");
             e.printStackTrace();
@@ -164,8 +169,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/setAvatar")
-    public Boolean setBookImage(@RequestBody Map<String, String> base64Image) {
+    @PutMapping("/avatar")
+    public Boolean setAvatar(@RequestBody Map<String, String> base64Image) {
         try {
             User user = SessionUtil.getUser();
             if (user == null) {
@@ -181,9 +186,9 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/getAvatar", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/avatar/{userId}", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
-    public BufferedImage getAvatar(@RequestParam(Constant.USER_ID) Integer userId) {
+    public BufferedImage getAvatar(@PathVariable("userId") Integer userId) {
         return userService.getAvatar(userId);
     }
 }

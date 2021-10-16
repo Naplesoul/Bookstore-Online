@@ -12,6 +12,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,6 +21,40 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    @GetMapping("/book/{bookId}")
+    public Book getBookByBookId(@PathVariable("bookId") Integer bookId) {
+        return bookService.getBookByBookId(bookId);
+    }
+
+    @PutMapping("/admin/bookImage/{bookId}")
+    public Boolean setBookImage(@PathVariable("bookId") Integer bookId,
+                                @RequestBody Map<String, String> base64Image) {
+        try {
+            if (!SessionUtil.isAdmin()) {
+                System.out.println("User unauthorized");
+                return false;
+            }
+            return bookService.setBookImage(bookId, base64Image.get(Constant.IMAGE));
+        } catch (Exception e) {
+            System.out.println("Caught an exception in setBookImage");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @GetMapping(value = "/bookImage/{bookId}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public BufferedImage getBookImage(@PathVariable("bookId") Integer bookId) {
+        return bookService.getBookImage(bookId);
+    }
+
+
+    @GetMapping("/books/{searchIntroText}")
+    public List<SimplifiedBook> searchBooksByIntro(@PathVariable("searchIntroText") String text) {
+        return bookService.searchAllBooksByIntro(text);
+    }
+
+    // 按条件获取书等操作不可避免地要使用请求参数，用get请求没法带request body
     @GetMapping("/books")
     public Page<SimplifiedBook> getBooks(@RequestParam(Constant.PAGE) Integer page,
                                          @RequestParam(Constant.SIZE) Integer size,
@@ -67,11 +102,6 @@ public class BookController {
         }
     }
 
-    @GetMapping("/book")
-    public Book getBookByBookId(@RequestParam(Constant.BOOK_ID) Integer bookId) {
-        return bookService.getBookByBookId(bookId);
-    }
-
     @PutMapping("/admin/book")
     public Boolean setBook(@RequestBody Map<String, Book> params) {
         try {
@@ -110,27 +140,5 @@ public class BookController {
             return -1;
         }
         return bookService.addBook(book);
-    }
-
-    @PutMapping("/admin/bookImage")
-    public Boolean setBookImage(@RequestParam(Constant.BOOK_ID) Integer bookId,
-                                @RequestBody Map<String, String> base64Image) {
-        try {
-            if (!SessionUtil.isAdmin()) {
-                System.out.println("User unauthorized");
-                return false;
-            }
-            return bookService.setBookImage(bookId, base64Image.get(Constant.IMAGE));
-        } catch (Exception e) {
-            System.out.println("Caught an exception in setBookImage");
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @GetMapping(value = "/bookImage", produces = MediaType.IMAGE_JPEG_VALUE)
-    @ResponseBody
-    public BufferedImage getBookImage(@RequestParam(Constant.BOOK_ID) Integer bookId) {
-        return bookService.getBookImage(bookId);
     }
 }

@@ -17,5 +17,6 @@ public interface BookDao {
     Integer addBook(Book book);
     Boolean setBookImage(Integer bookId, String base64Image);
     BufferedImage getBookImage(Integer bookId);
+    String getBase64BookImage(Integer bookId);
     Boolean reduceStorage(Integer bookId, Integer num);
 }

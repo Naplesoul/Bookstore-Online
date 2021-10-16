@@ -60,6 +60,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<SimplifiedBook> searchAllBooksByIntro(String searchText) {
+        return luceneUtil.searchIntro(searchText);
+    }
+
+    @Override
     public Page<Book> filterBooks(Book book, Integer page, Integer size) {
         return bookDao.filterBooks(book, page, size);
     }

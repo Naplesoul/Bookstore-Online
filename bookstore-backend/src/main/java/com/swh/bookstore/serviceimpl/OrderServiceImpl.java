@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setBookName(book.getBookName());
             orderItem.setAuthor(book.getAuthor());
             orderItem.setCategory(book.getCategory());
-            orderItem.setImage(book.getImage());
+            orderItem.setImage(bookDao.getBase64BookImage(orderItem.getBookId()));
             totalPrice += bookPrice * orderItem.getBookNum();
         }
 

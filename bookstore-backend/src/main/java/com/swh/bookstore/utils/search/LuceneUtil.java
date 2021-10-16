@@ -194,9 +194,49 @@ public class LuceneUtil {
         return null;
     }
 
+    private List<SimplifiedBook> searchBook(String searchType, String searchText) {
+        try {
+            Directory directory = FSDirectory.open(FileSystems.getDefault().getPath(Constant.INDEX_DIR));
+            // 索引读取工具
+            IndexReader reader = DirectoryReader.open(directory);
+            // 索引搜索工具
+            IndexSearcher searcher = new IndexSearcher(reader);
+            // 创建查询解析器,两个参数：默认要查询的字段的名称，分词器
+            QueryParser parser = new QueryParser(searchType, new ChineseAnalyzer());
+            // 创建查询对象
+            Query query = parser.parse(searchText);
+            // 获取前十条记录
+            TopDocs topDocs = searcher.search(query, 10);
+            ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+
+            List<SimplifiedBook> results = new ArrayList<>();
+
+            for (ScoreDoc scoreDoc : scoreDocs) {
+                int docID = scoreDoc.doc;
+                // 根据编号去找文档
+                Document doc = reader.document(docID);
+                SimplifiedBookImpl spfBook = new SimplifiedBookImpl(
+                        Integer.parseInt(doc.get(Constant.BOOK_ID)),
+                        Integer.parseInt(doc.get(Constant.PRICE)),
+                        doc.get(Constant.BOOK_NAME)
+                );
+                results.add(spfBook);
+            }
+            return results;
+        } catch (IOException e) {
+            System.out.println("Lucene: IO异常 于 查找索引");
+        } catch (ParseException e) {
+            System.out.println("Lucene: 解析异常 于 查找索引");
+        } catch (Exception e) {
+            System.out.println("Lucene: 未知异常 于 查找索引");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private Integer searchBook(Integer page, Integer size,
-                                            String searchText, String searchType,
-                                            List<SimplifiedBook> results) {
+                               String searchType, String searchText,
+                               List<SimplifiedBook> results) {
         try {
             int begin = (page - 1) * size;
             int end = begin + size;
@@ -256,5 +296,9 @@ public class LuceneUtil {
     public Integer searchIntro(Integer page, Integer size,
                                String searchText, List<SimplifiedBook> results) {
         return searchBook(page, size, Constant.INTRO, searchText, results);
+    }
+
+    public List<SimplifiedBook> searchIntro(String searchText) {
+        return searchBook(Constant.INTRO, searchText);
     }
 }
