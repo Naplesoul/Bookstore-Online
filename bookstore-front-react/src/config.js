@@ -1,6 +1,6 @@
 export const config = {
-    apiUrl: 'http://localhost:8080',
-    chatUrl: 'ws://localhost:8080/chatRoom',
+    apiUrl: 'http://localhost:8081',
+    chatUrl: 'ws://localhost:8081/chatRoom',
     bookId: 0,
     ISBN: 1,
     bookName: 2,
