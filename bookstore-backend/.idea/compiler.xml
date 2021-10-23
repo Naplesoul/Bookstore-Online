@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="SearchBook" />
+        <module name="Bookstore_Service" />
+        <module name="Bookstore" />
+        <module name="Eureka" />
+        <module name="Gateway" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Bookstore" target="11" />
+      <module name="Bookstore_Service" target="11" />
+      <module name="Eureka" target="11" />
+      <module name="Gateway" target="11" />
+      <module name="SearchBook" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Bookstore" options="-parameters" />
+      <module name="Bookstore_Service" options="-parameters" />
+      <module name="Eureka" options="-parameters" />
+      <module name="Gateway" options="-parameters" />
+      <module name="SearchBook" options="-parameters" />
+    </option>
+  </component>
+</project>
