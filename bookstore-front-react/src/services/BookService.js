@@ -50,3 +50,8 @@ export const setBookImage = (bookId, image, callback) => {
     };
     putRequest(url, form, callback);
 }
+
+export const searchAuthorByBookName = (bookName, callback) => {
+    const url = `https://localhost:8080/search/author/${bookName}`;
+    getRequest(url, callback);
+}
