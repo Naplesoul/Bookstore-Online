@@ -27,8 +27,8 @@ public class UserInfo {
     private String tel;
     private String address;
 
-    @Basic(fetch = FetchType.LAZY)
-    @LazyCollection(LazyCollectionOption.TRUE)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String avatar;
+//    @Basic(fetch = FetchType.LAZY)
+//    @LazyCollection(LazyCollectionOption.TRUE)
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    private String avatar;
 }

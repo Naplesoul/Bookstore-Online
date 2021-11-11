@@ -4,6 +4,10 @@ import cn.hutool.core.img.ImgUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.swh.bookstore.dao.BookDao;
 import com.swh.bookstore.entity.Book;
+import com.swh.bookstore.entity.BookImage;
+import com.swh.bookstore.entity.BookIntro;
+import com.swh.bookstore.repository.BookImageRepository;
+import com.swh.bookstore.repository.BookIntroRepository;
 import com.swh.bookstore.repository.BookRepository;
 import com.swh.bookstore.utils.cache.RedisUtil;
 import com.swh.bookstore.utils.dto.SimplifiedBook;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -28,6 +33,12 @@ public class BookDaoImpl implements BookDao {
     @Autowired
     RedisUtil redisUtil;
 
+    @Autowired
+    BookImageRepository bookImageRepository;
+
+    @Autowired
+    BookIntroRepository bookIntroRepository;
+
     @Override
     public Book getBookByBookId(Integer bookId) {
         Set<String> keys = redisUtil.keys("book:" + bookId + ":*");
@@ -36,9 +47,11 @@ public class BookDaoImpl implements BookDao {
         }
 
         Book book = bookRepository.findBookByBookId(bookId);
+        Optional<BookIntro> bookIntro = bookIntroRepository.findById(bookId);
+        bookIntro.ifPresent(intro -> book.setIntro(intro.getIntro()));
 
         if (book != null) {
-            book.setImage(null);
+//            book.setImage(null);
             redisUtil.set(
                     "book:" + bookId + ":" + book.getBookName(),
                     JSONArray.toJSON(book)
@@ -49,8 +62,41 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    public Book getBookByISBN(Integer bookId) {
+        Book book = bookRepository.findBookByBookId(bookId);
+        Optional<BookIntro> bookIntro = bookIntroRepository.findById(bookId);
+        bookIntro.ifPresent(intro -> book.setIntro(intro.getIntro()));
+        return book;
+    }
+
+    @Override
+    public Page<Book> getBookByPrice(Integer price, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Book> books = bookRepository.findBookByPrice(price, pageable);
+        for (Book book : books) {
+            Optional<BookIntro> bookIntro = bookIntroRepository.findById(book.getBookId());
+            bookIntro.ifPresent(intro -> book.setIntro(intro.getIntro()));
+        }
+        return books;
+    }
+    public Page<Book> getBookByStorage(Integer storage, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Book> books = bookRepository.findBookByStorage(storage, pageable);
+        for (Book book : books) {
+            Optional<BookIntro> bookIntro = bookIntroRepository.findById(book.getBookId());
+            bookIntro.ifPresent(intro -> book.setIntro(intro.getIntro()));
+        }
+        return books;
+    }
+
+    @Override
     public List<Book> getBooks() {
-        return bookRepository.findAll();
+        List<Book> books = bookRepository.findAll();
+        for (Book book : books) {
+            Optional<BookIntro> bookIntro = bookIntroRepository.findById(book.getBookId());
+            bookIntro.ifPresent(intro -> book.setIntro(intro.getIntro()));
+        }
+        return books;
     }
 
     @Override
@@ -60,37 +106,17 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public Page<Book> filterBooks(Book book, Integer page, Integer size) {
+    public Page<Book> filterBooks(String bookName, String category, String author,
+                                  Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        if (book.getBookId() != null) {
-            return bookRepository.findBookByBookId(book.getBookId(), pageable);
-        }
-        if (book.getISBN() != null) {
-            return bookRepository.findBookByISBN(book.getISBN(), pageable);
-        }
-        if (book.getPrice() != null) {
-            return bookRepository.findBookByPrice(book.getPrice(), pageable);
-        }
-        if (book.getStorage() != null) {
-            return bookRepository.findBookByStorage(book.getStorage(), pageable);
-        }
 
-        if (book.getBookName() == null) {
-            book.setBookName("");
+        Page<Book> books = bookRepository.filterBooks("%" + bookName + "%", "%" + category + "%",
+                "%" + author + "%", pageable);
+        for (Book book : books) {
+            Optional<BookIntro> bookIntro = bookIntroRepository.findById(book.getBookId());
+            bookIntro.ifPresent(intro -> book.setIntro(intro.getIntro()));
         }
-        if (book.getCategory() == null) {
-            book.setCategory("");
-        }
-        if (book.getAuthor() == null) {
-            book.setAuthor("");
-        }
-        if (book.getIntro() == null) {
-            book.setIntro("");
-        }
-
-        return bookRepository.filterBooks("%" + book.getBookName().trim() + "%",
-                "%" + book.getCategory().trim() + "%", "%" + book.getAuthor().trim() + "%",
-                "%" + book.getIntro().trim() + "%", pageable);
+        return books;
     }
 
     @Override
@@ -109,7 +135,8 @@ public class BookDaoImpl implements BookDao {
             return false;
         }
         bookRepository.setBook(book.getBookId(), book.getISBN(), book.getBookName(), book.getCategory(),
-                book.getAuthor(), book.getPrice(), book.getIntro(), book.getStorage());
+                book.getAuthor(), book.getPrice(), book.getStorage());
+        bookIntroRepository.save(new BookIntro(book.getBookId(), book.getIntro()));
         return true;
     }
 
@@ -125,6 +152,7 @@ public class BookDaoImpl implements BookDao {
             return false;
         }
         bookRepository.deleteBookByBookId(bookId);
+        bookImageRepository.deleteById(bookId);
         return true;
     }
 
@@ -135,6 +163,7 @@ public class BookDaoImpl implements BookDao {
             return -1;
         } else {
             bookRepository.saveAndFlush(book);
+            bookIntroRepository.save(new BookIntro(book.getBookId(), book.getIntro()));
             return book.getBookId();
         }
     }
@@ -146,7 +175,7 @@ public class BookDaoImpl implements BookDao {
             redisUtil.del(key);
         }
 
-        bookRepository.setBookImage(bookId, base64Image);
+        bookImageRepository.save(new BookImage(bookId, base64Image));
         return true;
     }
 
@@ -158,7 +187,14 @@ public class BookDaoImpl implements BookDao {
                 return redisUtil.get(key).toString();
             }
 
-            String base64Image = bookRepository.findBookImageByBookId(bookId).getImage();
+            Optional<BookImage> bookImage = bookImageRepository.findById(bookId);
+            String base64Image = null;
+
+            if (bookImage.isPresent()) {
+                base64Image = bookImage.get().getBase64();
+            }
+
+//            String base64Image = bookRepository.findBookImageByBookId(bookId).getImage();
 
             if (base64Image != null) {
                 redisUtil.set(
@@ -176,20 +212,11 @@ public class BookDaoImpl implements BookDao {
     @Override
     public BufferedImage getBookImage(Integer bookId) {
         try {
-            Set<String> keys = redisUtil.keys("bookImage:" + bookId);
-            for (String key : keys) {
-                return ImgUtil.toImage(redisUtil.get(key).toString());
-            }
-
-            String base64Image = bookRepository.findBookImageByBookId(bookId).getImage();
-
-            if (base64Image != null) {
-                redisUtil.set(
-                        "bookImage:" + bookId,
-                        base64Image
-                );
-            }
-            return ImgUtil.toImage(base64Image);
+            String base64Image = getBase64BookImage(bookId);
+            if (base64Image != null)
+                return ImgUtil.toImage(base64Image);
+            else
+                return null;
         } catch (Exception e) {
             System.out.println("Fail to get book image");
             return null;

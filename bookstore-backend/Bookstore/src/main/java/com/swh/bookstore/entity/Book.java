@@ -28,10 +28,12 @@ public class Book {
     private String category;
     private Integer price;
     private Integer storage;
+
+    @Transient
     private String intro;
 
-    @Basic(fetch = FetchType.LAZY)
-    @LazyCollection(LazyCollectionOption.TRUE)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String image;
+//    @Basic(fetch = FetchType.LAZY)
+//    @LazyCollection(LazyCollectionOption.TRUE)
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    private String image;
 }

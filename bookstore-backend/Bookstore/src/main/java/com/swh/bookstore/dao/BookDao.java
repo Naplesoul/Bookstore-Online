@@ -3,13 +3,17 @@ package com.swh.bookstore.dao;
 import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.utils.dto.SimplifiedBook;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 public interface BookDao {
     Book getBookByBookId(Integer bookId);
-    Page<Book> filterBooks(Book book, Integer page, Integer size);
+    Book getBookByISBN(Integer bookId);
+    Page<Book> getBookByPrice(Integer price, Integer page, Integer size);
+    Page<Book> getBookByStorage(Integer storage, Integer page, Integer size);
+    Page<Book> filterBooks(String bookName, String category, String author, Integer page, Integer size);
     List<Book> getBooks();
     Page<SimplifiedBook> getBooks(Integer page, Integer size);
     Boolean setBook(Book book);

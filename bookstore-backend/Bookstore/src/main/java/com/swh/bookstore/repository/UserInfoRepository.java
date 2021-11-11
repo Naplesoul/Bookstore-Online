@@ -15,9 +15,9 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Integer> {
             "u.tel = :tel, u.address = :address where u.userId = :userId")
     void setUserInfo(Integer userId, String nickname, String name, String email, String tel, String address);
 
-    @Modifying
-    @Query("update UserInfo u set u.avatar = :base64Image where u.userId = :userId")
-    void setAvatar(Integer userId, String base64Image);
-
-    UserAvatar findUserAvatarByUserId(Integer userId);
+//    @Modifying
+//    @Query("update UserInfo u set u.avatar = :base64Image where u.userId = :userId")
+//    void setAvatar(Integer userId, String base64Image);
+//
+//    UserAvatar findUserAvatarByUserId(Integer userId);
 }

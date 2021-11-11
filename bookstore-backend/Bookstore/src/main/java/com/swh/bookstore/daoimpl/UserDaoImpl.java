@@ -4,7 +4,9 @@ import cn.hutool.core.img.ImgUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.swh.bookstore.dao.UserDao;
 import com.swh.bookstore.entity.User;
+import com.swh.bookstore.entity.UserAvatar;
 import com.swh.bookstore.entity.UserInfo;
+import com.swh.bookstore.repository.UserAvatarRepository;
 import com.swh.bookstore.repository.UserRepository;
 import com.swh.bookstore.repository.UserInfoRepository;
 import com.swh.bookstore.utils.cache.RedisUtil;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -22,6 +25,9 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     UserInfoRepository userInfoRepository;
+
+    @Autowired
+    UserAvatarRepository userAvatarRepository;
 
     // key pattern: user:userId:username
     // key for avatar: avatar:userId
@@ -40,7 +46,7 @@ public class UserDaoImpl implements UserDao {
         User user = userRepository.findUserByUsernameAndPassword(username, password);
 
         if (user != null) {
-            user.getUserInfo().setAvatar(null);
+//            user.getUserInfo().setAvatar(null);
             redisUtil.set(
                     "user:" + user.getUserId() + ":" + username,
                     JSONArray.toJSON(user)
@@ -59,7 +65,7 @@ public class UserDaoImpl implements UserDao {
         User user = userRepository.findUserByUserId(userId);
 
         if (user != null) {
-            user.getUserInfo().setAvatar(null);
+//            user.getUserInfo().setAvatar(null);
             redisUtil.set(
                     "user:" + userId + ":" + user.getUsername(),
                     JSONArray.toJSON(user)
@@ -88,7 +94,7 @@ public class UserDaoImpl implements UserDao {
         UserInfo userInfo = new UserInfo();
         userInfo.setEmail(email);
         userInfo.setUserId(user.getUserId());
-        userInfo.setAvatar(null);
+//        userInfo.setAvatar(null);
 
         userInfoRepository.save(userInfo);
 
@@ -110,7 +116,7 @@ public class UserDaoImpl implements UserDao {
         User user = userRepository.findUserByUsername(username);
 
         if (user != null) {
-            user.getUserInfo().setAvatar(null);
+//            user.getUserInfo().setAvatar(null);
             redisUtil.set(
                     "user:" + user.getUserId() + ":" + username,
                     JSONArray.toJSON(user)
@@ -163,7 +169,7 @@ public class UserDaoImpl implements UserDao {
             redisUtil.del(key);
         }
 
-        userInfoRepository.setAvatar(userId, base64Image);
+        userAvatarRepository.save(new UserAvatar(userId, base64Image));
         return true;
     }
 
@@ -175,7 +181,11 @@ public class UserDaoImpl implements UserDao {
                 return ImgUtil.toImage(redisUtil.get(key).toString());
             }
 
-            String base64Image = userInfoRepository.findUserAvatarByUserId(userId).getAvatar();
+            Optional<UserAvatar> userAvatar = userAvatarRepository.findById(userId);
+            String base64Image = null;
+            if (userAvatar.isPresent()) {
+                base64Image = userAvatar.get().getBase64();
+            }
 
             if (base64Image != null) {
                 redisUtil.set(

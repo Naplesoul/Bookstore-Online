@@ -1,7 +1,6 @@
 package com.swh.bookstore.repository;
 
 import com.swh.bookstore.entity.Book;
-import com.swh.bookstore.utils.dto.BookImage;
 import com.swh.bookstore.utils.dto.SimplifiedBook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +17,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Book> findAll();
     Page<SimplifiedBook> findSimplifiedBooksBy(Pageable pageable);
 
-    Page<Book> findBookByBookId(Integer bookId, Pageable pageable);
-    Page<Book> findBookByISBN(Integer ISBN, Pageable pageable);
     Page<Book> findBookByPrice(Integer price, Pageable pageable);
     Page<Book> findBookByStorage(Integer storage, Pageable pageable);
 
@@ -27,15 +24,14 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     Book findBookByISBN(Integer ISBN);
 
     @Query("from Book b where b.bookName like :bookName and b.category like :category " +
-            "and b.author like :author and b.intro like :intro")
-    Page<Book> filterBooks(String bookName, String category, String author,
-                           String intro, Pageable pageable);
+            "and b.author like :author")
+    Page<Book> filterBooks(String bookName, String category, String author, Pageable pageable);
 
     @Modifying
     @Query("update Book b set b.ISBN = :ISBN, b.bookName = :bookName, b.category = :category, b.author = :author," +
-            "b.price = :price, b.intro = :intro, b.storage = :storage where b.bookId = :bookId")
+            "b.price = :price, b.storage = :storage where b.bookId = :bookId")
     void setBook(Integer bookId, Integer ISBN, String bookName, String category, String author,
-                 Integer price, String intro, Integer storage);
+                 Integer price, Integer storage);
 
     @Modifying
     @Query("update Book b set b.storage = b.storage - :num where b.bookId = :bookId")
@@ -44,9 +40,9 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Modifying
     void deleteBookByBookId(Integer bookId);
 
-    @Modifying
-    @Query("update Book b set b.image = :base64Image where b.bookId = :bookId")
-    void setBookImage(Integer bookId, String base64Image);
+//    @Modifying
+//    @Query("update Book b set b.image = :base64Image where b.bookId = :bookId")
+//    void setBookImage(Integer bookId, String base64Image);
 
-    BookImage findBookImageByBookId(Integer bookId);
+//    BookImage findBookImageByBookId(Integer bookId);
 }
