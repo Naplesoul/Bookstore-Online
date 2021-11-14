@@ -141,4 +141,15 @@ public class BookController {
         }
         return bookService.addBook(book);
     }
+
+    @GetMapping("/label/books/{label}")
+    public List<SimplifiedBook> searchRelatedBooksByLabel(@PathVariable("label") String label) {
+        return bookService.searchRelatedBooksByLabel(label);
+    }
+
+    @PostMapping("/admin/bookLabels/{bookId}")
+    public Boolean setBookLabels(@PathVariable("bookId") Integer bookId,
+                                 @RequestBody List<String> labels) {
+        return bookService.setBookLabels(bookId, labels);
+    }
 }

@@ -13,6 +13,8 @@ public interface BookService {
     Page<SimplifiedBook> searchBooks(Integer page, Integer size, String searchText);
     Page<SimplifiedBook> searchBooksByIntro(Integer page, Integer size, String searchText);
     List<SimplifiedBook> searchAllBooksByIntro(String searchText);
+    List<SimplifiedBook> searchRelatedBooksByLabel(String label);
+    Boolean setBookLabels(Integer bookId, List<String> labels);
     Page<Book> filterBooks(Book book, Integer page, Integer size);
     Boolean setBook(Book book);
     Boolean deleteBook(Integer bookId);

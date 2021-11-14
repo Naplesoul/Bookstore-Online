@@ -6,11 +6,14 @@ import com.swh.bookstore.dao.BookDao;
 import com.swh.bookstore.entity.Book;
 import com.swh.bookstore.entity.BookImage;
 import com.swh.bookstore.entity.BookIntro;
+import com.swh.bookstore.entity.BookLabel;
 import com.swh.bookstore.repository.BookImageRepository;
 import com.swh.bookstore.repository.BookIntroRepository;
+import com.swh.bookstore.repository.BookLabelRepository;
 import com.swh.bookstore.repository.BookRepository;
 import com.swh.bookstore.utils.cache.RedisUtil;
 import com.swh.bookstore.utils.dto.SimplifiedBook;
+import com.swh.bookstore.utils.dto.SimplifiedBookImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,9 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @Repository
@@ -38,6 +39,9 @@ public class BookDaoImpl implements BookDao {
 
     @Autowired
     BookIntroRepository bookIntroRepository;
+
+    @Autowired
+    BookLabelRepository bookLabelRepository;
 
     @Override
     public Book getBookByBookId(Integer bookId) {
@@ -79,6 +83,8 @@ public class BookDaoImpl implements BookDao {
         }
         return books;
     }
+
+    @Override
     public Page<Book> getBookByStorage(Integer storage, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Book> books = bookRepository.findBookByStorage(storage, pageable);
@@ -87,6 +93,55 @@ public class BookDaoImpl implements BookDao {
             bookIntro.ifPresent(intro -> book.setIntro(intro.getIntro()));
         }
         return books;
+    }
+
+    @Override
+    public Boolean setBookLabels(Integer bookId, List<String> labels) {
+        Book book = getBookByBookId(bookId);
+        if (book == null) {
+            return false;
+        }
+
+        List<BookLabel> bookLabels = new ArrayList<>();
+
+        for (String label : labels) {
+            BookLabel bookLabel = bookLabelRepository.findByLabel(label);
+            if (bookLabel == null) {
+                bookLabel = new BookLabel(label);
+                bookLabelRepository.save(bookLabel);
+            }
+            bookLabels.add(bookLabel);
+        }
+
+        if (bookLabels.size() > 0) {
+            bookLabels.get(0).addRelations(bookLabels);
+        }
+        for (BookLabel bookLabel : bookLabels) {
+            bookLabel.addBookId(bookId);
+            bookLabelRepository.save(bookLabel);
+        }
+
+        return true;
+    }
+
+    @Override
+    public List<SimplifiedBook> getRelatedBooksByLabel(String label) {
+        List<BookLabel> bookLabels = bookLabelRepository.findByRelatedLabel(label);
+        Set<Integer> resultBookIds = new HashSet<>();
+        List<SimplifiedBook> results = new ArrayList<>();
+
+        for (BookLabel bookLabel : bookLabels) {
+            resultBookIds.addAll(bookLabel.getBookIds());
+        }
+
+        for (Integer bookId : resultBookIds) {
+            Book book = getBookByBookId(bookId);
+            if (book != null) {
+                results.add(new SimplifiedBookImpl(book));
+            }
+        }
+
+        return results;
     }
 
     @Override
@@ -170,6 +225,11 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Boolean setBookImage(Integer bookId, String base64Image) {
+        Book book = getBookByBookId(bookId);
+        if (book == null) {
+            return false;
+        }
+
         Set<String> keys = redisUtil.keys("bookImage:" + bookId);
         for (String key : keys) {
             redisUtil.del(key);

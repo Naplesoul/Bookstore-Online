@@ -15,6 +15,8 @@ public interface BookDao {
     Page<Book> getBookByStorage(Integer storage, Integer page, Integer size);
     Page<Book> filterBooks(String bookName, String category, String author, Integer page, Integer size);
     List<Book> getBooks();
+    Boolean setBookLabels(Integer bookId, List<String> labels);
+    List<SimplifiedBook> getRelatedBooksByLabel(String label);
     Page<SimplifiedBook> getBooks(Integer page, Integer size);
     Boolean setBook(Book book);
     Boolean deleteBook(Integer bookId);

@@ -66,6 +66,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Boolean setBookLabels(Integer bookId, List<String> labels) {
+        return bookDao.setBookLabels(bookId, labels);
+    }
+
+    @Override
+    public List<SimplifiedBook> searchRelatedBooksByLabel(String label) {
+        return bookDao.getRelatedBooksByLabel(label);
+    }
+    @Override
     public Page<Book> filterBooks(Book book, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         List<Book> books = new ArrayList<>();
