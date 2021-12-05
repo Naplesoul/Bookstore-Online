@@ -55,3 +55,8 @@ export const searchAuthorByBookName = (bookName, callback) => {
     const url = `https://localhost:8080/search/author/${bookName}`;
     getRequest(url, callback);
 }
+
+export const searchRelatedBooksByLabel = (label, callback) => {
+    const url = `${config.apiUrl}/label/books/${label}`;
+    getRequest(url, callback);
+}
