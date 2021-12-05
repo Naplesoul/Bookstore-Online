@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+
+  backend_1:
+    container_name: bookstore_backend_1
+    image: bookstore_backend
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+
+  backend_2:
+    container_name: bookstore_backend_2
+    image: bookstore_backend
+    ports:
+      - "8082:8080"
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+
+  nginx:
+    container_name: bookstore_nginx
+    image: nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - bookstore-nginx-config:/etc/nginx
+    depends_on:
+      - backend_1
+      - backend_2
+
+  mysql:
+    container_name: bookstore_mysql
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - bookstore-mysql:/var/lib/mysql
+
+  mongodb:
+    container_name: bookstore_mongodb
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - bookstore-mongodb:/data/db
+
+
+  redis:
+    container_name: bookstore_redis
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - bookstore-redis:/data
+
+volumes:
+  bookstore-mysql:
+    external: true
+    name: bookstore-mysql
+
+  bookstore-redis:
+    external: true
+    name: bookstore-redis
+
+  bookstore-nginx-config:
+    external: true
+    name: bookstore-nginx-config
+
+  bookstore-mongodb:
+    external: true
+    name: bookstore-mongodb
+
+
