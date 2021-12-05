@@ -18,6 +18,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SessionUtil sessionUtil;
+
     private static Integer visitCount = 0;
 
     @GetMapping("/visitCount")
@@ -45,14 +48,14 @@ public class UserController {
         }
         user.setPassword(null);
         if (userType >= 0) {
-            SessionUtil.setUser(userId, user);
+            sessionUtil.setUser(user);
         }
         return user;
     }
 
     @GetMapping("/session")
     public User autoLogin() {
-        User user = SessionUtil.getUser();
+        User user = sessionUtil.getUser();
         if (user == null) {
             user = new User();
             user.setUserId(-1);
@@ -63,13 +66,13 @@ public class UserController {
 
     @DeleteMapping("/session")
     public Boolean logout() {
-        SessionUtil.invalidateSession();
+        sessionUtil.invalidateSession();
         return true;
     }
 
     @GetMapping("/admin/users")
     public List<User> getUsers() {
-        if (SessionUtil.isAdmin()) {
+        if (sessionUtil.isAdmin()) {
             return userService.getUsers();
         }
         System.out.println("User unauthorized");
@@ -97,7 +100,7 @@ public class UserController {
             }
             Integer userId = user.getUserId();
             user.setPassword(null);
-            SessionUtil.setUser(userId, user);
+            sessionUtil.setUser(user);
             return user;
 
         } catch (Exception e) {
@@ -114,18 +117,18 @@ public class UserController {
                                @RequestBody Map<String, Integer> params) {
         try {
             Integer userType = params.get(Constant.TARGET_USER_TYPE);
-            User user = SessionUtil.getUser();
+            User user = sessionUtil.getUser();
             if (user == null || !user.getUserType().equals(1) || userId.equals(user.getUserId())) {
                 System.out.println("User unauthorized");
                 return false;
             }
             if (userType < 0) {
-                SessionUtil.invalidateSessionByUserId(userId);
+                sessionUtil.invalidateSessionByUserId(userId);
             } else {
                 User newUser = new User();
                 newUser.setUserId(userId);
                 newUser.setUserType(userType);
-                SessionUtil.updateUser(newUser);
+                sessionUtil.updateUser(newUser);
             }
             return userService.setUserType(userId, userType);
         } catch (Exception e) {
@@ -149,7 +152,7 @@ public class UserController {
     @PutMapping("/userInfo")
     public Boolean setUserInfo(@RequestBody Map<String, UserInfo> params) {
         try {
-            User user = SessionUtil.getUser();
+            User user = sessionUtil.getUser();
             if (user == null) {
                 System.out.println("User unauthorized");
                 return false;
@@ -172,7 +175,7 @@ public class UserController {
     @PutMapping("/avatar")
     public Boolean setAvatar(@RequestBody Map<String, String> base64Image) {
         try {
-            User user = SessionUtil.getUser();
+            User user = sessionUtil.getUser();
             if (user == null) {
                 System.out.println("User unauthorized");
                 return false;

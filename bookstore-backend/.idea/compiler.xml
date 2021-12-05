@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="SearchBook" />
-        <module name="Bookstore_Service" />
         <module name="Bookstore" />
         <module name="Eureka" />
         <module name="Gateway" />

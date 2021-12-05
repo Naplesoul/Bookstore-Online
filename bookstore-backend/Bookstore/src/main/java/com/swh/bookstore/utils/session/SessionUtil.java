@@ -1,22 +1,31 @@
 package com.swh.bookstore.utils.session;
 
+import com.alibaba.fastjson.JSONObject;
 import com.swh.bookstore.constant.Constant;
 import com.swh.bookstore.entity.User;
 import com.swh.bookstore.entity.UserInfo;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@Component
 public class SessionUtil {
 
-    public static boolean checkAuth() {
+//    @Autowired
+//    private SessionMaintainer sessionMaintainer;
+
+//    @Autowired
+//    private SessionStorage sessionStorage;
+
+    public boolean checkAuth() {
         User user = getUser();
         return user != null;
     }
 
-    public static boolean isAdmin() {
+    public boolean isAdmin() {
         User user = getUser();
         if (user == null) {
             return false;
@@ -24,22 +33,24 @@ public class SessionUtil {
         return user.getUserType().equals(1);
     }
 
-    public static User getUser() {
+    public User getUser() {
         try {
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (requestAttributes != null) {
                 HttpServletRequest request = requestAttributes.getRequest();
                 HttpSession session = request.getSession(false);
-
                 if (session != null) {
-                    User user = (User) session.getAttribute(Constant.USER);
-                    if (user != null) {
-                        Integer userId = user.getUserId();
-                        Integer userType = user.getUserType();
-                        if (userId != null && userId > 0
-                                && userType != null && userType >= 0) {
-                            return user;
-                        }
+                    Integer userId = (Integer) session.getAttribute(Constant.USER_ID);
+                    Integer userType = (Integer) session.getAttribute(Constant.USER_TYPE);
+                    String username = (String) session.getAttribute(Constant.USERNAME);
+                    UserInfo userInfo = JSONObject.parseObject((String) session.getAttribute(Constant.USER_INFO), UserInfo.class);
+                    if (userId != null && userId > 0 && userType != null && userType >= 0 && username != null) {
+                        User user = new User();
+                        user.setUserId(userId);
+                        user.setUserType(userType);
+                        user.setUsername(username);
+                        user.setUserInfo(userInfo);
+                        return user;
                     }
                 }
             }
@@ -51,7 +62,7 @@ public class SessionUtil {
         return null;
     }
 
-    public static void setUser(Integer userId, User user) {
+    public void setUser(User user) {
         try {
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
@@ -59,8 +70,10 @@ public class SessionUtil {
                 HttpServletRequest request = requestAttributes.getRequest();
                 HttpSession session = request.getSession(true);
 
-                session.setAttribute(Constant.USER, user);
-                SessionMaintainer.setSessionByUserId(userId, session);
+                session.setAttribute(Constant.USER_ID, user.getUserId());
+                session.setAttribute(Constant.USERNAME, user.getUsername());
+                session.setAttribute(Constant.USER_TYPE, user.getUserType());
+                session.setAttribute(Constant.USER_INFO, JSONObject.toJSONString(user.getUserInfo()));
             }
         } catch (Exception e) {
             System.out.println("Session already invalid");
@@ -68,36 +81,11 @@ public class SessionUtil {
         }
     }
 
-    public static void updateUser(User user) {
-        Integer userId = user.getUserId();
-        if (userId == null) {
-            return;
-        }
-        try {
-            HttpSession session = SessionMaintainer.getSessionByUserId(userId);
-            if (session == null) {
-                return;
-            }
-            User existedUser = (User) session.getAttribute(Constant.USER);
-            if (existedUser == null) {
-                return;
-            }
-            String newUsername = user.getUsername();
-            Integer newUserType = user.getUserType();
-            UserInfo newUserInfo = user.getUserInfo();
-            User newUser = new User();
-            newUser.setUserId(userId);
-            newUser.setUsername(newUsername == null ? existedUser.getUsername() : newUsername);
-            newUser.setUserType(newUserType == null ? existedUser.getUserType() : newUserType);
-            newUser.setUserInfo(newUserInfo == null ? existedUser.getUserInfo() : newUserInfo);
-            session.setAttribute(Constant.USER, newUser);
-        } catch (Exception e) {
-            System.out.println("Session already invalid");
-            System.out.println(e.getMessage());
-        }
+    public void updateUser(User user) {
+        setUser(user);
     }
 
-    public static void invalidateSession() {
+    public void invalidateSession() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
         if (requestAttributes != null) {
@@ -110,7 +98,7 @@ public class SessionUtil {
         }
     }
 
-    public static void invalidateSessionByUserId(Integer userId) {
-        SessionMaintainer.invalidateSessionByUserId(userId);
+    public void invalidateSessionByUserId(Integer userId) {
+//        sessionMaintainer.invalidateSessionByUserId(userId);
     }
 }

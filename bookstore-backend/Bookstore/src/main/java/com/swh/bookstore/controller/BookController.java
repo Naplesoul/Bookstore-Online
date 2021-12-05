@@ -21,6 +21,9 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    @Autowired
+    private SessionUtil sessionUtil;
+
     @GetMapping("/book/{bookId}")
     public Book getBookByBookId(@PathVariable("bookId") Integer bookId) {
         return bookService.getBookByBookId(bookId);
@@ -30,7 +33,7 @@ public class BookController {
     public Boolean setBookImage(@PathVariable("bookId") Integer bookId,
                                 @RequestBody Map<String, String> base64Image) {
         try {
-            if (!SessionUtil.isAdmin()) {
+            if (!sessionUtil.isAdmin()) {
                 System.out.println("User unauthorized");
                 return false;
             }
@@ -81,7 +84,7 @@ public class BookController {
                            @Nullable @RequestParam(Constant.STORAGE) Integer storage,
                            @Nullable @RequestParam(Constant.INTRO) String intro) {
         try {
-            if (!SessionUtil.isAdmin()) {
+            if (!sessionUtil.isAdmin()) {
                 System.out.println("User unauthorized");
                 return null;
             }
@@ -105,7 +108,7 @@ public class BookController {
     @PutMapping("/admin/book")
     public Boolean setBook(@RequestBody Map<String, Book> params) {
         try {
-            if (!SessionUtil.isAdmin()) {
+            if (!sessionUtil.isAdmin()) {
                 System.out.println("User unauthorized");
                 return false;
             }
@@ -121,7 +124,7 @@ public class BookController {
     @DeleteMapping("/admin/book")
         public Boolean deleteBook(@RequestParam(Constant.BOOK_ID) Integer bookId) {
         try {
-            if (!SessionUtil.isAdmin()) {
+            if (!sessionUtil.isAdmin()) {
                 System.out.println("User unauthorized");
                 return false;
             }
@@ -135,7 +138,7 @@ public class BookController {
 
     @PostMapping("/admin/book")
     public Integer addBook(@RequestBody Book book) {
-        if (!SessionUtil.isAdmin()) {
+        if (!sessionUtil.isAdmin()) {
             System.out.println("User unauthorized");
             return -1;
         }

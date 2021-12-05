@@ -24,9 +24,12 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private SessionUtil sessionUtil;
+
     @GetMapping("/orderItems/{orderId}")
     public List<OrderItem> getOrderItems(@PathVariable("orderId") Integer orderId) {
-        User user = SessionUtil.getUser();
+        User user = sessionUtil.getUser();
         if (user == null) {
             System.out.println("User unauthorized");
             return null;
@@ -38,7 +41,7 @@ public class OrderController {
 
     @PostMapping("/order")
     public Boolean placeOrder(@RequestBody OrderMessage order) {
-        User user = SessionUtil.getUser();
+        User user = sessionUtil.getUser();
         if (user == null) {
             System.out.println("User unauthorized");
             return false;
@@ -63,7 +66,7 @@ public class OrderController {
                                  @RequestParam(Constant.END_TIME) String _endTime) {
         Timestamp startTime = Timestamp.valueOf(_startTime);
         Timestamp endTime = Timestamp.valueOf(_endTime);
-        User user = SessionUtil.getUser();
+        User user = sessionUtil.getUser();
         if (user == null) {
             System.out.println("User unauthorized");
             return null;
@@ -78,7 +81,7 @@ public class OrderController {
                                         @RequestParam(Constant.SIZE) Integer size,
                                         @RequestParam(Constant.START_TIME) String _startTime,
                                         @RequestParam(Constant.END_TIME) String _endTime) {
-        User user = SessionUtil.getUser();
+        User user = sessionUtil.getUser();
         if (user == null) {
             System.out.println("User unauthorized");
             return null;
@@ -95,7 +98,7 @@ public class OrderController {
                                                     @RequestParam(Constant.SIZE) Integer size,
                                                     @RequestParam(Constant.START_TIME) String _startTime,
                                                     @RequestParam(Constant.END_TIME) String _endTime) {
-        if (!SessionUtil.isAdmin()) {
+        if (!sessionUtil.isAdmin()) {
             System.out.println("User unauthorized");
             return null;
         }
@@ -108,7 +111,7 @@ public class OrderController {
     public Map<String, Integer> getTotalSalesAndConsumption(
             @RequestParam(Constant.START_TIME) String _startTime,
             @RequestParam(Constant.END_TIME) String _endTime) {
-        User user = SessionUtil.getUser();
+        User user = sessionUtil.getUser();
         if (user == null) {
             System.out.println("User unauthorized");
             return null;
