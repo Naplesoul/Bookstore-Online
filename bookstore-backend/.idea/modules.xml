@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Bookstore/Bookstore.iml" filepath="$PROJECT_DIR$/Bookstore/Bookstore.iml" />
       <module fileurl="file://$PROJECT_DIR$/Eureka/Eureka.iml" filepath="$PROJECT_DIR$/Eureka/Eureka.iml" />
       <module fileurl="file://$PROJECT_DIR$/Gateway/Gateway.iml" filepath="$PROJECT_DIR$/Gateway/Gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MapReduce/MapReduce.iml" filepath="$PROJECT_DIR$/MapReduce/MapReduce.iml" />
       <module fileurl="file://$PROJECT_DIR$/SearchBook/SearchBook.iml" filepath="$PROJECT_DIR$/SearchBook/SearchBook.iml" />
     </modules>
   </component>

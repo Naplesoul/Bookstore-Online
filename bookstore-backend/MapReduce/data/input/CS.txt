@@ -1,0 +1,45 @@
+“Every C++ professional needs a copy of Effective C++. It is an absolute must-read for anyone thinking of doing serious C++ development. If you’ve never read Effective C++ and you think you know everything about C++, think again.”
+ Steve Schirripa, Software Engineer, Google
+“C++ and the C++ community have grown up in the last fifteen years, and the third edition of Effective C++ reflects this. The clear and precise style of the book is evidence of Scott’s deep insight and distinctive ability to impart knowledge.”
+ Gerhard Kreuzer, Research and Development Engineer, Siemens AG
+The first two editions of Effective C++ were embraced by hundreds of thousands of programmers worldwide. The reason is clear: Scott Meyers’ practical approach to C++ describes the rules of thumb used by the experts ― the things they almost always do or almost always avoid doing ― to produce clear, correct, efficient code.
+The book is organized around 55 specific guidelines, each of which describes a way to write better C++. Each is backed by concrete examples. For this third edition, more than half the content is new, including added chapters on managing resources and using templates. Topics from the second edition have been extensively revised to reflect modern design considerations, including exceptions, design patterns, and multithreading.
+Important features of Effective C++ include:
+Expert guidance on the design of effective classes, functions, templates, and inheritance hierarchies.
+Applications of new “TR1” standard library functionality, along with comparisons to existing standard library components.
+Insights into differences between C++ and other languages (e.g., Java, C#, C) that help developers from those languages assimilate “the C++ way” of doing things.
+
+Computer systems: A Programmer’s Perspective explains the underlying elements common among all computer systems and how they affect general application performance. Written from the programmer’s perspective, this book strives to teach readers how understanding basic elements of computer systems and executing real practice can lead them to create better programs.
+Spanning across computer science themes such as hardware architecture, the operating system, and systems software, the Third Edition serves as a comprehensive introduction to programming. This book strives to create programmers who understand all elements of computer systems and will be able to engage in any application of the field--from fixing faulty software, to writing more capable programs, to avoiding common flaws. It lays the groundwork for readers to delve into more intensive topics such as computer architecture, embedded systems, and cybersecurity.
+This book focuses on systems that execute an x86-64 machine code, and recommends that programmers have access to a Linux system for this course. Programmers should have basic familiarity with C or C++.
+Also available with MasteringEngineering
+Mastering Engineering is an online homework, tutorial, and assessment system, designed to improve results through personalized learning. This innovative online program emulates the instructor’s office hour environment, engaging and guiding students through engineering concepts with self-paced individualized coaching  With a wide range of activities available, students can actively learn, understand, and retain even the most difficult concepts.
+Students, if interested in purchasing this title with MasteringEngineering, ask your instructor for the correct package ISBN and Course ID. Instructors, contact your Pearson representative for more information.
+
+Algorithm Design introduces algorithms by looking at the real-world problems that motivate them. The book teaches students a range of design and analysis techniques for problems that arise in computing applications. The text encourages an understanding of the algorithm design process and an appreciation of the role of algorithms in the broader field of computer science.
+August 6, 2009 Author, Jon Kleinberg, was recently cited in the New York Times for his statistical analysis research in the Internet age.
+
+C Primer Plus is a carefully tested, well-crafted, and complete tutorial on a subject core to programmers and developers. This computer science classic teaches principles of programming, including structured code and top-down design.
+Author and educator Stephen Prata has created an introduction to C that is instructive, clear, and insightful. Fundamental programming concepts are explained along with details of the C language. Many short, practical examples illustrate just one or two concepts at a time, encouraging readers to master new topics by immediately putting them to use.
+Review questions and programming exercises at the end of each chapter bring out the most critical pieces of information and help readers understand and digest the most difficult concepts. A friendly and easy-to-use self-study guide, this book is appropriate for serious students of programming, as well as developers proficient in other languages with a desire to better understand the fundamentals of this core language.
+The sixth edition of this book has been updated and expanded to cover the latest developments in C as well as to take a detailed look at the new C11 standard. In C Primer Plus you’ll find depth, breadth, and a variety of teaching techniques and tools to enhance your learning:
+Complete, integrated discussion of both C language fundamentals and additional features
+Clear guidance about when and why to use different parts of the language
+Hands-on learning with concise and simple examples that develop your understanding of a concept or two at a time
+Hundreds of practical sample programs
+Review questions and programming exercises at the end of each chapter to test your understanding
+Coverage of generic C to give you the greatest flexibility
+
+C++ Primer Plus is a carefully crafted, complete tutorial on one of the most significant and widely used programming languages today. An accessible and easy-to-use self-study guide, this book is appropriate for both serious students of programming as well as developers already proficient in other languages.
+The sixth edition of C++ Primer Plus has been updated and expanded to cover the latest developments in C++, including a detailed look at the new C++11 standard.
+Author and educator Stephen Prata has created an introduction to C++ that is instructive, clear, and insightful. Fundamental programming concepts are explained along with details of the C++ language. Many short, practical examples illustrate just one or two concepts at a time, encouraging readers to master new topics by immediately putting them to use.
+Review questions and programming exercises at the end of each chapter help readers zero in on the most critical information and digest the most difficult concepts.
+In C++ Primer Plus, you’ll find depth, breadth, and a variety of teaching techniques and tools to enhance your learning:
+A new detailed chapter on the changes and additional capabilities introduced in the C++11 standard
+Complete, integrated discussion of both basic C language and additional C++ features
+Clear guidance about when and why to use a feature
+Hands-on learning with concise and simple examples that develop your understanding a concept or two at a time
+Hundreds of practical sample programs
+Review questions and programming exercises at the end of each chapter to test your understanding
+Coverage of generic C++ gives you the greatest possible flexibility
+Teaches the ISO standard, including discussions of templates, the Standard Template Library, the string class, exceptions, RTTI, and namespaces

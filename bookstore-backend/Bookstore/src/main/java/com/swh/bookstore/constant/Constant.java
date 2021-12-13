@@ -31,7 +31,7 @@ public class Constant {
     public static final String IMAGE = "image";
     public static final String ORDER_ITEM_ID = "orderItemId";
 
-//    public static final String INDEX_DIR = "D:\\DevStorage\\IntelliJ_IDEA\\Bookstore-Online\\bookstore-backend\\index";
-    public static final String INDEX_DIR = "./index";
+    public static final String INDEX_DIR = "D:\\DevStorage\\IntelliJ_IDEA\\Bookstore-Online\\bookstore-backend\\index";
+//    public static final String INDEX_DIR = "./index";
 }
 
