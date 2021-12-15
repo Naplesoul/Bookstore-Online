@@ -136,8 +136,8 @@ public class WordCount {
         FileInputFormat.addInputPath(job, new Path(otherArgs.get(0)));
         FileOutputFormat.setOutputPath(job, new Path(otherArgs.get(1)));
 
-        System.out.println("Mapper Count: " + conf.get("mapreduce.job.maps"));
-        System.out.println("Reducer Count: " + conf.get("mapreduce.job.reduces"));
+        System.out.println("Default suggested mapper count: " + conf.get("mapreduce.job.maps"));
+        System.out.println("Default suggested reducer Count: " + conf.get("mapreduce.job.reduces"));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 }

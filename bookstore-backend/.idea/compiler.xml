@@ -19,7 +19,7 @@
       <module name="Bookstore_Service" target="11" />
       <module name="Eureka" target="11" />
       <module name="Gateway" target="11" />
-      <module name="MapReduce" target="17" />
+      <module name="MapReduce" target="11" />
       <module name="SearchBook" target="11" />
     </bytecodeTargetLevel>
   </component>
