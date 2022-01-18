@@ -21,7 +21,7 @@ const styles = theme => ({
         height: '100vh',
     },
     image: {
-        backgroundImage: 'url(https://api.dujin.org/bing/1920.php)',
+        backgroundImage: `url(${config.apiUrl}/bookImage/0)`,
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
