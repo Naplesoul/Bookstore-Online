@@ -7,7 +7,7 @@ export const login = (_username, _password, callback) => {
         username: _username,
         password: _password,
         // username: "shenwhang",
-        // password: "801616"
+        // password: "123456"
     };
     postRequest(url, loginForm, callback);
 }
