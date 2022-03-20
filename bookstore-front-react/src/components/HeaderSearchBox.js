@@ -54,6 +54,10 @@ class HeaderSearchBox extends React.Component {
     onSearchTextChange(e) {
         if (e.which === 13) {
             let text = e.target.value.trim().toLowerCase();
+            if (text.length > 20) {
+                alert("输入最长为20个字符");
+                return;
+            }
             this.props.onSearchTextChange(text);
             this.props.redirectTo("/store/books");
         }

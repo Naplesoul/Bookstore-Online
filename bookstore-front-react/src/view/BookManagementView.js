@@ -202,6 +202,14 @@ class BookManagementView extends React.Component {
         let storage = document.getElementById("searchStorage").value.trim().toLowerCase();
         let intro = document.getElementById("searchIntro").value.trim().toLowerCase();
 
+        if (bookId.length > 40 || ISBN.length > 40 || bookName.length > 40
+            || author.length > 40 || category.length > 40 || price.length > 40
+            || storage.length > 40 || intro.length > 40) {
+
+            alert("输入最长为40个字符");
+            return;
+        }
+
         if (bookId == null || bookId.length === 0) {
             bookId = null;
         } else {

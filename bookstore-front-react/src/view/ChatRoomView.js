@@ -45,6 +45,10 @@ class ChatRoomView extends React.Component {
             chatInput.value = "";
             return;
         }
+        if (msgStr.length > 999) {
+            alert("消息长度不能超过999个字符");
+            return;
+        }
         chatInput.value = "";
         this.props.addMessage({
             messageType: "text",
