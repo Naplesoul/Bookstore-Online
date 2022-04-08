@@ -26,7 +26,7 @@ public class ChineseTokenizer extends Tokenizer {
         this._IKImplement = new IKSegmenter(this.input, useSmart);
     }
 
-    public boolean incrementToken() throws IOException {
+    public final boolean incrementToken() throws IOException {
         this.clearAttributes();
         Lexeme nextLexeme = this._IKImplement.next();
         if (nextLexeme != null) {
