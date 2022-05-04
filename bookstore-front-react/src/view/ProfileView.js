@@ -27,6 +27,9 @@ const styles = theme => ({
         marginTop: 20,
         marginBottom: 20,
         width: "100%"
+    },
+    genderSelect: {
+        marginTop: 6
     }
 });
 
@@ -169,6 +172,18 @@ class CartView extends React.Component {
                         multiline={true}
                         defaultValue={this.props.user.userInfo.address}
                     />
+                    <Grid container spacing={3}>
+                        <Grid item xs={2}>
+                            <Typography variant={"h6"}>性别：</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <select id={"gender"} className={classes.genderSelect}>
+                                <option value={"male"} id={"male"}>男</option>
+                                <option value={"female"} id={"female"}>女</option>
+                                <option value={"secret"} id={"secret"}>保密</option>
+                            </select>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         );
