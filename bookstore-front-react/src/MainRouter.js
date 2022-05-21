@@ -83,9 +83,6 @@ class MainRouter extends React.Component {
     render() {
         return(
             <Router history={history}>
-                <Route exact path={"/"}>
-                    <Redirect to={{pathname: "/store"}}/>
-                </Route>
                 <Route path={"/store"}>
                     <Frame user={this.state.user}
                            logout={this.logout}
@@ -98,6 +95,7 @@ class MainRouter extends React.Component {
                 <Route exact path={"/signup"}>
                     <SignupView login={this.login} user={this.state.user}/>
                 </Route>
+                <Redirect to={{pathname: "/store"}}/>
             </Router>
         );
     };
