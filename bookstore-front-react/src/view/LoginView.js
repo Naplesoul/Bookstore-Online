@@ -162,7 +162,7 @@ class LoginView extends React.Component {
                             </Button>
                             <Grid container>
                                 <Grid item>
-                                    <Link variant="body2" href={"/signup"}>
+                                    <Link variant="body2" onClick={()=>{this.setState({redirectPath: "/signup"})}}>
                                         注册
                                     </Link>
                                 </Grid>

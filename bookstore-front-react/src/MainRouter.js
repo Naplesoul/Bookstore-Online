@@ -95,11 +95,12 @@ class MainRouter extends React.Component {
                 <Route exact path={"/signup"}>
                     <SignupView login={this.login} user={this.state.user}/>
                 </Route>
-                <Redirect to={{pathname: "/store"}}/>
+                <Route>
+                    <Redirect to={{pathname: "/store"}}/>
+                </Route>
             </Router>
         );
     };
-
 }
 
 export default MainRouter;

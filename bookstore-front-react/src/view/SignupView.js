@@ -218,7 +218,7 @@ class SignupView extends React.Component {
                             </Button>
                             <Grid container>
                                 <Grid item>
-                                    <Link variant="body2" href={"/login"}>
+                                    <Link variant="body2" onClick={()=>{this.setState({redirectPath: "/login"})}}>
                                         已有账号？点此登录
                                     </Link>
                                 </Grid>
