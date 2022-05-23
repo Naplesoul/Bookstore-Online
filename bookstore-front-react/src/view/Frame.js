@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
 import {CssBaseline} from "@material-ui/core";
@@ -19,6 +19,7 @@ import AdminStatisticsView from "./AdminStatisticsView";
 import ChatRoomView from "./ChatRoomView";
 import {chatService} from "../services/ChatService";
 import {config} from "../config";
+import {RedirectUtil} from "../components/RedirectUtil";
 
 // let _bookData = [
 //     {bookId: 0, ISBN: 0, bookName: "The Lord of the Rings", author: "J. R. R. Tolkien", category: "novel", price: 45.90, storage: 500, intro: "The book is a sequel to \"The Hobbit\" and is recognized as the originator of modern fantasy literature. ", image: require("../assets/book0.jpg").default},
@@ -123,11 +124,8 @@ class Frame extends React.Component {
     render() {
         if (this.state.redirectPath){
             let path = this.state.redirectPath;
-            this.setState({
-                redirectPath: null,
-            });
             return(
-                <Redirect to={{pathname: path}}/>
+                <RedirectUtil to={{pathname: path}} reset={()=>{this.setState({redirectPath: null})}}/>
             );
         }
         const { classes } = this.props;

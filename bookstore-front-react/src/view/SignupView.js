@@ -8,11 +8,11 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import {getReduplicateUsername, signup} from "../services/UserService";
 import {config} from "../config";
 import {checkEmail} from "../utils/inputCheck";
+import {RedirectUtil} from "../components/RedirectUtil";
 
 const duplicateHelpText = "该用户名已被占用"
 
@@ -138,11 +138,8 @@ class SignupView extends React.Component {
     render() {
         if(this.state.redirectPath){
             let path = this.state.redirectPath;
-            this.setState({
-                redirectPath: null,
-            });
             return(
-                <Redirect to={{pathname: path}}/>
+                <RedirectUtil to={{pathname: path}} reset={()=>{this.setState({redirectPath: null})}}/>
             );
         }
         const { classes } = this.props;

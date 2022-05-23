@@ -89,7 +89,6 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setBookName(book.getBookName());
             orderItem.setAuthor(book.getAuthor());
             orderItem.setCategory(book.getCategory());
-            orderItem.setImage(bookDao.getBase64BookImage(orderItem.getBookId()));
             totalPrice += bookPrice * orderItem.getBookNum();
         }
 
@@ -184,10 +183,5 @@ public class OrderServiceImpl implements OrderService {
         map.put(Constant.TOTAL_SALES, totalSales);
         map.put(Constant.TOTAL_CONSUMPTION, totalConsumption);
         return map;
-    }
-
-    @Override
-    public BufferedImage getOrderItemImage(Integer itemId) {
-        return orderDao.getOrderItemImage(itemId);
     }
 }
