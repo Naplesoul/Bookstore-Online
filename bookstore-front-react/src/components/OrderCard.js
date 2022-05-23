@@ -64,7 +64,7 @@ class OrderCard extends React.Component {
             return (
                 <div>
                     {this.state.orderItems.map((item, index) => {
-                        return (<OrderItem orderItem={item}/>);
+                        return (<OrderItem orderItem={item} key={index}/>);
                     })}
                 </div>
             );

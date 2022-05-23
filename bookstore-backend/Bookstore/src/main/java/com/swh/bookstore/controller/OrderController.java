@@ -51,12 +51,6 @@ public class OrderController {
         return orderService.placeOrder(order);
     }
 
-    @GetMapping(value = "/orderItemImage/{orderItemId}", produces = MediaType.IMAGE_JPEG_VALUE)
-    @ResponseBody
-    public BufferedImage getOrderItemImage(@PathVariable("orderItemId") Integer itemId) {
-        return orderService.getOrderItemImage(itemId);
-    }
-
     // 按条件获取订单等操作不可避免地要使用请求参数，用get请求没法带request body
     @GetMapping("/orders")
     public Page<Order> getOrders(@RequestParam(Constant.PAGE) Integer page,
